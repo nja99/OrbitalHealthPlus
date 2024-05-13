@@ -15,9 +15,9 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
-        body: SafeArea(
+        body: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -25,10 +25,10 @@ class LoginPage extends StatelessWidget {
                 const SizedBox(height: 100),
 
                 // Logo
-                Icon(Icons.circle, size: 150),
+                const Icon(Icons.circle, size: 150),
 
                 // Username
-                const SizedBox(height: 75),
+                const SizedBox(height: 100),
                 UserTextField(
                   controller: usernameController,
                   hintText: 'Username',
@@ -45,7 +45,7 @@ class LoginPage extends StatelessWidget {
 
                 // Forgot Password
                 const Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  padding: EdgeInsets.symmetric(horizontal: 25.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -68,7 +68,7 @@ class LoginPage extends StatelessWidget {
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Not a Member?'),
+                    Text("Don't have an Account?"),
                     SizedBox(width: 4),
                     Text(
                       'Register Now',
