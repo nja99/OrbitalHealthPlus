@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:healthsphere/components/user_button.dart';
+import 'package:healthsphere/components/user_popupalerts.dart';
 import 'package:healthsphere/components/user_textfield.dart';
 
 class LoginPage extends StatefulWidget {
@@ -16,32 +17,10 @@ class _LoginPageState extends State<LoginPage> {
 
   final passwordController = TextEditingController();
 
-    // User Not Found Function
-  void userNotFound() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const AlertDialog(
-          title: Text("User Not Found"),
-        );
-      }
-    );
-  }
-
-  // Incorrect Password Function
-  void incorrectPassword() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const AlertDialog(
-          title: Text("Incorrect Password"),
-        );
-      }
-    );
-  }
-
   // Login Function
   void userSignIn() async {
+    
+    // Loading Circle
     showDialog(
       context: context,
       builder: (context) {
@@ -51,32 +30,48 @@ class _LoginPageState extends State<LoginPage> {
       }
     );
     
+    // Attempt Sign In
     try {
-      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text, 
           password: passwordController.text
         );
       
       // Remove Loading Circle
       Navigator.pop(context);
-
-    } on FirebaseAuthException catch (e) {
+    
+    } on FirebaseAuthException catch(e) {
 
       // Remove Loading Circle
       Navigator.pop(context);
 
-      // User Does Not Exists
-      if (e.code == "user-not-found") {
-        userNotFound();
-      } 
-      
-      // Incorrect Password
-      else if (e.code == "wrong-password") {
-        incorrectPassword();
+      print(e.code);
+
+      if (e.code == 'invalid-email') {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) {
+            return PopUpAlerts(
+              title: "Invalid E-mail", 
+              description: "Please check if you entered your e-mail correctly.");
+          }
+        );
+      }
+      // Invalid Credentials
+      else if (e.code == 'invalid-credential') {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) {
+            return PopUpAlerts(
+              title: "Invalid Credentials", 
+              description: "Please try again.");
+          }
+        );
       }
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 25),
                 UserButton(
                   buttonText: "Log in",
-                  onTap: userSignIn
+                  onPressed: userSignIn
                 ),
 
                 // Register Now
