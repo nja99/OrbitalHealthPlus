@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class UserButton extends StatelessWidget {
 
   final Function()? onTap;
+  final String buttonText;
 
   const UserButton({
     super.key,
-    required this.onTap
+    required this.onTap,
+    required this.buttonText,
     });
 
   @override
@@ -22,7 +23,7 @@ class UserButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(10)),
         child: Center(
           child: Text(
-            "Log In",
+            buttonText,
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,

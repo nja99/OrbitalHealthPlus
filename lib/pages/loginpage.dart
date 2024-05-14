@@ -26,7 +26,7 @@ class LoginPage extends StatelessWidget {
                 
                 // Logo
                 Image.asset(
-                  "lib/assets/Logo.png",
+                  "lib/assets/images/Logo.png",
                   height: 150),
 
                 // Username
@@ -63,6 +63,7 @@ class LoginPage extends StatelessWidget {
                 const SizedBox(height: 25),
                 UserButton(
                   onTap: loginUser,
+                  buttonText: "Log in",
                 ),
 
                 // Register Now
