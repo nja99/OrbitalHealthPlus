@@ -48,104 +48,100 @@ class _LoginPageState extends State<LoginPage> {
       print(e.code);
 
       if (e.code == 'invalid-email') {
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) {
-            return PopUpAlerts(
-              title: "Invalid E-mail", 
-              description: "Please check if you entered your e-mail correctly.");
-          }
-        );
+        showCustomDialog(context, "Invalid Email", "Please check if you entered your e-mail correctly.");
       }
       // Invalid Credentials
       else if (e.code == 'invalid-credential') {
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) {
-            return PopUpAlerts(
-              title: "Invalid Credentials", 
-              description: "Please try again.");
-          }
-        );
+        showCustomDialog(context, "Invalid Credentials", "Please try again.");
       }
     }
+  }
+
+  void showCustomDialog(
+      BuildContext context, String title, String description) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return PopUpAlerts(title: title, description: description);
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 100),
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 100),
                 
-                // Logo
-                Image.asset(
-                  "lib/assets/images/Logo.png",
-                  height: 150),
+              // Logo
+              Image.asset(
+                "lib/assets/images/Logo.png",
+                height: 150),
 
-                // Email
-                const SizedBox(height: 100),
-                UserTextField(
-                  controller: emailController,
-                  hintText: "E-mail",
-                  obscureText: false,
-                ),
+              // Email
+              const SizedBox(height: 100),
+              UserTextField(
+                controller: emailController,
+                hintText: "E-mail",
+                obscureText: false,
+              ),
 
-                // Password
-                const SizedBox(height: 15),
-                UserTextField(
-                  controller: passwordController,
-                  hintText: "Password",
-                  obscureText: true,
-                ),
+              // Password
+              const SizedBox(height: 15),
+              UserTextField(
+                controller: passwordController,
+                hintText: "Password",
+                obscureText: true,
+              ),
 
-                // Forgot Password
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        "Forgot Password?",
-                        style: TextStyle(color: Colors.grey)
-                      ),
-                    ],
-                  ),
-                ),
-                
-                // Login Button
-                const SizedBox(height: 25),
-                UserButton(
-                  buttonText: "Log in",
-                  onPressed: userSignIn
-                ),
-
-                // Register Now
-                const SizedBox(height: 25),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+              // Forgot Password
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 25.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text("Don't have an Account?"),
-                    SizedBox(width: 4),
                     Text(
-                      "Register Now",
-                      style:TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                      )),
-                  ],)
+                      "Forgot Password?",
+                      style: TextStyle(color: Colors.grey)
+                    ),
+                  ],
+                ),
+              ),
+              
+              // Login Button
+              const SizedBox(height: 25),
+              UserButton(
+                buttonText: "Log in",
+                onPressed: userSignIn
+              ),
 
-
-              ],
-            ),
+              // Register Now
+              const SizedBox(height: 25),
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Don't have an Account?"),
+                  SizedBox(width: 4),
+                  Text(
+                    "Register Now",
+                    style:TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                    )
+                  ),
+                ],
+              )
+            ],
           ),
-        ));
+        ),
+      )
+    );
   }
 }
