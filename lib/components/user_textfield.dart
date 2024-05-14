@@ -9,7 +9,8 @@ class UserTextField extends StatelessWidget {
     super.key,
     required this.controller,
     required this.hintText,
-    required this.obscureText});
+    required this.obscureText
+    });
 
   @override
   Widget build(BuildContext context) {

@@ -3,24 +3,29 @@ import 'package:flutter/material.dart';
 class UserButton extends StatelessWidget {
 
   final String buttonText;
-  final Function()? onTap;
+  final Function()? onPressed;
 
   const UserButton({
     super.key,
     required this.buttonText,
-    required this.onTap,
+    required this.onPressed,
     });
 
   @override
   Widget build(BuildContext context){
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.all(25),
-        margin: EdgeInsets.symmetric(horizontal: 25.0),
-        decoration: BoxDecoration(
-          color: Colors.orange,
-          borderRadius: BorderRadius.circular(10)),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 25.0),
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          padding: EdgeInsets.all(25),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          backgroundColor: Colors.orange,
+          elevation: 5,
+
+        ),
         child: Center(
           child: Text(
             buttonText,
@@ -30,7 +35,7 @@ class UserButton extends StatelessWidget {
               fontSize: 16,
             ),
           ),
-        ),
+       ),
       ),
     );
   }
