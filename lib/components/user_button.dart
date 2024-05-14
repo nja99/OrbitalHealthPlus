@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class UserButton extends StatelessWidget {
 
-  final Function()? onTap;
   final String buttonText;
+  final Function()? onTap;
 
   const UserButton({
     super.key,
-    required this.onTap,
     required this.buttonText,
+    required this.onTap,
     });
 
   @override

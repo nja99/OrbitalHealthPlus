@@ -33,7 +33,7 @@ class LoginPage extends StatelessWidget {
                 const SizedBox(height: 100),
                 UserTextField(
                   controller: usernameController,
-                  hintText: 'Username',
+                  hintText: "Username",
                   obscureText: false,
                 ),
 
@@ -41,7 +41,7 @@ class LoginPage extends StatelessWidget {
                 const SizedBox(height: 15),
                 UserTextField(
                   controller: passwordController,
-                  hintText: 'Password',
+                  hintText: "Password",
                   obscureText: true,
                 ),
 
@@ -52,7 +52,7 @@ class LoginPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                        'Forgot Password?',
+                        "Forgot Password?",
                         style: TextStyle(color: Colors.grey)
                       ),
                     ],
@@ -62,8 +62,8 @@ class LoginPage extends StatelessWidget {
                 // Login Button
                 const SizedBox(height: 25),
                 UserButton(
-                  onTap: loginUser,
                   buttonText: "Log in",
+                  onTap: loginUser
                 ),
 
                 // Register Now
@@ -74,7 +74,7 @@ class LoginPage extends StatelessWidget {
                     Text("Don't have an Account?"),
                     SizedBox(width: 4),
                     Text(
-                      'Register Now',
+                      "Register Now",
                       style:TextStyle(
                         color: Colors.blue,
                         fontWeight: FontWeight.bold,
