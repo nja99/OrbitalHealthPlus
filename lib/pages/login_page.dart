@@ -1,16 +1,82 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:healthsphere/components/user_button.dart';
 import 'package:healthsphere/components/user_textfield.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   LoginPage({super.key});
 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   // Text Controllers
-  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
+
   final passwordController = TextEditingController();
 
+    // User Not Found Function
+  void userNotFound() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const AlertDialog(
+          title: Text("User Not Found"),
+        );
+      }
+    );
+  }
+
+  // Incorrect Password Function
+  void incorrectPassword() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const AlertDialog(
+          title: Text("Incorrect Password"),
+        );
+      }
+    );
+  }
+
   // Login Function
-  void loginUser() {}
+  void userSignIn() async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+    );
+    
+    try {
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailController.text, 
+          password: passwordController.text
+        );
+      
+      // Remove Loading Circle
+      Navigator.pop(context);
+
+    } on FirebaseAuthException catch (e) {
+
+      // Remove Loading Circle
+      Navigator.pop(context);
+
+      // User Does Not Exists
+      if (e.code == "user-not-found") {
+        userNotFound();
+      } 
+      
+      // Incorrect Password
+      else if (e.code == "wrong-password") {
+        incorrectPassword();
+      }
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +95,11 @@ class LoginPage extends StatelessWidget {
                   "lib/assets/images/Logo.png",
                   height: 150),
 
-                // Username
+                // Email
                 const SizedBox(height: 100),
                 UserTextField(
-                  controller: usernameController,
-                  hintText: "Username",
+                  controller: emailController,
+                  hintText: "E-mail",
                   obscureText: false,
                 ),
 
@@ -63,7 +129,7 @@ class LoginPage extends StatelessWidget {
                 const SizedBox(height: 25),
                 UserButton(
                   buttonText: "Log in",
-                  onTap: loginUser
+                  onTap: userSignIn
                 ),
 
                 // Register Now

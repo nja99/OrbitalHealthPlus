@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "585073256299",
+    "project_id": "orbitalhealthsphere-73d9d",
+    "storage_bucket": "orbitalhealthsphere-73d9d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:585073256299:android:0a67ac4dccd65cadd00e2e",
+        "android_client_info": {
+          "package_name": "com.example.healthsphere"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbnM8z8FN4cDW4xEbpsB9U0ALDzmxRmmk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
