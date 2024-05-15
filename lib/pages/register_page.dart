@@ -5,22 +5,22 @@ import 'package:healthsphere/components/user_button.dart';
 import 'package:healthsphere/components/user_popupalerts.dart';
 import 'package:healthsphere/components/user_textfield.dart';
 
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   final Function()? onTap;
-  const LoginPage({super.key, required this.onTap});
+  const RegisterPage({super.key, required this.onTap});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   // Text Controllers
   final emailController = TextEditingController();
-
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
   // Login Function
-  void userSignIn() async {
+  void signUserUp() async {
     
     // Loading Circle
     showDialog(
@@ -32,12 +32,18 @@ class _LoginPageState extends State<LoginPage> {
       }
     );
     
-    // Attempt Sign In
+    // Attempt creating the user
     try {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
+      //check if password is confirmed
+      if (passwordController.text == confirmPasswordController.text) {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text, 
           password: passwordController.text
-        );
+        );  
+      } else {
+        // show error msg, passwords don't match
+        showCustomDialog(context, "Mismatch Error", "Passwords don't match!");
+      }
       
       // Remove Loading Circle
       Navigator.pop(context);
@@ -46,6 +52,7 @@ class _LoginPageState extends State<LoginPage> {
 
       // Remove Loading Circle
       Navigator.pop(context);
+
 
       if (e.code == 'invalid-email') {
         showCustomDialog(context, "Invalid Email", "Please check if you entered your e-mail correctly.");
@@ -72,19 +79,32 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      resizeToAvoidBottomInset: false,
-      body: SafeArea(
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Center(
-          child: ListView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height:50),
+              const SizedBox(height: 100),
+                
               // Logo
               Image.asset(
                 "lib/assets/images/Logo.png",
                 height: 150),
 
+                const SizedBox(height: 50),
+
+                //let's create an account for you
+                Text(
+                  'Let\'s create and account for you!',
+                  style: TextStyle(
+                    color: Colors.grey[700],
+                    fontSize:14,
+                  ),
+                ),
+
               // Email
-              const SizedBox(height: 100),
+              const SizedBox(height: 25),
               UserTextField(
                 controller: emailController,
                 hintText: "E-mail",
@@ -99,25 +119,20 @@ class _LoginPageState extends State<LoginPage> {
                 obscureText: true,
               ),
 
-              // Forgot Password
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 25.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      "Forgot Password?",
-                      style: TextStyle(color: Colors.grey)
-                    ),
-                  ],
-                ),
+              // Confirm Password
+              const SizedBox(height: 15),
+              UserTextField(
+                controller: confirmPasswordController,
+                hintText: "Confirm Password",
+                obscureText: true,
               ),
+
               
               // Login Button
               const SizedBox(height: 25),
               UserButton(
-                buttonText: "Log in",
-                onPressed: userSignIn
+                buttonText: "Sign Up",
+                onPressed: signUserUp
               ),
 
               // Register Now
@@ -125,12 +140,12 @@ class _LoginPageState extends State<LoginPage> {
                Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Don't have an Account?"),
+                  const Text(" Already have an Account?"),
                   const SizedBox(width: 4),
                   GestureDetector(
                     onTap: widget.onTap,
                     child: const Text(
-                        "Register Now",
+                        "Login Now",
                         style: TextStyle(
                           color: Colors.blue,
                           fontWeight: FontWeight.bold,
