@@ -5,7 +5,7 @@ import 'package:healthsphere/components/user_popupalerts.dart';
 import 'package:healthsphere/components/user_textfield.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({super.key});
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -44,8 +44,6 @@ class _LoginPageState extends State<LoginPage> {
 
       // Remove Loading Circle
       Navigator.pop(context);
-
-      print(e.code);
 
       if (e.code == 'invalid-email') {
         showCustomDialog(context, "Invalid Email", "Please check if you entered your e-mail correctly.");

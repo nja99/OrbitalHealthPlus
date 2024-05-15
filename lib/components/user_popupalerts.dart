@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 
 class PopUpAlerts extends StatelessWidget {
 
   final String title;
   final String description;
 
-  PopUpAlerts({
+  const PopUpAlerts({
     super.key,
     required this.title,
     required this.description,
@@ -18,15 +18,15 @@ class PopUpAlerts extends StatelessWidget {
       title: Text(
         title, 
         textAlign: TextAlign.center, 
-        style: TextStyle(fontSize: 17.5)
+        style: const TextStyle(fontSize: 17.5)
       ),
       content: Text(
         description, 
         textAlign: TextAlign.center
       ),
       actions: [
-        Container(
-          width: double.maxFinite,
+        SizedBox(
+          width: double.infinity,
           child: ElevatedButton(
             onPressed: () => Navigator.pop(context),
             style: ElevatedButton.styleFrom(
