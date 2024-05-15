@@ -79,11 +79,9 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
+      body:SafeArea(
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: ListView(
             children: [
               const SizedBox(height: 100),
                 
@@ -101,6 +99,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     color: Colors.grey[700],
                     fontSize:14,
                   ),
+                  textAlign: TextAlign.center,
                 ),
 
               // Email
