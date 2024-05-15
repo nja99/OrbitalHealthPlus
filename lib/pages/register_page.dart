@@ -34,10 +34,16 @@ class _RegisterPageState extends State<RegisterPage> {
     
     // Attempt creating the user
     try {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
+      //check if password is confirmed
+      if (passwordController.text == confirmPasswordController.text) {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text, 
           password: passwordController.text
-        );
+        );  
+      } else {
+        // show error msg, passwords don't match
+        showCustomDialog(context, "Mismatch Error", "Passwords don't match!");
+      }
       
       // Remove Loading Circle
       Navigator.pop(context);
@@ -46,6 +52,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
       // Remove Loading Circle
       Navigator.pop(context);
+
 
       if (e.code == 'invalid-email') {
         showCustomDialog(context, "Invalid Email", "Please check if you entered your e-mail correctly.");
@@ -85,8 +92,19 @@ class _RegisterPageState extends State<RegisterPage> {
                 "lib/assets/images/Logo.png",
                 height: 150),
 
+                const SizedBox(height: 50),
+
+                //let's create an account for you
+                Text(
+                  'Let\'s create and account for you!',
+                  style: TextStyle(
+                    color: Colors.grey[700],
+                    fontSize:14,
+                  ),
+                ),
+
               // Email
-              const SizedBox(height: 100),
+              const SizedBox(height: 25),
               UserTextField(
                 controller: emailController,
                 hintText: "E-mail",
@@ -109,24 +127,11 @@ class _RegisterPageState extends State<RegisterPage> {
                 obscureText: true,
               ),
 
-              // Forgot Password
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 25.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      "Forgot Password?",
-                      style: TextStyle(color: Colors.grey)
-                    ),
-                  ],
-                ),
-              ),
               
               // Login Button
               const SizedBox(height: 25),
               UserButton(
-                buttonText: "Log in",
+                buttonText: "Sign Up",
                 onPressed: signUserUp
               ),
 
