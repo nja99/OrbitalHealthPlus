@@ -72,14 +72,12 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: ListView(
             children: [
-              const SizedBox(height: 100),
-                
+              const SizedBox(height:50),
               // Logo
               Image.asset(
                 "lib/assets/images/Logo.png",
