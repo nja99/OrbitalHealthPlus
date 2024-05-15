@@ -5,22 +5,22 @@ import 'package:healthsphere/components/user_button.dart';
 import 'package:healthsphere/components/user_popupalerts.dart';
 import 'package:healthsphere/components/user_textfield.dart';
 
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   final Function()? onTap;
-  const LoginPage({super.key, required this.onTap});
+  const RegisterPage({super.key, required this.onTap});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   // Text Controllers
   final emailController = TextEditingController();
-
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
   // Login Function
-  void userSignIn() async {
+  void signUserUp() async {
     
     // Loading Circle
     showDialog(
@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
       }
     );
     
-    // Attempt Sign In
+    // Attempt creating the user
     try {
         await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text, 
@@ -101,6 +101,14 @@ class _LoginPageState extends State<LoginPage> {
                 obscureText: true,
               ),
 
+              // Confirm Password
+              const SizedBox(height: 15),
+              UserTextField(
+                controller: confirmPasswordController,
+                hintText: "Confirm Password",
+                obscureText: true,
+              ),
+
               // Forgot Password
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 25.0),
@@ -119,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 25),
               UserButton(
                 buttonText: "Log in",
-                onPressed: userSignIn
+                onPressed: signUserUp
               ),
 
               // Register Now
@@ -127,12 +135,12 @@ class _LoginPageState extends State<LoginPage> {
                Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Don't have an Account?"),
+                  const Text(" Already have an Account?"),
                   const SizedBox(width: 4),
                   GestureDetector(
                     onTap: widget.onTap,
                     child: const Text(
-                        "Register Now",
+                        "Login Now",
                         style: TextStyle(
                           color: Colors.blue,
                           fontWeight: FontWeight.bold,
