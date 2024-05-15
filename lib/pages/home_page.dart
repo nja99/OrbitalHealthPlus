@@ -1,16 +1,61 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:healthsphere/services/firestore.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
 
-  HomePage({super.key});
+  const HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final user = FirebaseAuth.instance.currentUser;
 
+  // Fire Store //
+  final FirestoreService firestoreService = FirestoreService();
+
+  // Text Controller //
+  final TextEditingController textController = TextEditingController();
+
+  // Functions //
+  // Sign Out
   void userSignOut() {
     FirebaseAuth.instance.signOut();
   }
 
+  // Open Dialog Box to Add New Document
+  void openDocumentBox () {
+    showDialog(
+      context: context, 
+      builder: (context) => AlertDialog(
+
+        // User Input
+        content: TextField(
+          controller: textController
+        ),
+        // Save Button
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              // Add Document
+              firestoreService.addDocument(textController.text);
+
+              // Clear Text Controller
+              textController.clear();
+
+              // Close Dialog Box
+              Navigator.pop(context);
+            },
+            child: const Text("Add"),
+          ),
+        ],
+      )
+    );
+  }
+
+  @override
   Widget build (BuildContext context) {
     
     return Scaffold(
@@ -18,13 +63,14 @@ class HomePage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: userSignOut, 
-            icon: Icon(Icons.logout)
+            icon: const Icon(Icons.logout)
           )
         ],
       ),
-      body: Center(
-        child: Text("LOGGED IN") ,),
+      floatingActionButton: FloatingActionButton(
+        onPressed: openDocumentBox,
+        child: const Icon(Icons.add),
+      ),
     );
   }
-  
 }
