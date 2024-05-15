@@ -23,7 +23,7 @@ class HomePage extends StatelessWidget {
         ],
       ),
       body: Center(
-        child: Text("LOGGED IN") ,)
+        child: Text("LOGGED IN") ,),
     );
   }
   
