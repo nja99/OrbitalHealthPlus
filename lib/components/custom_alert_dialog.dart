@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 
-class PopUpAlerts extends StatelessWidget {
+class CustomAlertDialog extends StatelessWidget {
 
   final String title;
   final String description;
 
-  const PopUpAlerts({
+  const CustomAlertDialog({
     super.key,
     required this.title,
     required this.description,
@@ -14,6 +14,7 @@ class PopUpAlerts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return AlertDialog(
       title: Text(
         title, 
@@ -49,4 +50,14 @@ class PopUpAlerts extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
     );
   }
+}
+
+void showCustomDialog(BuildContext context, String title, String description) {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) {
+      return CustomAlertDialog(title: title, description: description);
+    },
+  );
 }

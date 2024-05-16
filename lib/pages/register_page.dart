@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:healthsphere/components/user_button.dart';
-import 'package:healthsphere/components/user_popupalerts.dart';
+import 'package:healthsphere/components/custom_alert_dialog.dart';
 import 'package:healthsphere/components/user_textfield.dart';
 import 'package:healthsphere/services/auth/auth_service.dart';
 
@@ -52,17 +52,6 @@ class _RegisterPageState extends State<RegisterPage> {
     else {
         showCustomDialog(context, "Mismatch Error", "Passwords don't match!");
     }
-  }
-
-  void showCustomDialog(
-      BuildContext context, String title, String description) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return PopUpAlerts(title: title, description: description);
-      },
-    );
   }
 
   @override
