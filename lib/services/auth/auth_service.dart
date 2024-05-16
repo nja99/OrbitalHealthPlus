@@ -21,9 +21,7 @@ class AuthService {
     
     // Catch Errors if Sign In Fails
     on FirebaseAuthException catch (e) {
-
       throw Exception(e.code);
-
     } 
   }
 
@@ -34,20 +32,16 @@ class AuthService {
     try {
       UserCredential userCredential = await _firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
-
       return userCredential;
     }
-
     // Catch Errors if Sign In Fails
     on FirebaseAuthException catch (e) {
       throw Exception(e.code);
     }
   }
 
-
   // Sign Out
   Future<void> signOut() async {
     return await _firebaseAuth.signOut();
   }
-
 }
