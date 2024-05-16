@@ -92,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
 
               // Forgot Password
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 25.0),
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
