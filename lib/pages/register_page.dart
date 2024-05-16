@@ -1,9 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:healthsphere/components/user_button.dart';
 import 'package:healthsphere/components/user_popupalerts.dart';
 import 'package:healthsphere/components/user_textfield.dart';
+import 'package:healthsphere/services/auth/auth_service.dart';
 
 class RegisterPage extends StatefulWidget {
   final Function()? onTap;
@@ -20,8 +19,11 @@ class _RegisterPageState extends State<RegisterPage> {
   final confirmPasswordController = TextEditingController();
 
   // Login Function
-  void signUserUp() async {
-    
+  void userSignUp() async {
+
+    // Get Auth Service
+    final authService = AuthService();
+
     // Loading Circle
     showDialog(
       context: context,
@@ -31,36 +33,24 @@ class _RegisterPageState extends State<RegisterPage> {
         );
       }
     );
-    
-    // Attempt creating the user
-    try {
-      //check if password is confirmed
-      if (passwordController.text == confirmPasswordController.text) {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: emailController.text, 
-          password: passwordController.text
-        );  
-      } else {
-        // show error msg, passwords don't match
+
+    // Check if Password Matches -> Create User
+    if (passwordController.text == confirmPasswordController.text) {
+      // Attempt to create user
+      try {
+        await authService.signUpWithEmailPassword(emailController.text, passwordController.text);
+        authService.signOut();
+        Navigator.pop(context);
+      }
+      // Catch Sign Up Errors
+      catch (e) {
+        Navigator.pop(context);
+        showCustomDialog(context, e.toString(), "Please try again.");
+      }
+    } 
+    // If Password does not match -> Prompt Message
+    else {
         showCustomDialog(context, "Mismatch Error", "Passwords don't match!");
-      }
-      
-      // Remove Loading Circle
-      Navigator.pop(context);
-    
-    } on FirebaseAuthException catch(e) {
-
-      // Remove Loading Circle
-      Navigator.pop(context);
-
-
-      if (e.code == 'invalid-email') {
-        showCustomDialog(context, "Invalid Email", "Please check if you entered your e-mail correctly.");
-      }
-      // Invalid Credentials
-      else if (e.code == 'invalid-credential') {
-        showCustomDialog(context, "Invalid Credentials", "Please try again.");
-      }
     }
   }
 
@@ -78,7 +68,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body:SafeArea(
         child: Center(
           child: ListView(
@@ -96,7 +86,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 Text(
                   'Let\'s create and account for you!',
                   style: TextStyle(
-                    color: Colors.grey[700],
+                    color: Theme.of(context).colorScheme.primary,
                     fontSize:14,
                   ),
                   textAlign: TextAlign.center,
@@ -131,7 +121,7 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 25),
               UserButton(
                 buttonText: "Sign Up",
-                onPressed: signUserUp
+                onPressed: userSignUp
               ),
 
               // Register Now

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:healthsphere/pages/login_page.dart';
+import 'package:healthsphere/pages/register_page.dart';
 
-import 'register_page.dart';
 class LoginOrRegisterPage extends StatefulWidget {
   const LoginOrRegisterPage({super.key});
 
@@ -11,14 +11,14 @@ class LoginOrRegisterPage extends StatefulWidget {
 
 class _LoginOrRegisterPageState extends State<LoginOrRegisterPage> {
  // initially show login page
- bool showLoginPage = true;
+  bool showLoginPage = true;
 
  // toggle between login and register page
- void togglePages() {
-  setState(() {
-    showLoginPage = !showLoginPage;
-  });
- }
+  void togglePages() {
+    setState(() {
+      showLoginPage = !showLoginPage;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

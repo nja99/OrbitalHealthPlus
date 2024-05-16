@@ -1,9 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:healthsphere/pages/login_page.dart';
 import 'package:healthsphere/pages/home_page.dart';
-
-import 'login_or_register_page.dart';
+import 'package:healthsphere/services/auth/login_or_register_page.dart';
 
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
@@ -17,8 +15,7 @@ class AuthPage extends StatelessWidget {
           // User is LOGGED IN
           if (snapshot.hasData) {
             return const HomePage();
-          }
-
+          }        
           // User is NOT LOGGED IN
           else {
             return const LoginOrRegisterPage();

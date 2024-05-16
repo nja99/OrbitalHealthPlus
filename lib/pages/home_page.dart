@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:healthsphere/services/auth/auth_service.dart';
 import 'package:healthsphere/services/firestore.dart';
 
 class HomePage extends StatefulWidget {
@@ -23,7 +24,8 @@ class _HomePageState extends State<HomePage> {
   // Functions //
   // Sign Out
   void userSignOut() {
-    FirebaseAuth.instance.signOut();
+    final authService = AuthService();
+    authService.signOut();
   }
 
   // Open Dialog Box to Add New Document
@@ -67,6 +69,10 @@ class _HomePageState extends State<HomePage> {
     
     return Scaffold(
       appBar: AppBar(
+        title:const Text("HEALTHSPHERE"),
+        titleTextStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        centerTitle: true,
+        backgroundColor: Colors.orange,
         actions: [
           IconButton(
             onPressed: userSignOut, 
@@ -100,30 +106,32 @@ class _HomePageState extends State<HomePage> {
                 String documentData = data['document'];
 
                 // Display document in list tiles
-                return ListTile(
-                  title: Text(documentData),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // Edit Button
-                      IconButton(
-                        onPressed: () => openDocumentBox(documentID: documentID),
-                        icon: const Icon(Icons.edit),
-                      ),
-                      //Delete Button
-                      IconButton(
-                        onPressed: () => firestoreService.deleteDocument(documentID),
-                        icon: const Icon(Icons.delete),
-                      )
-                    ]
-                  )
+                return Card(
+                  child: ListTile(
+                    title: Text(documentData),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Edit Button
+                        IconButton(
+                          onPressed: () => openDocumentBox(documentID: documentID),
+                          icon: const Icon(Icons.edit),
+                        ),
+                        //Delete Button
+                        IconButton(
+                          onPressed: () => firestoreService.deleteDocument(documentID),
+                          icon: const Icon(Icons.delete),
+                        )
+                      ]
+                    )
+                  ),
                 );
               }
             );
           }
           // If there are no Documents
           else {
-            return const Text("EMPTY");
+            return const Text(" ");
           }
         },
       )

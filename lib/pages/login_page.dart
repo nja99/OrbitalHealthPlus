@@ -1,9 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:healthsphere/components/user_button.dart';
 import 'package:healthsphere/components/user_popupalerts.dart';
 import 'package:healthsphere/components/user_textfield.dart';
+import 'package:healthsphere/services/auth/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   final Function()? onTap;
@@ -21,6 +20,8 @@ class _LoginPageState extends State<LoginPage> {
 
   // Login Function
   void userSignIn() async {
+
+    final authService = AuthService();
     
     // Loading Circle
     showDialog(
@@ -34,26 +35,16 @@ class _LoginPageState extends State<LoginPage> {
     
     // Attempt Sign In
     try {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailController.text, 
-          password: passwordController.text
-        );
-      
+      // Sign User In
+      await authService.signInWithEmailPassword(emailController.text, passwordController.text);
       // Remove Loading Circle
       Navigator.pop(context);
     
-    } on FirebaseAuthException catch(e) {
-
-      // Remove Loading Circle
+    }
+    // Catch Login Exceptions
+    catch (e) {
       Navigator.pop(context);
-
-      if (e.code == 'invalid-email') {
-        showCustomDialog(context, "Invalid Email", "Please check if you entered your e-mail correctly.");
-      }
-      // Invalid Credentials
-      else if (e.code == 'invalid-credential') {
-        showCustomDialog(context, "Invalid Credentials", "Please try again.");
-      }
+      showCustomDialog(context, e.toString(), "Please try again.");
     }
   }
 
@@ -71,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.background,
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Center(
@@ -100,14 +91,14 @@ class _LoginPageState extends State<LoginPage> {
               ),
 
               // Forgot Password
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 25.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
                       "Forgot Password?",
-                      style: TextStyle(color: Colors.grey)
+                      style: TextStyle(color: Theme.of(context).colorScheme.primary)
                     ),
                   ],
                 ),
@@ -122,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
 
               // Register Now
               const SizedBox(height: 25),
-               Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text("Don't have an Account?"),
@@ -130,12 +121,12 @@ class _LoginPageState extends State<LoginPage> {
                   GestureDetector(
                     onTap: widget.onTap,
                     child: const Text(
-                        "Register Now",
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold,
-                        )
-                      ),
+                      "Register Now",
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                      )
+                    ),
                   ),
                 ],
               )

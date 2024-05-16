@@ -22,15 +22,15 @@ class UserButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          backgroundColor: Colors.orange,
+          backgroundColor: Theme.of(context).colorScheme.secondary,
           elevation: 5,
 
         ),
         child: Center(
           child: Text(
             buttonText,
-            style: const TextStyle(
-              color: Colors.white,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
               fontWeight: FontWeight.bold,
               fontSize: 16,
             ),
