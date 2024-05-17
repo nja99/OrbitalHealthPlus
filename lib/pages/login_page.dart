@@ -51,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Center(
@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
               // Logo
               Image.asset(
                 "lib/assets/images/Logo.png",
-                height: 150),
+                height: 160),
 
               // Email
               const SizedBox(height: 100),
