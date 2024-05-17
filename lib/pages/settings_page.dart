@@ -9,6 +9,7 @@ class SettingsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Settings"),
+        backgroundColor: Theme.of(context).colorScheme.surface,
       ),
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: ListView(
@@ -21,8 +22,9 @@ class SettingsPage extends StatelessWidget {
             margin: const EdgeInsets.only(left: 25, top:10, right: 25),
             padding: const EdgeInsets.all(25),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                //dark mode
+                //Dark mode
                 Text(
                   "Dark Mode",
                   style: TextStyle(

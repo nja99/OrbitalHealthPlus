@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:healthsphere/components/home_drawer_tile.dart';
 import 'package:healthsphere/pages/login_page.dart';
+import 'package:healthsphere/pages/settings_page.dart';
 
 
 
@@ -61,12 +62,6 @@ class HomeDrawer extends StatelessWidget {
             icon: Icons.logout,
             onTap: () {
               Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const LoginPage(),
-                ),
-              );
             }
           ),
 
