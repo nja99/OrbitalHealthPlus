@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:healthsphere/components/home_drawer_tile.dart';
-import 'package:healthsphere/pages/login_page.dart';
 import 'package:healthsphere/pages/settings_page.dart';
-
+import 'package:healthsphere/services/auth/auth_service.dart';
 
 
 class HomeDrawer extends StatelessWidget {
   const HomeDrawer({super.key});
+
+  void userSignOut() {
+    final authService = AuthService();
+    authService.signOut();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +65,7 @@ class HomeDrawer extends StatelessWidget {
             text: "L O G O U T",
             icon: Icons.logout,
             onTap: () {
+              userSignOut();
               Navigator.pop(context);
             }
           ),
