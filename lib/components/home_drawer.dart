@@ -3,7 +3,6 @@ import 'package:healthsphere/components/home_drawer_tile.dart';
 import 'package:healthsphere/pages/settings_page.dart';
 import 'package:healthsphere/services/auth/auth_service.dart';
 
-
 class HomeDrawer extends StatelessWidget {
   const HomeDrawer({super.key});
 
@@ -18,7 +17,6 @@ class HomeDrawer extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.tertiary,
       child: ListView(
         children: [
-
           // App logo
           Padding(
             padding: EdgeInsets.only(top: 10.0),
@@ -40,37 +38,35 @@ class HomeDrawer extends StatelessWidget {
           HomeDrawerTile(
             text: "H O M E",
             icon: Icons.home,
-              onTap: () => Navigator.pop(context),
+            onTap: () => Navigator.pop(context),
           ),
 
           // Setting list tile
           HomeDrawerTile(
-            text: "S E T T I N G S",
-            icon: Icons.settings,
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const SettingsPage(),
-                ),                
-              );
-            }
-          ),
+              text: "S E T T I N G S",
+              icon: Icons.settings,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SettingsPage(),
+                  ),
+                );
+              }),
 
-          const SizedBox(height:500),
+          const SizedBox(height: 500),
 
           // Logout list tile
           HomeDrawerTile(
-            text: "L O G O U T",
-            icon: Icons.logout,
-            onTap: () {
-              userSignOut();
-              Navigator.pop(context);
-            }
-          ),
+              text: "L O G O U T",
+              icon: Icons.logout,
+              onTap: () {
+                userSignOut();
+                Navigator.pop(context);
+              }),
 
-          const SizedBox(height:25),
+          const SizedBox(height: 25),
         ],
       ),
     );
