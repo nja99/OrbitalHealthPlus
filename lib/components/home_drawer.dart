@@ -1,5 +1,8 @@
-import "package:flutter/material.dart";
-import "package:healthsphere/components/home_drawer_tile.dart";
+import 'package:flutter/material.dart';
+import 'package:healthsphere/components/home_drawer_tile.dart';
+import 'package:healthsphere/pages/login_page.dart';
+
+
 
 class HomeDrawer extends StatelessWidget {
   const HomeDrawer({super.key});
@@ -32,23 +35,39 @@ class HomeDrawer extends StatelessWidget {
           HomeDrawerTile(
             text: "H O M E",
             icon: Icons.home,
-              onTap: () {}
+              onTap: () => Navigator.pop(context),
           ),
 
           // Setting list tile
           HomeDrawerTile(
             text: "S E T T I N G S",
             icon: Icons.settings,
-              onTap: () {}
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SettingsPage(),
+                ),                
+              );
+            }
           ),
 
-          const Spacer(),
+          const SizedBox(height:500),
 
           // Logout list tile
           HomeDrawerTile(
             text: "L O G O U T",
             icon: Icons.logout,
-              onTap: () {}
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const LoginPage(),
+                ),
+              );
+            }
           ),
 
           const SizedBox(height:25),
