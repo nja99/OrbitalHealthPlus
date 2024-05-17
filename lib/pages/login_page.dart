@@ -63,8 +63,20 @@ class _LoginPageState extends State<LoginPage> {
                 "lib/assets/images/Logo.png",
                 height: 160),
 
+                const SizedBox(height: 50),
+
+                //Welcome back!
+                Text(
+                  'Welcome back!',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontSize:14,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+
               // Email
-              const SizedBox(height: 100),
+              const SizedBox(height: 50),
               UserTextField(
                 controller: emailController,
                 hintText: "E-mail",

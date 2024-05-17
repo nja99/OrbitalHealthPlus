@@ -57,12 +57,12 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body:SafeArea(
         child: Center(
           child: ListView(
             children: [
-              const SizedBox(height: 100),
+              const SizedBox(height: 50),
                 
               // Logo
               Image.asset(
