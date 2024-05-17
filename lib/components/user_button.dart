@@ -22,7 +22,7 @@ class UserButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          backgroundColor: Theme.of(context).colorScheme.secondary,
+          backgroundColor: Colors.orange,
           elevation: 5,
 
         ),
@@ -30,7 +30,7 @@ class UserButton extends StatelessWidget {
           child: Text(
             buttonText,
             style: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
+              color: Theme.of(context).colorScheme.tertiary,
               fontWeight: FontWeight.bold,
               fontSize: 16,
             ),
