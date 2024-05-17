@@ -74,15 +74,9 @@ class _HomePageState extends State<HomePage> {
         titleTextStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         centerTitle: true,
         backgroundColor: Colors.orange,
-        actions: [
-          IconButton(
-            onPressed: userSignOut, 
-            icon: const Icon(Icons.logout)
-          )
-        ],
       ),
 
-      drawer: HomeDrawer(),
+      drawer: const HomeDrawer(),
       floatingActionButton: FloatingActionButton(
         onPressed: openDocumentBox,
         child: const Icon(Icons.add),
