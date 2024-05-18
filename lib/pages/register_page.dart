@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:healthsphere/components/loading_overlay.dart';
 import 'package:healthsphere/components/user_button.dart';
 import 'package:healthsphere/components/custom_alert_dialog.dart';
 import 'package:healthsphere/components/user_textfield.dart';
@@ -77,89 +78,78 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Center(
-              child: ListView(
-                children: [
-                  const SizedBox(height: 50),
-                  // Logo
-                  Image.asset("lib/assets/images/Logo.png", height: 160),
-                  const SizedBox(height: 50),
-
-                  // Create account text
-                  Text(
-                    'Let\'s create an account for you!',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontSize: 14,
-                    ),
-                    textAlign: TextAlign.center,
+    return buildLoadingOverlay(
+      isLoading,
+      Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        body: SafeArea(
+          child: Center(
+            child: ListView(
+              children: [
+                const SizedBox(height: 50),
+                // Logo
+                Image.asset("lib/assets/images/Logo.png", height: 160),
+                const SizedBox(height: 50),
+      
+                // Create account text
+                Text(
+                  'Let\'s create an account for you!',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontSize: 14,
                   ),
-
-                  // Email
-                  const SizedBox(height: 25),
-                  UserTextField(
-                    controller: emailController,
-                    labelText: "E-mail",
-                    obscureText: false,
-                  ),
-
-                  // Password
-                  const SizedBox(height: 15),
-                  UserTextField(
-                    controller: passwordController,
-                    labelText: "Password",
-                    obscureText: true,
-                  ),
-
-                  // Confirm Password
-                  const SizedBox(height: 15),
-                  UserTextField(
-                    controller: confirmPasswordController,
-                    labelText: "Confirm Password",
-                    obscureText: true,
-                  ),
-                  
-                  // Sign Up Button
-                  const SizedBox(height: 25),
-                  UserButton(buttonText: "Sign Up", onPressed: userSignUp),
-                  // Already have an account
-                  const SizedBox(height: 25),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text("Already have an Account?"),
-                      const SizedBox(width: 4),
-                      GestureDetector(
-                        onTap: widget.onTap,
-                        child: const Text(
-                          "Login Now",
-                          style: TextStyle(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
-                          ),
+                  textAlign: TextAlign.center,
+                ),
+      
+                // Email
+                const SizedBox(height: 25),
+                UserTextField(
+                  controller: emailController,
+                  labelText: "E-mail",
+                  obscureText: false,
+                ),
+      
+                // Password
+                const SizedBox(height: 15),
+                UserTextField(
+                  controller: passwordController,
+                  labelText: "Password",
+                  obscureText: true,
+                ),
+      
+                // Confirm Password
+                const SizedBox(height: 15),
+                UserTextField(
+                  controller: confirmPasswordController,
+                  labelText: "Confirm Password",
+                  obscureText: true,
+                ),
+                
+                // Sign Up Button
+                const SizedBox(height: 25),
+                UserButton(buttonText: "Sign Up", onPressed: userSignUp),
+                // Already have an account
+                const SizedBox(height: 25),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("Already have an Account?"),
+                    const SizedBox(width: 4),
+                    GestureDetector(
+                      onTap: widget.onTap,
+                      child: const Text(
+                        "Login Now",
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            if (isLoading)
-              AbsorbPointer(
-                absorbing: true,
-                child: Container(
-                  color: Colors.black.withOpacity(0.5),
-                  child: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                    ),
+                  ],
                 ),
-              ),
-          ],
+              ],
+            ),
+          ),
         ),
       ),
     );

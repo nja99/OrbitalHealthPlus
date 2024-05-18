@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:healthsphere/components/loading_overlay.dart';
 import 'package:healthsphere/components/user_button.dart';
 import 'package:healthsphere/components/custom_alert_dialog.dart';
 import 'package:healthsphere/components/user_textfield.dart';
@@ -60,21 +61,20 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      resizeToAvoidBottomInset: false,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Center(
+    return buildLoadingOverlay(
+      isLoading,
+      Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+            child: Center(
               child: ListView(
                 children: [
+                  const SizedBox(height: 50),
                   // Logo
-                  const SizedBox(height: 50),
                   Image.asset("lib/assets/images/Logo.png", height: 160),
-                  
-                  // Welcome back!
                   const SizedBox(height: 50),
+                  // Welcome back!
                   Text(
                     'Welcome back!',
                     style: TextStyle(
@@ -83,7 +83,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-
                   // Email
                   const SizedBox(height: 50),
                   UserTextField(
@@ -91,7 +90,6 @@ class _LoginPageState extends State<LoginPage> {
                     labelText: "Email Address",
                     obscureText: false,
                   ),
-
                   // Password
                   const SizedBox(height: 15),
                   UserTextField(
@@ -99,7 +97,6 @@ class _LoginPageState extends State<LoginPage> {
                     labelText: "Password",
                     obscureText: true,
                   ),
-
                   // Forgot Password
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -114,14 +111,12 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                   ),
-
                   // Login Button
                   const SizedBox(height: 25),
                   UserButton(
                     buttonText: "Log in",
                     onPressed: userSignIn,
                   ),
-
                   // Register Now
                   const SizedBox(height: 25),
                   Row(
@@ -144,19 +139,8 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
-            if (isLoading)
-              AbsorbPointer(
-                absorbing: true,
-                child: Container(
-                  color: Colors.black.withOpacity(0.5),
-                  child: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
-              ),
-          ],
+          ),
         ),
-      ),
     );
   }
 }

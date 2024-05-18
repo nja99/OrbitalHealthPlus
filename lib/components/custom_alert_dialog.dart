@@ -60,17 +60,3 @@ void showCustomDialog(BuildContext context, String title, String description) {
     },
   );
 }
-
-void showLoadingDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (context) => const Center(
-      child: CircularProgressIndicator(),
-    ),
-  );
-}
-
-void hideLoadingDialog(BuildContext context) {
-  Navigator.of(context, rootNavigator: true).pop();
-}
