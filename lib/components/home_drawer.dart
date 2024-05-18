@@ -6,9 +6,9 @@ import 'package:healthsphere/services/auth/auth_service.dart';
 class HomeDrawer extends StatelessWidget {
   const HomeDrawer({super.key});
 
-  void userSignOut() {
+  void userSignOut() async {
     final authService = AuthService();
-    authService.signOut();
+    await authService.signOut();
   }
 
   @override
