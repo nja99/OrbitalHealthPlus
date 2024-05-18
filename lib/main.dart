@@ -4,6 +4,7 @@ import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:healthsphere/services/auth/auth_page.dart';
+import 'package:healthsphere/services/providers/auth_providers.dart';
 
 void main() async {
   
@@ -13,7 +14,8 @@ void main() async {
   runApp(
     ChangeNotifierProvider(
       create: (context) => ThemeProvider(),
-      child: const MyApp(),
+      child: const AuthProviders(
+        child: MyApp()),
     )
   );
   

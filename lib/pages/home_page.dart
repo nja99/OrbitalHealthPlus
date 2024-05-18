@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:healthsphere/components/home_drawer.dart';
-import 'home_screen.dart';
+import 'package:healthsphere/screen/home_screen.dart';
 
 class HomePage extends StatefulWidget {
 
