@@ -85,7 +85,7 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 25),
               UserTextField(
                 controller: emailController,
-                hintText: "E-mail",
+                labelText: "E-mail",
                 obscureText: false,
               ),
 
@@ -93,7 +93,7 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 15),
               UserTextField(
                 controller: passwordController,
-                hintText: "Password",
+                labelText: "Password",
                 obscureText: true,
               ),
 
@@ -101,7 +101,7 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 15),
               UserTextField(
                 controller: confirmPasswordController,
-                hintText: "Confirm Password",
+                labelText: "Confirm Password",
                 obscureText: true,
               ),
 
@@ -115,7 +115,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
               // Register Now
               const SizedBox(height: 25),
-               Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text(" Already have an Account?"),

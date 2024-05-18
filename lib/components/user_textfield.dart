@@ -1,35 +1,69 @@
 import 'package:flutter/material.dart';
 
-class UserTextField extends StatelessWidget {
+class UserTextField extends StatefulWidget {
   final TextEditingController controller;
-  final String hintText;
+  final String labelText;
   final bool obscureText;
 
   const UserTextField({
     super.key,
     required this.controller,
-    required this.hintText,
-    required this.obscureText
+    required this.labelText,
+    required this.obscureText,
     });
+
+  @override
+  State<UserTextField> createState() => _UserTextFieldState();
+}
+
+class _UserTextFieldState extends State<UserTextField> {
+
+  late bool _isObscured;
+
+  @override
+  void initState(){
+    super.initState();
+    _isObscured = widget.obscureText;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+      padding: const EdgeInsetsDirectional.fromSTEB(35, 12, 35, 0),
       child: TextField(
-        controller: controller,
-        obscureText: obscureText,
+        controller: widget.controller,
+        obscureText: _isObscured,
         decoration: InputDecoration(
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Theme.of(context).colorScheme.tertiary),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Theme.of(context).colorScheme.primary,
+              width: 2
+            ),
           ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Theme.of(context).colorScheme.secondary,
+              width: 2
+            )
           ),
-          fillColor: Theme.of(context).colorScheme.secondary,
+          fillColor: Theme.of(context).colorScheme.surface,
           filled: true,
-          hintText: hintText,
-          hintStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
+          contentPadding: const EdgeInsetsDirectional.fromSTEB(0, 16, 16, 8),
+          labelText: widget.labelText,
+          labelStyle: TextStyle(
+            color: Theme.of(context).colorScheme.primary,
+            fontSize: 16,
+          ),
+          suffixIcon: widget.obscureText
+            ? IconButton(
+                icon: Icon(_isObscured ? Icons.visibility_off : Icons.visibility),
+                onPressed: () {
+                  setState(() {
+                    _isObscured = !_isObscured;
+                  });
+                },
+              )
+            : null,
         ),
       ),
     );
