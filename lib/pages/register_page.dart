@@ -40,17 +40,24 @@ class _RegisterPageState extends State<RegisterPage> {
       try {
         await authService.signUpWithEmailPassword(emailController.text, passwordController.text);
         authService.signOut();
-        Navigator.pop(context);
+        
+        // Remove Loading Circle
+        if (mounted) {
+          Navigator.pop(context);
+        }
       }
       // Catch Sign Up Errors
       catch (e) {
-        Navigator.pop(context);
-        showCustomDialog(context, e.toString(), "Please try again.");
+        // Remove Loading Circle
+        if (mounted) {
+          Navigator.pop(context);
+          showCustomDialog(context, e.toString(), "Please try again.");
+        }
       }
     } 
     // If Password does not match -> Prompt Message
     else {
-        showCustomDialog(context, "Mismatch Error", "Passwords don't match!");
+      showCustomDialog(context, "Mismatch Error", "Passwords don't match!");
     }
   }
 
@@ -85,7 +92,7 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 25),
               UserTextField(
                 controller: emailController,
-                hintText: "E-mail",
+                labelText: "E-mail",
                 obscureText: false,
               ),
 
@@ -93,7 +100,7 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 15),
               UserTextField(
                 controller: passwordController,
-                hintText: "Password",
+                labelText: "Password",
                 obscureText: true,
               ),
 
@@ -101,7 +108,7 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 15),
               UserTextField(
                 controller: confirmPasswordController,
-                hintText: "Confirm Password",
+                labelText: "Confirm Password",
                 obscureText: true,
               ),
 

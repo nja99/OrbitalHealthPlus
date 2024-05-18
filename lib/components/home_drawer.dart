@@ -18,7 +18,7 @@ class HomeDrawer extends StatelessWidget {
       child: ListView(
         children: [
           // App logo
-          Padding(
+          const Padding(
             padding: EdgeInsets.only(top: 10.0),
             child: Icon(
               Icons.lock_open_outlined,

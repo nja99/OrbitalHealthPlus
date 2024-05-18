@@ -38,13 +38,17 @@ class _LoginPageState extends State<LoginPage> {
       // Sign User In
       await authService.signInWithEmailPassword(emailController.text, passwordController.text);
       // Remove Loading Circle
-      Navigator.pop(context);
+      if (mounted) {
+        Navigator.pop(context);
+      }
     
     }
     // Catch Login Exceptions
     catch (e) {
-      Navigator.pop(context);
-      showCustomDialog(context, e.toString(), "Please try again.");
+      if (mounted) {
+        Navigator.pop(context);
+        showCustomDialog(context, e.toString(), "Please try again.");
+      }
     }
   }
 
@@ -79,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 50),
               UserTextField(
                 controller: emailController,
-                hintText: "E-mail",
+                labelText: "E-mail",
                 obscureText: false,
               ),
 
@@ -87,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 15),
               UserTextField(
                 controller: passwordController,
-                hintText: "Password",
+                labelText: "Password",
                 obscureText: true,
               ),
 
