@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:healthsphere/services/firestore.dart';
+import 'package:healthsphere/services/database/firestore_service.dart';
+import 'package:healthsphere/services/service_locator.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final user = FirebaseAuth.instance.currentUser;
   // Fire Store //
-  final FirestoreService firestoreService = FirestoreService();
+  final FirestoreService firestoreService = getIt<FirestoreService>();
   
   // Text Controller //
   final TextEditingController textController = TextEditingController();

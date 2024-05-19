@@ -1,16 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:healthsphere/services/service_locator.dart';
 
 class FirestoreService {
 
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+  final FirebaseAuth _firebaseAuth = getIt<FirebaseAuth>();
+  final FirebaseFirestore _firebaseFirestore = getIt<FirebaseFirestore>();
 
 // Retrieve Collection of Documents
-
-  final CollectionReference documents =
-    FirebaseFirestore.instance.collection("documents");
-
   CollectionReference get tasksCollection {
     String uid = _firebaseAuth.currentUser?.uid ?? '';
     return _firebaseFirestore.collection('users').doc(uid).collection('tasks');

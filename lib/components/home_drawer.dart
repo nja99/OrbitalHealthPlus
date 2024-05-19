@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:healthsphere/components/home_drawer_tile.dart';
 import 'package:healthsphere/pages/settings_page.dart';
 import 'package:healthsphere/services/auth/auth_service.dart';
+import 'package:healthsphere/services/service_locator.dart';
 
 class HomeDrawer extends StatelessWidget {
   const HomeDrawer({super.key});
 
   void userSignOut() async {
-    final authService = AuthService();
+    final authService = getIt<AuthService>();
     await authService.signOut();
   }
 

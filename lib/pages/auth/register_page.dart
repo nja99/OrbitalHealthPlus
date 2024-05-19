@@ -3,6 +3,7 @@ import 'package:healthsphere/components/user_button.dart';
 import 'package:healthsphere/components/custom_alert_dialog.dart';
 import 'package:healthsphere/components/user_textfield.dart';
 import 'package:healthsphere/services/auth/auth_service.dart';
+import 'package:healthsphere/services/service_locator.dart';
 import 'package:healthsphere/utils/loading_overlay.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -27,7 +28,7 @@ class _RegisterPageState extends State<RegisterPage> {
   void userSignUp() async {
 
     // Get Auth Service
-    final authService = AuthService();
+    final authService = getIt<AuthService>();
 
 
     // Show loading indicator

@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:healthsphere/services/service_locator.dart';
 
 class UserProfileService {
   
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore = getIt<FirebaseFirestore>();
 
   DocumentReference _getUserDocument(User user) {
     return _firestore.collection('users').doc(user.uid);
