@@ -14,13 +14,13 @@ class UserButton extends StatelessWidget {
   @override
   Widget build(BuildContext context){
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+      padding: const EdgeInsetsDirectional.fromSTEB(16, 12, 16, 24),
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.all(25),
+          padding: const EdgeInsets.all(18),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(50),
           ),
           backgroundColor: Theme.of(context).colorScheme.secondary,
           elevation: 5,
@@ -30,12 +30,12 @@ class UserButton extends StatelessWidget {
           child: Text(
             buttonText,
             style: TextStyle(
-              color: Theme.of(context).colorScheme.tertiary,
+              color: Theme.of(context).colorScheme.primary,
               fontWeight: FontWeight.bold,
-              fontSize: 16,
+              fontSize: 18,
             ),
           ),
-       ),
+        ),
       ),
     );
   }

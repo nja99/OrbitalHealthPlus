@@ -1,6 +1,7 @@
+import 'package:healthsphere/services/service_locator.dart';
 import 'package:healthsphere/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
-import 'firebase_options.dart';
+import 'config/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:healthsphere/services/auth/auth_page.dart';
@@ -8,8 +9,9 @@ import 'package:healthsphere/services/auth/auth_page.dart';
 void main() async {
   
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  setUp();
   runApp(
     ChangeNotifierProvider(
       create: (context) => ThemeProvider(),
