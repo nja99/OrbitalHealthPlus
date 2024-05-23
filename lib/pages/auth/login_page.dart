@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:healthsphere/components/user_button.dart';
 import 'package:healthsphere/components/custom_alert_dialog.dart';
 import 'package:healthsphere/components/user_textfield.dart';
+import 'package:healthsphere/pages/auth/forget_pw_page.dart';
 import 'package:healthsphere/services/auth/auth_service.dart';
 import 'package:healthsphere/services/service_locator.dart';
 import 'package:healthsphere/utils/loading_overlay.dart';
@@ -76,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                   'Welcome back!',
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.primary,
-                    fontSize: 14,
+                    fontSize: 16,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -98,14 +100,27 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 3),
                 // Forgot Password
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                  padding: EdgeInsets.symmetric(horizontal: 30.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
-                        "Forgot Password?",
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return ForgetPasswordPage();
+                              },
+                            ),
+                          );
+                        },
+                        child: Text(
+                          "Forgot Password?",
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ],
                   ),

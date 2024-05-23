@@ -1,3 +1,5 @@
+
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:healthsphere/services/service_locator.dart';
 import 'package:healthsphere/services/user/user_profile_service.dart';
@@ -53,5 +55,14 @@ class AuthService {
   // Sign Out
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
+  }
+
+  Future<void> resetPassword(String email) async {
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+    } 
+    on FirebaseAuthException catch (e) {
+      throw Exception(e.code);
+    }
   }
 }
