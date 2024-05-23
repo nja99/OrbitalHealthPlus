@@ -94,9 +94,11 @@ class _LoginPageState extends State<LoginPage> {
                   labelText: "Password",
                   obscureText: true,
                 ),
+
+                const SizedBox(height: 3),
                 // Forgot Password
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -109,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 // Login Button
-                const SizedBox(height: 25),
+                const SizedBox(height: 10),
                 UserButton(
                   buttonText: "Log in",
                   onPressed: userSignIn,
