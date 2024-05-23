@@ -69,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Center(
             child: ListView(
               children: [
-                const SizedBox(height: 50),
+                const SizedBox(height: 40),
                 // Logo
                 Image.asset("lib/assets/images/Logo.png", height: 160),
                 const SizedBox(height: 50),
@@ -83,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                   textAlign: TextAlign.center,
                 ),
                 // Email
-                const SizedBox(height: 50),
+                const SizedBox(height: 30),
                 UserTextField(
                   controller: emailController,
                   labelText: "Email Address",
@@ -133,6 +133,36 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 // Register Now
                 const SizedBox(height: 25),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Divider(
+                          thickness:0.5,
+                          color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Text(
+                            "Or continue with",
+                            style: TextStyle(color: Theme.of(context).colorScheme.primary)
+                          ),
+                        ),
+                        Expanded(
+                          child: Divider(
+                            thickness:0.5,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 25),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
