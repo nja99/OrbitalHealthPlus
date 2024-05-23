@@ -24,20 +24,17 @@ class _LoginPageState extends State<LoginPage> {
 
   // Loading state
   bool _isLoading = false;
+  final authService = getIt<AuthService>();
+
 
   // Login Function
   void userSignIn() async {
-
-    final authService = getIt<AuthService>();
-    
-     // Show loading indicator
+    // Show loading indicator
     setState(() {
       _isLoading = true;
     });
-
     // Attempt Sign In
     try {
-      // Sign User In
       await authService.signInWithEmailPassword(emailController.text, passwordController.text);
       // Remove Loading Circle
       if (mounted) {
@@ -46,7 +43,6 @@ class _LoginPageState extends State<LoginPage> {
         });
       }
     }
-    // Catch Login Exceptions
     catch (e) {
       // Remove Loading Circle
       if (mounted) {
@@ -55,9 +51,10 @@ class _LoginPageState extends State<LoginPage> {
         });
         showCustomDialog(context, e.toString(), "Please try again.");
       }
-
     }
   } 
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -167,16 +164,22 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 10),
 
                 //google and facebook sign in
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     //google button
-                    SquareTile(imagePath: 'lib/assets/images/google_logo.png', height: 50.0,),
-
+                    SquareTile(
+                      imagePath: 'lib/assets/images/google_logo.png',
+                      height: 50.0,
+                      onTap: () => authService.signInWithGoogle(),
+                      ),
                     const SizedBox(width: 25),
                     //facebook button
-                    SquareTile(imagePath: 'lib/assets/images/facebook_logo.png', height: 50.0)
-                  
+                    SquareTile(
+                      imagePath: 'lib/assets/images/facebook_logo.png',
+                      height: 50.0,
+                      onTap: () {},
+                      ),
                   ],
                 ),
 
