@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:healthsphere/components/square_tile.dart';
 import 'package:healthsphere/components/user_button.dart';
 import 'package:healthsphere/components/custom_alert_dialog.dart';
 import 'package:healthsphere/components/user_textfield.dart';
@@ -131,34 +132,52 @@ class _LoginPageState extends State<LoginPage> {
                   buttonText: "Log in",
                   onPressed: userSignIn,
                 ),
+
                 // Register Now
                 const SizedBox(height: 25),
 
+                // or continue with
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Row(
                     children: [
                       Expanded(
                         child: Divider(
-                          thickness:0.5,
-                          color: Theme.of(context).colorScheme.primary,
+                          thickness:1,
+                          color: Theme.of(context).colorScheme.inversePrimary,
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: Text(
                             "Or continue with",
-                            style: TextStyle(color: Theme.of(context).colorScheme.primary)
+                            style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary)
                           ),
                         ),
                         Expanded(
                           child: Divider(
-                            thickness:0.5,
-                            color: Theme.of(context).colorScheme.primary,
+                            thickness:1,
+                            color: Theme.of(context).colorScheme.inversePrimary,
                           ),
                         ),
                     ],
                   ),
+                ),
+
+                const SizedBox(height: 10),
+
+                //google and facebook sign in
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    //google button
+                    SquareTile(imagePath: 'lib/assets/images/google_logo.png', height: 50.0,),
+
+                    const SizedBox(width: 25),
+                    //facebook button
+                    SquareTile(imagePath: 'lib/assets/images/facebook_logo.png', height: 50.0)
+                  
+                  ],
                 ),
 
                 const SizedBox(height: 25),

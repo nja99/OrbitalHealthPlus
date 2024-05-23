@@ -4,9 +4,9 @@ ThemeData lightMode = ThemeData(
   fontFamily: "Urbanist",
   colorScheme: ColorScheme.light(
     surface: Colors.white,
-    primary: Colors.grey.shade600,
+    primary: Colors.grey.shade500,
     secondary: Colors.black,
-    tertiary: Colors.white,
+    tertiary: Colors.grey.shade300,
     inversePrimary: Colors.grey.shade700,
   )
 );
