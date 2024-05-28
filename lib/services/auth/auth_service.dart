@@ -1,7 +1,4 @@
-
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:healthsphere/services/service_locator.dart';
 import 'package:healthsphere/services/user/user_profile_service.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -32,10 +29,6 @@ class AuthService {
 
     return await _firebaseAuth.signInWithCredential(credential);
   }
-
-
-  
-
 
   // Get Current User
   User? getCurrentUser() {

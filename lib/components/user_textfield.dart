@@ -51,7 +51,7 @@ class _UserTextFieldState extends State<UserTextField> {
           labelText: widget.labelText,
           labelStyle: TextStyle(
             color: Theme.of(context).colorScheme.primary,
-            fontSize: 18,
+            fontSize: 16,
           ),
           suffixIcon: widget.obscureText
             ? IconButton(
