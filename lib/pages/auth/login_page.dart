@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:healthsphere/components/square_tile.dart';
 import 'package:healthsphere/components/user_button.dart';
 import 'package:healthsphere/components/custom_alert_dialog.dart';
 import 'package:healthsphere/components/user_textfield.dart';
+import 'package:healthsphere/pages/auth/forget_pw_page.dart';
 import 'package:healthsphere/services/auth/auth_service.dart';
 import 'package:healthsphere/services/service_locator.dart';
 import 'package:healthsphere/utils/loading_overlay.dart';
@@ -21,20 +24,17 @@ class _LoginPageState extends State<LoginPage> {
 
   // Loading state
   bool _isLoading = false;
+  final authService = getIt<AuthService>();
+
 
   // Login Function
   void userSignIn() async {
-
-    final authService = getIt<AuthService>();
-    
-     // Show loading indicator
+    // Show loading indicator
     setState(() {
       _isLoading = true;
     });
-
     // Attempt Sign In
     try {
-      // Sign User In
       await authService.signInWithEmailPassword(emailController.text, passwordController.text);
       // Remove Loading Circle
       if (mounted) {
@@ -43,7 +43,6 @@ class _LoginPageState extends State<LoginPage> {
         });
       }
     }
-    // Catch Login Exceptions
     catch (e) {
       // Remove Loading Circle
       if (mounted) {
@@ -52,9 +51,10 @@ class _LoginPageState extends State<LoginPage> {
         });
         showCustomDialog(context, e.toString(), "Please try again.");
       }
-
     }
   } 
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Center(
             child: ListView(
               children: [
-                const SizedBox(height: 50),
+                const SizedBox(height: 40),
                 // Logo
                 Image.asset("lib/assets/images/Logo.png", height: 160),
                 const SizedBox(height: 50),
@@ -76,12 +76,12 @@ class _LoginPageState extends State<LoginPage> {
                   'Welcome back!',
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.primary,
-                    fontSize: 14,
+                    fontSize: 16,
                   ),
                   textAlign: TextAlign.center,
                 ),
                 // Email
-                const SizedBox(height: 50),
+                const SizedBox(height: 30),
                 UserTextField(
                   controller: emailController,
                   labelText: "Email Address",
@@ -94,28 +94,97 @@ class _LoginPageState extends State<LoginPage> {
                   labelText: "Password",
                   obscureText: true,
                 ),
+
+                const SizedBox(height: 3),
                 // Forgot Password
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  padding: EdgeInsets.symmetric(horizontal: 30.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
-                        "Forgot Password?",
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return ForgetPasswordPage();
+                              },
+                            ),
+                          );
+                        },
+                        child: Text(
+                          "Forgot Password?",
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
                 // Login Button
-                const SizedBox(height: 25),
+                const SizedBox(height: 10),
                 UserButton(
                   buttonText: "Log in",
                   onPressed: userSignIn,
                 ),
+
                 // Register Now
                 const SizedBox(height: 25),
+
+                // or continue with
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Divider(
+                          thickness:1,
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Text(
+                            "Or continue with",
+                            style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary)
+                          ),
+                        ),
+                        Expanded(
+                          child: Divider(
+                            thickness:1,
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 10),
+
+                //google and facebook sign in
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    //google button
+                    SquareTile(
+                      imagePath: 'lib/assets/images/google_logo.png',
+                      height: 50.0,
+                      onTap: () => authService.signInWithGoogle(),
+                      ),
+                    const SizedBox(width: 25),
+                    //facebook button
+                    SquareTile(
+                      imagePath: 'lib/assets/images/facebook_logo.png',
+                      height: 50.0,
+                      onTap: () {},
+                      ),
+                  ],
+                ),
+
+                const SizedBox(height: 25),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
