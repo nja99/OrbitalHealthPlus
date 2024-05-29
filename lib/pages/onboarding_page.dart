@@ -3,7 +3,6 @@ import "package:font_awesome_flutter/font_awesome_flutter.dart";
 import "package:healthsphere/components/user_button.dart";
 import "package:healthsphere/pages/auth/login_page.dart";
 import "package:healthsphere/pages/auth/register_page.dart";
-import "package:healthsphere/services/auth/auth_page.dart";
 import "package:healthsphere/services/auth/auth_service.dart";
 import "package:healthsphere/services/auth/auth_service_locator.dart";
 
