@@ -87,7 +87,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(height: 50),
                 // Logo
                 const SizedBox(height: 60),
-                Image.asset("lib/assets/images/logo_light.png", height: 120),
+                Image.asset("lib/assets/images/logo_light.png", height: 160),
       
                 // Create account text
                 Text(

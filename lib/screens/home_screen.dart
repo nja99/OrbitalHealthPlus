@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: openDocumentBox,
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add,color: Color(0xFF4B39EF),),
       ), //bottom right of page
 
       body: StreamBuilder<QuerySnapshot>(

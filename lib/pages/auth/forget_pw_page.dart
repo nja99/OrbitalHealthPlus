@@ -38,8 +38,6 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
       }
   } 
 
-
-
   @override
   Widget build(BuildContext context) {
     return loadingOverlay(
