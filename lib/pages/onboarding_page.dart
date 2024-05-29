@@ -1,10 +1,19 @@
 import "package:flutter/material.dart";
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
 import "package:healthsphere/components/user_button.dart";
+import "package:healthsphere/pages/auth/login_page.dart";
+import "package:healthsphere/services/auth/auth_page.dart";
 
-class OnBoardingPage extends StatelessWidget {
+class OnBoardingPage extends StatefulWidget {
 
   const OnBoardingPage({super.key});
+  
+  @override
+  State<OnBoardingPage> createState() => _OnBoardingPageState();
+}
+
+class _OnBoardingPageState extends State<OnBoardingPage> {
+  
 
   @override
   Widget build(BuildContext context) {
@@ -97,18 +106,24 @@ class OnBoardingPage extends StatelessWidget {
                   const Text("Already Have an Account?"),
                   const SizedBox(width: 4),
                   GestureDetector(
-                    onTap: () {},
-                    child: const Text (
+                    child: const Text(
                       "Log In!",
                       style: TextStyle(
                         color: Colors.blue,
                         fontWeight: FontWeight.bold,
                         fontSize: 16
                       ),
-                    )
-                  )
+                    ),
+                    onTap: () { 
+                      Navigator.push(context,
+                        MaterialPageRoute(
+                          builder: (context) => const AuthPage(),
+                        ),
+                      );
+                    },
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),

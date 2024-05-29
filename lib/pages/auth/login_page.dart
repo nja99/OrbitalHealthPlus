@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                 Image.asset("lib/assets/images/logo_light.png", height: 120),
                 
                 // Welcome back!
-                const SizedBox(height: 50),
+                const SizedBox(height: 20),
                 Text(
                   'Welcome back!',
                   style: TextStyle(
@@ -164,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
 
-                const SizedBox(height: 10),
+                const SizedBox(height: 15),
 
                 //google and facebook sign in
                 Row(
@@ -173,14 +173,14 @@ class _LoginPageState extends State<LoginPage> {
                     //google button
                     SquareTile(
                       imagePath: 'lib/assets/images/google_logo.png',
-                      height: 15.0,
+                      height: 40.0,
                       onTap: () => authService.signInWithGoogle(),
                       ),
                     const SizedBox(width: 25),
                     //facebook button
                     SquareTile(
                       imagePath: 'lib/assets/images/facebook_logo.png',
-                      height: 15.0,
+                      height: 40.0,
                       onTap: () {},
                       ),
                   ],
