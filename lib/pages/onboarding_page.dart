@@ -1,10 +1,22 @@
 import "package:flutter/material.dart";
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
 import "package:healthsphere/components/user_button.dart";
+import "package:healthsphere/pages/auth/login_page.dart";
+import "package:healthsphere/pages/auth/register_page.dart";
+import "package:healthsphere/services/auth/auth_service.dart";
+import "package:healthsphere/services/auth/auth_service_locator.dart";
 
-class OnBoardingPage extends StatelessWidget {
+class OnBoardingPage extends StatefulWidget {
 
   const OnBoardingPage({super.key});
+  
+  @override
+  State<OnBoardingPage> createState() => _OnBoardingPageState();
+}
+
+class _OnBoardingPageState extends State<OnBoardingPage> {
+  final authService = getIt<AuthService>();
+  
 
   @override
   Widget build(BuildContext context) {
@@ -60,15 +72,20 @@ class OnBoardingPage extends StatelessWidget {
               // Sign Up with E-mail
               UserButton(
                 buttonText: "Sign Up with Email", 
-                onPressed: () {},
+                onPressed: () { 
+                      Navigator.push(context,
+                        MaterialPageRoute(
+                          builder: (context) => const RegisterPage(),
+                        ),
+                      );
+                    },
                 iconData: Icons.email
               ),
 
               // Or Use Social Media
-              Text(
+              const Text(
                 "Or use social media",
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.inversePrimary,
                   fontSize: 16
                 ),
                 textAlign: TextAlign.center,
@@ -78,14 +95,14 @@ class OnBoardingPage extends StatelessWidget {
               const SizedBox(height: 5),
               UserButton(
                 buttonText: "Sign Up with Google", 
-                onPressed: () {},
-                iconData: FontAwesomeIcons.google
+                onPressed: () => authService.signInWithGoogle(),
+                iconData: FontAwesomeIcons.google,
               ),
 
               // Sign up with Facebook
               UserButton(
                 buttonText: "Sign Up with Facebook", 
-                onPressed: () {},
+                onPressed: () {}, //TO DO
                 iconData: FontAwesomeIcons.facebook,
               ),
 
@@ -97,18 +114,24 @@ class OnBoardingPage extends StatelessWidget {
                   const Text("Already Have an Account?"),
                   const SizedBox(width: 4),
                   GestureDetector(
-                    onTap: () {},
-                    child: const Text (
+                    child: const Text(
                       "Log In!",
                       style: TextStyle(
                         color: Colors.blue,
                         fontWeight: FontWeight.bold,
                         fontSize: 16
                       ),
-                    )
-                  )
+                    ),
+                    onTap: () { 
+                      Navigator.push(context,
+                        MaterialPageRoute(
+                          builder: (context) => const LoginPage(),
+                        ),
+                      );
+                    },
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),

@@ -1,8 +1,13 @@
+/*
+
 import 'package:flutter/material.dart';
 import 'package:healthsphere/pages/auth/login_page.dart';
 import 'package:healthsphere/pages/auth/register_page.dart';
+import 'package:healthsphere/services/auth/auth_service.dart';
+import 'package:healthsphere/services/auth/auth_service_locator.dart';
 
 class LoginOrRegisterPage extends StatefulWidget {
+
   const LoginOrRegisterPage({super.key});
 
   @override
@@ -11,7 +16,14 @@ class LoginOrRegisterPage extends StatefulWidget {
 
 class _LoginOrRegisterPageState extends State<LoginOrRegisterPage> {
  // initially show login page
-  bool showLoginPage = true;
+  late bool showLoginPage;
+
+  @override
+  void initState() {
+    super.initState();
+    final authService = getIt<AuthService>();
+    showLoginPage = authService.returnShowLoginPage();
+  }
 
  // toggle between login and register page
   void togglePages() {
@@ -24,12 +36,15 @@ class _LoginOrRegisterPageState extends State<LoginOrRegisterPage> {
   Widget build(BuildContext context) {
     if (showLoginPage) {
       return LoginPage(
-        onTap: togglePages,
+
         );
     } else {
       return RegisterPage(
-        onTap: togglePages,
+
       );
     }
   }
 }
+
+*/
+

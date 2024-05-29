@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:healthsphere/components/user_button.dart';
 import 'package:healthsphere/components/custom_alert_dialog.dart';
 import 'package:healthsphere/components/user_textfield.dart';
+import 'package:healthsphere/pages/auth/login_page.dart';
 import 'package:healthsphere/services/auth/auth_service.dart';
 import 'package:healthsphere/services/service_locator.dart';
 import 'package:healthsphere/utils/loading_overlay.dart';
 
 class RegisterPage extends StatefulWidget {
-  final Function()? onTap;
-  const RegisterPage({super.key, required this.onTap});
+
+  const RegisterPage({super.key});
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -85,8 +86,8 @@ class _RegisterPageState extends State<RegisterPage> {
               children: [
                 const SizedBox(height: 50),
                 // Logo
-                Image.asset("lib/assets/images/Logo.png", height: 160),
-                const SizedBox(height: 50),
+                const SizedBox(height: 60),
+                Image.asset("lib/assets/images/logo_light.png", height: 120),
       
                 // Create account text
                 Text(
@@ -133,7 +134,12 @@ class _RegisterPageState extends State<RegisterPage> {
                     const Text("Already have an Account?"),
                     const SizedBox(width: 4),
                     GestureDetector(
-                      onTap: widget.onTap,
+                      onTap: () { Navigator.push(context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginPage(),
+                          ),
+                        ); 
+                      },
                       child: const Text(
                         "Login Now",
                         style: TextStyle(

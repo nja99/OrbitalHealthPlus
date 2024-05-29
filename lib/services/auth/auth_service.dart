@@ -9,7 +9,6 @@ class AuthService {
   // Get instance of Firebase Auth
   final FirebaseAuth _firebaseAuth = getIt<FirebaseAuth>();
   final UserProfileService _userProfileService = UserProfileService();
-  
 
   signInWithGoogle() async {
 
@@ -29,6 +28,8 @@ class AuthService {
 
     return await _firebaseAuth.signInWithCredential(credential);
   }
+
+  
 
   // Get Current User
   User? getCurrentUser() {

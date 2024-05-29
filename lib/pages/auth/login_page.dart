@@ -4,13 +4,13 @@ import 'package:healthsphere/components/user_button.dart';
 import 'package:healthsphere/components/custom_alert_dialog.dart';
 import 'package:healthsphere/components/user_textfield.dart';
 import 'package:healthsphere/pages/auth/forget_pw_page.dart';
+import 'package:healthsphere/pages/auth/register_page.dart';
 import 'package:healthsphere/services/auth/auth_service.dart';
 import 'package:healthsphere/services/service_locator.dart';
 import 'package:healthsphere/utils/loading_overlay.dart';
 
 class LoginPage extends StatefulWidget {
-  final Function()? onTap;
-  const LoginPage({super.key, required this.onTap});
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                 Image.asset("lib/assets/images/logo_light.png", height: 120),
                 
                 // Welcome back!
-                const SizedBox(height: 50),
+                const SizedBox(height: 20),
                 Text(
                   'Welcome back!',
                   style: TextStyle(
@@ -164,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
 
-                const SizedBox(height: 10),
+                const SizedBox(height: 15),
 
                 //google and facebook sign in
                 Row(
@@ -173,14 +173,14 @@ class _LoginPageState extends State<LoginPage> {
                     //google button
                     SquareTile(
                       imagePath: 'lib/assets/images/google_logo.png',
-                      height: 15.0,
+                      height: 40.0,
                       onTap: () => authService.signInWithGoogle(),
                       ),
                     const SizedBox(width: 25),
                     //facebook button
                     SquareTile(
                       imagePath: 'lib/assets/images/facebook_logo.png',
-                      height: 15.0,
+                      height: 40.0,
                       onTap: () {},
                       ),
                   ],
@@ -194,7 +194,12 @@ class _LoginPageState extends State<LoginPage> {
                     const Text("Don't have an Account?"),
                     const SizedBox(width: 4),
                     GestureDetector(
-                      onTap: widget.onTap,
+                      onTap: () { Navigator.push(context,
+                          MaterialPageRoute(
+                            builder: (context) => const RegisterPage(),
+                          ),
+                        ); 
+                      },
                       child: const Text(
                         "Register Now",
                         style: TextStyle(
