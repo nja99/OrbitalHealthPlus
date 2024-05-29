@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:healthsphere/components/user_button.dart';
 import 'package:healthsphere/components/user_textfield.dart';
 import 'package:healthsphere/services/auth/auth_service.dart';
 import 'package:healthsphere/services/user/user_service_locator.dart';
-import 'package:provider/provider.dart';
 import 'package:healthsphere/utils/loading_overlay.dart';
 import 'package:healthsphere/components/custom_alert_dialog.dart';
 
@@ -15,7 +13,6 @@ class ForgetPasswordPage extends StatefulWidget {
   @override
   State<ForgetPasswordPage> createState() => _ForgetPasswordPageState();
 }
-
 
 
 class _ForgetPasswordPageState extends State<ForgetPasswordPage> {

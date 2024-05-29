@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:healthsphere/components/square_tile.dart';
 import 'package:healthsphere/components/user_button.dart';
 import 'package:healthsphere/components/custom_alert_dialog.dart';
@@ -67,11 +66,13 @@ class _LoginPageState extends State<LoginPage> {
           child: Center(
             child: ListView(
               children: [
-                const SizedBox(height: 40),
+                
                 // Logo
-                Image.asset("lib/assets/images/Logo.png", height: 160),
-                const SizedBox(height: 50),
+                const SizedBox(height: 60),
+                Image.asset("lib/assets/images/logo_light.png", height: 120),
+                
                 // Welcome back!
+                const SizedBox(height: 50),
                 Text(
                   'Welcome back!',
                   style: TextStyle(
@@ -80,6 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   textAlign: TextAlign.center,
                 ),
+
                 // Email
                 const SizedBox(height: 30),
                 UserTextField(
@@ -87,6 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                   labelText: "Email Address",
                   obscureText: false,
                 ),
+
                 // Password
                 const SizedBox(height: 15),
                 UserTextField(
@@ -98,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 3),
                 // Forgot Password
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 30.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -107,12 +110,12 @@ class _LoginPageState extends State<LoginPage> {
                           Navigator.push(context,
                             MaterialPageRoute(
                               builder: (context) {
-                                return ForgetPasswordPage();
+                                return const ForgetPasswordPage();
                               },
                             ),
                           );
                         },
-                        child: Text(
+                        child: const Text(
                           "Forgot Password?",
                           style: TextStyle(
                             color: Colors.blue,
@@ -135,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
 
                 // or continue with
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: Row(
                     children: [
                       Expanded(
@@ -170,14 +173,14 @@ class _LoginPageState extends State<LoginPage> {
                     //google button
                     SquareTile(
                       imagePath: 'lib/assets/images/google_logo.png',
-                      height: 50.0,
+                      height: 15.0,
                       onTap: () => authService.signInWithGoogle(),
                       ),
                     const SizedBox(width: 25),
                     //facebook button
                     SquareTile(
                       imagePath: 'lib/assets/images/facebook_logo.png',
-                      height: 50.0,
+                      height: 15.0,
                       onTap: () {},
                       ),
                   ],

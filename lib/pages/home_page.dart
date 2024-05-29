@@ -36,14 +36,14 @@ class _HomePageState extends State<HomePage> {
         titleTextStyle:
           const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         centerTitle: true,
-        backgroundColor: Colors.orange,
+        backgroundColor: const Color(0xFF4B25DD),
       ),
       drawer: const HomeDrawer(),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _navigateBottomBar,
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.orange,
+        selectedItemColor: const Color(0xFF4B25DD),
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(icon: Icon(Icons.add), label: "Add"),

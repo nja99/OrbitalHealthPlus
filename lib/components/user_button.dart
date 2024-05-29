@@ -3,18 +3,20 @@ import 'package:flutter/material.dart';
 class UserButton extends StatelessWidget {
 
   final String buttonText;
+  final IconData? iconData;
   final Function()? onPressed;
 
   const UserButton({
     super.key,
     required this.buttonText,
     required this.onPressed,
+    this.iconData
     });
 
   @override
   Widget build(BuildContext context){
     return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(20, 15, 20, 15),
+      padding: const EdgeInsetsDirectional.fromSTEB(30, 12, 30, 12),
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
@@ -27,14 +29,21 @@ class UserButton extends StatelessWidget {
 
         ),
         child: Center(
-          child: Text(
-            buttonText,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-            ),
-          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if(iconData != null)
+                Icon(iconData),
+              const SizedBox(width: 8),
+              Text(
+                buttonText,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16
+                ),)
+            ],
+          )
         ),
       ),
     );
