@@ -27,13 +27,14 @@ class _LoginPageState extends State<LoginPage> {
   final authService = getIt<AuthService>();
 
 
+
+
   // Login Function
   void userSignIn() async {
     // Show loading indicator
     setState(() {
       _isLoading = true;
     });
-    // Attempt Sign In
     try {
       await authService.signInWithEmailPassword(emailController.text, passwordController.text);
       // Remove Loading Circle
@@ -48,7 +49,6 @@ class _LoginPageState extends State<LoginPage> {
             );
     }
     catch (e) {
-      // Remove Loading Circle
       if (mounted) {
         setState(() {
           _isLoading = false;
@@ -57,6 +57,8 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
   } 
+
+
 
 
 
@@ -179,8 +181,15 @@ class _LoginPageState extends State<LoginPage> {
                     SquareTile(
                       imagePath: 'lib/assets/images/google_logo.png',
                       height: 40.0,
-                      onTap: () => authService.signInWithGoogle(),
-                      ),
+                      onTap: () => {
+                      authService.signInWithGoogle(),
+                      Navigator.push(context,
+                          MaterialPageRoute(
+                            builder: (context) => const RegisterPage(),
+                          ),
+                        ),
+                      }
+                    ),
                     const SizedBox(width: 25),
                     //facebook button
                     SquareTile(
