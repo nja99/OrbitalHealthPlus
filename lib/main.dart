@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
-import 'package:healthsphere/services/auth/auth_page.dart';
+import 'package:healthsphere/pages/onboarding_page.dart';
 import 'package:healthsphere/services/service_locator.dart';
 import 'package:healthsphere/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner:false,
-      home: const AuthPage(),
+      home: const OnBoardingPage(),
       theme: Provider.of<ThemeProvider>(context).themeData
     );
   }

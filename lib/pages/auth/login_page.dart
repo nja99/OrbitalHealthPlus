@@ -5,6 +5,7 @@ import 'package:healthsphere/components/custom_alert_dialog.dart';
 import 'package:healthsphere/components/user_textfield.dart';
 import 'package:healthsphere/pages/auth/forget_pw_page.dart';
 import 'package:healthsphere/pages/auth/register_page.dart';
+import 'package:healthsphere/pages/home_page.dart';
 import 'package:healthsphere/services/auth/auth_service.dart';
 import 'package:healthsphere/services/service_locator.dart';
 import 'package:healthsphere/utils/loading_overlay.dart';
@@ -26,13 +27,14 @@ class _LoginPageState extends State<LoginPage> {
   final authService = getIt<AuthService>();
 
 
+
+
   // Login Function
   void userSignIn() async {
     // Show loading indicator
     setState(() {
       _isLoading = true;
     });
-    // Attempt Sign In
     try {
       await authService.signInWithEmailPassword(emailController.text, passwordController.text);
       // Remove Loading Circle
@@ -41,9 +43,12 @@ class _LoginPageState extends State<LoginPage> {
           _isLoading = false;
         });
       }
+      Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const HomePage()),
+            );
     }
     catch (e) {
-      // Remove Loading Circle
       if (mounted) {
         setState(() {
           _isLoading = false;
@@ -52,6 +57,8 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
   } 
+
+
 
 
 
@@ -174,8 +181,15 @@ class _LoginPageState extends State<LoginPage> {
                     SquareTile(
                       imagePath: 'lib/assets/images/google_logo.png',
                       height: 40.0,
-                      onTap: () => authService.signInWithGoogle(),
-                      ),
+                      onTap: () => {
+                      authService.signInWithGoogle(),
+                      Navigator.push(context,
+                          MaterialPageRoute(
+                            builder: (context) => const RegisterPage(),
+                          ),
+                        ),
+                      }
+                    ),
                     const SizedBox(width: 25),
                     //facebook button
                     SquareTile(
