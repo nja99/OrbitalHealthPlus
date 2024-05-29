@@ -21,19 +21,18 @@ class _HomeScreenState extends State<HomeScreen> {
     return const AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: Scaffold(
-        body: Column(
-          children: [
-            HomeAppBar(),
-            HomeBody(),
-          ],
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              HomeAppBar(),
+              HomeBody(),
+            ],
+          ),
         ),
       ),
     );
   }
 }
-
-
-
 
 class HomeAppBar extends StatelessWidget {
   const HomeAppBar({super.key});

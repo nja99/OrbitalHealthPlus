@@ -10,6 +10,8 @@ class CategoryCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {},
       child: Container(
+        height: 10,
+        width: 10,
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
