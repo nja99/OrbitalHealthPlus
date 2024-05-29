@@ -181,11 +181,11 @@ class _LoginPageState extends State<LoginPage> {
                     SquareTile(
                       imagePath: 'lib/assets/images/google_logo.png',
                       height: 40.0,
-                      onTap: () => {
-                      authService.signInWithGoogle(),
+                      onTap: () async => {
+                      await authService.signInWithGoogle(),
                       Navigator.push(context,
                           MaterialPageRoute(
-                            builder: (context) => const RegisterPage(),
+                            builder: (context) => const HomePage(),
                           ),
                         ),
                       }

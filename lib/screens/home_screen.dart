@@ -1,8 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:healthsphere/services/database/firestore_service.dart';
-import 'package:healthsphere/services/service_locator.dart';
+import "package:flutter/cupertino.dart";
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:healthsphere/components/circle_button.dart";
+import "package:healthsphere/components/home_drawer.dart";
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,100 +12,80 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final user = FirebaseAuth.instance.currentUser;
-  // Fire Store //
-  final FirestoreService firestoreService = getIt<FirestoreService>();
-  
-  // Text Controller //
-  final TextEditingController textController = TextEditingController();
-
-  // Open Dialog Box to Add New Document
-  void openDocumentBox({String? documentID}) {
-    showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              // User Input
-              content: TextField(controller: textController),
-              // Save Button
-              actions: [
-                ElevatedButton(
-                  onPressed: () {
-                    // Add Document
-                    if (documentID == null) {
-                      firestoreService.addTask(textController.text);
-                    }
-                    // Edit Note
-                    else {
-                      firestoreService.updateTask(
-                          documentID, textController.text);
-                    }
-                    // Clear Text Controller
-                    textController.clear();
-                    // Close Dialog Box
-                    Navigator.pop(context);
-                  },
-                  child: const Text("Add"),
-                ),
-              ],
-            ));
+  @override
+  Widget build(BuildContext context) {
+    return const AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light,
+      child: Scaffold(
+        body: Column(
+          children: [
+            AppBars(),
+          ],
+        ),
+      ),
+    );
   }
+}
+
+class AppBars extends StatelessWidget {
+  const AppBars({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: openDocumentBox,
-        child: const Icon(Icons.add),
-      ), //bottom right of page
+    return Container(
+      padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
+      height: 200,
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(20),
+          bottomRight: Radius.circular(20),
+        ),
+        gradient: LinearGradient(
+          colors: [
+            Color(0xff886ff2),
+            Color(0xff6849ef),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: Column(
+        children: [
+          
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Hello, \nGood Morning!',
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.surface,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                  ),
+              ),
+              CircleButton(
+                icon: Icons.notifications,
+                onPressed: () {},
+              )
+            ],
+          ),
+          const SizedBox(height: 10),
 
-      body: StreamBuilder<QuerySnapshot>(
-        stream: firestoreService.readTaskStream(),
-        builder: (context, snapshot) {
-          // Retrieve Documents, If there is data
-          if (snapshot.hasData) {
-            List documentList = snapshot.data!.docs;
-
-            // Display List
-            return ListView.builder(
-                itemCount: documentList.length,
-                itemBuilder: (context, index) {
-                  // Retrieve individual documents
-                  DocumentSnapshot document = documentList[index];
-                  String documentID = document.id;
-
-                  // Get Note from Each Document
-                  Map<String, dynamic> data =
-                      document.data() as Map<String, dynamic>;
-                  String documentData = data['document'];
-
-                  // Display document in list tiles
-                  return Card(
-                    child: ListTile(
-                        title: Text(documentData),
-                        trailing:
-                            Row(mainAxisSize: MainAxisSize.min, children: [
-                          // Edit Button
-                          IconButton(
-                            onPressed: () =>
-                                openDocumentBox(documentID: documentID),
-                            icon: const Icon(Icons.edit),
-                          ),
-                          //Delete Button
-                          IconButton(
-                            onPressed: () =>
-                                firestoreService.deleteTask(documentID),
-                            icon: const Icon(Icons.delete),
-                          )
-                        ])),
-                  );
-                });
-          }
-          // If there are no Documents
-          else {
-            return const Text(" ");
-          }
-        },
-      )
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Container(
+              width: 380.0, // Set width
+              height: 48.0, // Set height
+              child: CupertinoSearchTextField(
+                backgroundColor: Theme.of(context).colorScheme.surface,
+                borderRadius: BorderRadius.circular(30),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

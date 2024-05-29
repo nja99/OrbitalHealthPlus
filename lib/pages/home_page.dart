@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:healthsphere/components/home_drawer.dart';
 import 'package:healthsphere/screens/home_screen.dart';
 
+
 class HomePage extends StatefulWidget {
 
   const HomePage({super.key});
@@ -31,14 +32,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pages[_selectedIndex],
-      appBar: AppBar(
-        title: const Text("HEALTHSPHERE"),
-        titleTextStyle:
-          const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-        centerTitle: true,
-        backgroundColor: const Color(0xFF4B25DD),
-      ),
-      drawer: const HomeDrawer(),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _navigateBottomBar,
