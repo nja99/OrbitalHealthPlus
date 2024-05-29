@@ -35,13 +35,13 @@ class _UserTextFieldState extends State<UserTextField> {
         decoration: InputDecoration(
           enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(
-              color: Theme.of(context).colorScheme.inversePrimary,
+              color: Theme.of(context).colorScheme.onTertiaryFixedVariant,
               width: 1.5
             ),
           ),
           focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(
-              color: Theme.of(context).colorScheme.inversePrimary,
+              color: Theme.of(context).colorScheme.onTertiaryFixedVariant,
               width: 1.5
             ),
           ),
@@ -50,7 +50,7 @@ class _UserTextFieldState extends State<UserTextField> {
           contentPadding: const EdgeInsetsDirectional.fromSTEB(0, 16, 16, 8),
           labelText: widget.labelText,
           labelStyle: TextStyle(
-            color: Theme.of(context).colorScheme.inversePrimary,
+            color: Theme.of(context).colorScheme.onTertiaryFixedVariant,
             fontSize: 16,
           ),
           suffixIcon: widget.obscureText

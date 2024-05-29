@@ -151,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                       Expanded(
                         child: Divider(
                           thickness:1,
-                          color: Theme.of(context).colorScheme.inversePrimary,
+                          color: Theme.of(context).colorScheme.onTertiaryFixedVariant,
                           ),
                         ),
                         Padding(
@@ -164,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                         Expanded(
                           child: Divider(
                             thickness:1,
-                            color: Theme.of(context).colorScheme.inversePrimary,
+                            color: Theme.of(context).colorScheme.onTertiaryFixedVariant,
                           ),
                         ),
                     ],

@@ -12,7 +12,7 @@ ThemeData lightMode = ThemeData(
     onSecondaryFixedVariant: const Color(0xFF4B39EF),
 
     tertiary: Colors.grey.shade300,
-    onTertiaryFixedVariant: Colors.grey.shade500,
+    onTertiaryFixedVariant: Colors.grey.shade600,
     
     inversePrimary: const Color.fromARGB(255, 0, 0, 0),
     

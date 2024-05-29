@@ -1,10 +1,14 @@
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
+import "package:healthsphere/components/category_card.dart";
 import "package:healthsphere/components/circle_button.dart";
+import "package:healthsphere/components/home_body.dart";
 import "package:healthsphere/components/home_drawer.dart";
+import 'package:healthsphere/assets/model/category.dart';
 
 class HomeScreen extends StatefulWidget {
+  
   const HomeScreen({super.key});
 
   @override
@@ -19,7 +23,8 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         body: Column(
           children: [
-            AppBars(),
+            HomeAppBar(),
+            HomeBody(),
           ],
         ),
       ),
@@ -27,8 +32,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class AppBars extends StatelessWidget {
-  const AppBars({super.key});
+
+
+
+class HomeAppBar extends StatelessWidget {
+  const HomeAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +60,6 @@ class AppBars extends StatelessWidget {
       ),
       child: Column(
         children: [
-          
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,7 +73,7 @@ class AppBars extends StatelessWidget {
                   ),
               ),
               CircleButton(
-                icon: Icons.notifications,
+                icon: Icons.menu,
                 onPressed: () {},
               )
             ],
