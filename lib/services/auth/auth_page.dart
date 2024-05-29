@@ -1,13 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:healthsphere/pages/auth/login_page.dart';
 import 'package:healthsphere/pages/home_page.dart';
-import 'package:healthsphere/pages/onboarding_page.dart';
 import 'package:healthsphere/services/service_locator.dart';
 
-class AuthPage extends StatelessWidget {
+class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
 
+  @override
+  State<AuthPage> createState() => _AuthPageState();
+}
+
+class _AuthPageState extends State<AuthPage> {
   @override
   Widget build(BuildContext context) {
     
@@ -23,7 +27,7 @@ class AuthPage extends StatelessWidget {
           }        
           // User is NOT LOGGED IN
           else {
-            return const OnBoardingPage();
+            return const LoginPage();
           }
         }
 

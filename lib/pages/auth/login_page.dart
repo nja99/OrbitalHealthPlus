@@ -5,6 +5,7 @@ import 'package:healthsphere/components/custom_alert_dialog.dart';
 import 'package:healthsphere/components/user_textfield.dart';
 import 'package:healthsphere/pages/auth/forget_pw_page.dart';
 import 'package:healthsphere/pages/auth/register_page.dart';
+import 'package:healthsphere/pages/home_page.dart';
 import 'package:healthsphere/services/auth/auth_service.dart';
 import 'package:healthsphere/services/service_locator.dart';
 import 'package:healthsphere/utils/loading_overlay.dart';
@@ -41,6 +42,10 @@ class _LoginPageState extends State<LoginPage> {
           _isLoading = false;
         });
       }
+      Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const HomePage()),
+            );
     }
     catch (e) {
       // Remove Loading Circle
