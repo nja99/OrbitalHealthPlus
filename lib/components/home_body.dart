@@ -19,7 +19,7 @@ class HomeBody extends StatelessWidget {
               Text(
                 'Explore Categories',
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.inversePrimary,
+                  color: Theme.of(context).colorScheme.inverseSurface,
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
                 ),

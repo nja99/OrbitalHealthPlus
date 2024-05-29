@@ -4,7 +4,7 @@ ThemeData lightMode = ThemeData(
   fontFamily: "Urbanist",
   colorScheme: ColorScheme.light(
     surface: Colors.white,
-
+    
     primary: const Color(0xFF8a72f1),
     onPrimaryFixedVariant: const Color(0xFF6849ef),
 
@@ -14,7 +14,7 @@ ThemeData lightMode = ThemeData(
     tertiary: Colors.grey.shade300,
     onTertiaryFixedVariant: Colors.grey.shade600,
     
-    inversePrimary: const Color.fromARGB(255, 0, 0, 0),
+    inverseSurface: const Color.fromARGB(255, 0, 0, 0),
     
     
   )
