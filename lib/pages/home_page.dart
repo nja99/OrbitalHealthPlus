@@ -34,9 +34,9 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text("HEALTHSPHERE"),
         titleTextStyle:
-          const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          const TextStyle(fontWeight: FontWeight.bold, fontSize: 20,color: const Color(0xFF4B25DD)),
         centerTitle: true,
-        backgroundColor: const Color(0xFF4B25DD),
+        backgroundColor: Colors.white
       ),
       drawer: const HomeDrawer(),
       bottomNavigationBar: BottomNavigationBar(

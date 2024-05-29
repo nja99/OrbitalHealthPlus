@@ -76,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                 
                 // Logo
                 const SizedBox(height: 60),
-                Image.asset("lib/assets/images/logo_light.png", height: 120),
+                Image.asset("lib/assets/images/logo_light.png", height: 160),
                 
                 // Welcome back!
                 const SizedBox(height: 20),
@@ -158,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: Text(
                             "Or continue with",
-                            style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary)
+                            style: TextStyle(color: Theme.of(context).colorScheme.onSurface)
                           ),
                         ),
                         Expanded(
