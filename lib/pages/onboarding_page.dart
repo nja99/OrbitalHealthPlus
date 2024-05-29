@@ -126,7 +126,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                     onTap: () { 
                       Navigator.push(context,
                         MaterialPageRoute(
-                          builder: (context) => const AuthPage(),
+                          builder: (context) => const LoginPage(),
                         ),
                       );
                     },

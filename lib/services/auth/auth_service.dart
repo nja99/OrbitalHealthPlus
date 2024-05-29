@@ -29,6 +29,8 @@ class AuthService {
     return await _firebaseAuth.signInWithCredential(credential);
   }
 
+  
+
   // Get Current User
   User? getCurrentUser() {
     return _firebaseAuth.currentUser;
