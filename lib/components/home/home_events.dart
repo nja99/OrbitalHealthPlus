@@ -1,7 +1,5 @@
-import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
-import "package:flutter/services.dart";
-import "package:healthsphere/components/category_card.dart";
+import "package:healthsphere/components/cards/category_card.dart";
 import 'package:healthsphere/assets/model/category.dart';
 
 class HomeEvents extends StatelessWidget {

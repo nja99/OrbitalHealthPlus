@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:healthsphere/services/database/appointment_firestore_service.dart';
 import 'firestore_service.dart';
 
 // Create a singleton instance of GetIt for dependency injection
@@ -14,5 +15,8 @@ void setUpDatabaseServices() {
   
   // Register FirestoreService as a lazy singleton.
   getIt.registerLazySingleton<FirestoreService>(() => FirestoreService());
+
+  // Register AppointmentFireStoreService as a lazy singleton.
+  getIt.registerLazySingleton<AppointmentFirestoreService>(() => AppointmentFirestoreService());
   
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:healthsphere/components/home/home_drawer.dart';
+import 'package:healthsphere/screens/appointment_screen.dart';
 import 'package:healthsphere/screens/home_screen.dart';
-
+import 'package:healthsphere/utils/page_data.dart';
 
 class HomePage extends StatefulWidget {
 
@@ -20,18 +22,39 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  final List<Widget> _pages = [
-    HomeScreen(),
-    HomeScreen(),
-    HomeScreen(),
-    HomeScreen(),
+  final List<PageData> _pages = [
+    PageData(page: const HomeScreen(), title: "Home"),
+    PageData(page: const AppointmentScreen(), title: "Appointments"),
+    PageData(page: const HomeScreen(), title: "Home"),
+    PageData(page: const HomeScreen(), title: "Home"),
   ];
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
+        body: IndexedStack(
+          index: _selectedIndex,
+          children: _pages.map((item) => item.page).toList(),
+        ),
+        appBar: _buildAppBar(),
+        drawer: const HomeDrawer(),
+        bottomNavigationBar: _buildBottomNavigationBar());
+  }
+
+  AppBar _buildAppBar() {
+    return AppBar(
+        title: Text(_pages[_selectedIndex].title),
+        titleTextStyle: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Color(0xFF4B25DD)),
+        centerTitle: true,
+        backgroundColor: Colors.white);
+  }
+
+  BottomNavigationBar _buildBottomNavigationBar() {
+    return BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _navigateBottomBar,
         type: BottomNavigationBarType.fixed,
@@ -39,9 +62,9 @@ class _HomePageState extends State<HomePage> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(icon: Icon(Icons.add), label: "Add"),
-          BottomNavigationBarItem(icon: Icon(Icons.notifications), label: "Notifications"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.notifications), label: "Notifications"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-        ]),
-    );
+        ]);
   }
 }

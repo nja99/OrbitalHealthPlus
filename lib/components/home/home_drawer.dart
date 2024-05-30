@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:healthsphere/components/home_drawer_tile.dart';
+import 'package:healthsphere/components/home/home_drawer_tile.dart';
 import 'package:healthsphere/pages/auth/login_page.dart';
 import 'package:healthsphere/pages/settings_page.dart';
 import 'package:healthsphere/services/auth/auth_service.dart';
