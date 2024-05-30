@@ -21,10 +21,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   final List<Widget> _pages = [
-    const HomeScreen(),
-    const HomeScreen(),
-    const HomeScreen(),
-    const HomeScreen(),
+    HomeScreen(),
+    HomeScreen(),
+    HomeScreen(),
+    HomeScreen(),
   ];
 
   @override

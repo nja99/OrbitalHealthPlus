@@ -66,7 +66,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                 );
               }),
 
-          const SizedBox(height: 500),
+          const SizedBox(height: 400),
 
           // Logout list tile
           HomeDrawerTile(

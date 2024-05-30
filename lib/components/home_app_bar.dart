@@ -1,11 +1,12 @@
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:healthsphere/components/circle_button.dart";
-import "package:healthsphere/components/home_drawer.dart";
+import 'package:healthsphere/screens/home_screen.dart';
 
 
 class HomeAppBar extends StatelessWidget {
-  const HomeAppBar({super.key});
+  final GlobalKey<ScaffoldState> scaffoldKey;
+  const HomeAppBar({super.key,required this.scaffoldKey});
 
   @override
   Widget build(BuildContext context) {
@@ -43,10 +44,10 @@ class HomeAppBar extends StatelessWidget {
               ),
               CircleButton(
                 icon: Icons.menu,
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
+                onTap: () {
+                  scaffoldKey.currentState?.openDrawer();
                 },
-              )
+              ),
             ],
           ),
           const SizedBox(height: 10),
