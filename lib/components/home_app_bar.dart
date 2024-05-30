@@ -44,9 +44,7 @@ class HomeAppBar extends StatelessWidget {
               CircleButton(
                 icon: Icons.menu,
                 onPressed: () {
-                  MaterialPageRoute(
-                    builder: (context) => const HomeDrawer(),
-                  );
+                  Scaffold.of(context).openDrawer();
                 },
               )
             ],

@@ -2,11 +2,10 @@ import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:healthsphere/components/category_card.dart";
-import "package:healthsphere/components/home_drawer.dart";
 import 'package:healthsphere/assets/model/category.dart';
 
-class HomeBody extends StatelessWidget {
-  const HomeBody({super.key});
+class HomeEvents extends StatelessWidget {
+  const HomeEvents({super.key});
 
   @override
   Widget build(BuildContext context) {

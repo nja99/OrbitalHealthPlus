@@ -3,8 +3,8 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:healthsphere/components/home_app_bar.dart";
 import "package:healthsphere/components/home_appointment.dart";
-import "package:healthsphere/components/home_body.dart";
-import "package:healthsphere/components/home_drawer.dart";
+import "package:healthsphere/components/home_events.dart";
+
 
 
 class HomeScreen extends StatefulWidget {
@@ -21,16 +21,14 @@ class _HomeScreenState extends State<HomeScreen> {
     return const AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: Column(
+          body: Column(
             children: [
               HomeAppBar(),
               HomeAppointment(),
-              HomeBody(),
+              HomeEvents(),
             ],
           ),
         ),
-      ),
     );
   }
 }
