@@ -3,6 +3,7 @@ import "package:font_awesome_flutter/font_awesome_flutter.dart";
 import "package:healthsphere/components/user_button.dart";
 import "package:healthsphere/pages/auth/login_page.dart";
 import "package:healthsphere/pages/auth/register_page.dart";
+import "package:healthsphere/pages/home_page.dart";
 import "package:healthsphere/services/auth/auth_service.dart";
 import "package:healthsphere/services/auth/auth_service_locator.dart";
 
@@ -95,7 +96,14 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
               const SizedBox(height: 5),
               UserButton(
                 buttonText: "Sign Up with Google", 
-                onPressed: () => authService.signInWithGoogle(),
+                onPressed: () async => {
+                      await authService.signInWithGoogle(),
+                      Navigator.push(context,
+                          MaterialPageRoute(
+                            builder: (context) => const HomePage(),
+                          ),
+                        ),
+                      },
                 iconData: FontAwesomeIcons.google,
               ),
 

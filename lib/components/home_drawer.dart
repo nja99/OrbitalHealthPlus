@@ -51,7 +51,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
 
           // Setting list tile
           HomeDrawerTile(
-              text: "S E T T I N G S",
+              text: "S E T T I N G",
               icon: Icons.settings,
               onTap: () {
                 Navigator.pop(context);
@@ -63,7 +63,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                 );
               }),
 
-          const SizedBox(height: 500),
+          const SizedBox(height: 400),
 
           // Logout list tile
           HomeDrawerTile(

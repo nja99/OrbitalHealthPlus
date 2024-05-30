@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:healthsphere/components/home_drawer.dart';
 import 'package:healthsphere/screens/home_screen.dart';
+
 
 class HomePage extends StatefulWidget {
 
@@ -21,24 +21,16 @@ class _HomePageState extends State<HomePage> {
   }
 
   final List<Widget> _pages = [
-    const HomeScreen(),
-    const HomeScreen(),
-    const HomeScreen(),
-    const HomeScreen(),
+    HomeScreen(),
+    HomeScreen(),
+    HomeScreen(),
+    HomeScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pages[_selectedIndex],
-      appBar: AppBar(
-        title: const Text("HEALTHSPHERE"),
-        titleTextStyle:
-          const TextStyle(fontWeight: FontWeight.bold, fontSize: 20,color: const Color(0xFF4B25DD)),
-        centerTitle: true,
-        backgroundColor: Colors.white
-      ),
-      drawer: const HomeDrawer(),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _navigateBottomBar,

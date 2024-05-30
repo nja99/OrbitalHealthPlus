@@ -151,20 +151,20 @@ class _LoginPageState extends State<LoginPage> {
                       Expanded(
                         child: Divider(
                           thickness:1,
-                          color: Theme.of(context).colorScheme.inversePrimary,
+                          color: Theme.of(context).colorScheme.onTertiaryFixedVariant,
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: Text(
                             "Or continue with",
-                            style: TextStyle(color: Theme.of(context).colorScheme.onSurface)
+                            style: TextStyle(color: Theme.of(context).colorScheme.inverseSurface)
                           ),
                         ),
                         Expanded(
                           child: Divider(
                             thickness:1,
-                            color: Theme.of(context).colorScheme.inversePrimary,
+                            color: Theme.of(context).colorScheme.onTertiaryFixedVariant,
                           ),
                         ),
                     ],
@@ -181,11 +181,11 @@ class _LoginPageState extends State<LoginPage> {
                     SquareTile(
                       imagePath: 'lib/assets/images/google_logo.png',
                       height: 40.0,
-                      onTap: () => {
-                      authService.signInWithGoogle(),
+                      onTap: () async => {
+                      await authService.signInWithGoogle(),
                       Navigator.push(context,
                           MaterialPageRoute(
-                            builder: (context) => const RegisterPage(),
+                            builder: (context) => const HomePage(),
                           ),
                         ),
                       }
