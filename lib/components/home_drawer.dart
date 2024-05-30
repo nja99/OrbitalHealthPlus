@@ -29,12 +29,9 @@ class _HomeDrawerState extends State<HomeDrawer> {
       child: ListView(
         children: [
           // App logo
-          const Padding(
-            padding: EdgeInsets.only(top: 10.0),
-            child: Icon(
-              Icons.lock_open_outlined,
-              size: 80,
-            ),
+          Padding(
+            padding: const EdgeInsets.only(top: 10.0),
+            child: Image.asset("lib/assets/images/logo_light.png", height: 120)
           ),
 
           // Divider line
