@@ -29,7 +29,7 @@ class AppointmentFirestoreService {
   // READ
   Stream<QuerySnapshot> readAppointmentStream() {
     return appointmentsCollection
-      .orderBy('time_stamp', descending: true)
+      .orderBy('date_time')
       .snapshots();
   }
 

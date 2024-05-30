@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:healthsphere/components/square_tile.dart';
-import 'package:healthsphere/components/user_button.dart';
-import 'package:healthsphere/components/custom_alert_dialog.dart';
-import 'package:healthsphere/components/user_textfield.dart';
+import 'package:healthsphere/components/buttons/square_tile.dart';
+import 'package:healthsphere/components/buttons/user_button.dart';
+import 'package:healthsphere/components/dialogs/custom_alert_dialog.dart';
+import 'package:healthsphere/components/forms/user_textfield.dart';
 import 'package:healthsphere/pages/auth/forget_pw_page.dart';
 import 'package:healthsphere/pages/auth/register_page.dart';
 import 'package:healthsphere/pages/home_page.dart';

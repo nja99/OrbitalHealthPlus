@@ -17,11 +17,9 @@ class UserProfileService {
       'createdAt': Timestamp.now(),
     }, SetOptions(merge: true)); // Merge to avoid overwriting existing data
 
-    CollectionReference tasksCollection = userDoc.collection('tasks');
     CollectionReference appointmentsCollection = userDoc.collection('appointments');
     CollectionReference medicationsCollection = userDoc.collection('medications');
   
-    await tasksCollection.add(<String, dynamic>{});
     await appointmentsCollection.add(<String,dynamic>{});
     await medicationsCollection.add(<String, dynamic>{});
   }

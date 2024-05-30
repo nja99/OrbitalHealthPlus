@@ -1,9 +1,8 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
+import "package:healthsphere/components/cards/appointment_card.dart";
 import "package:healthsphere/components/dialogs/create_appointment_dialog.dart";
-import "package:healthsphere/components/cards/custom_card.dart";
 import "package:healthsphere/components/dimissible_widget.dart";
-import "package:healthsphere/components/dialogs/show_appointment_dialog.dart";
 import "package:healthsphere/services/auth/auth_service_locator.dart";
 import "package:healthsphere/services/database/appointment_firestore_service.dart";
 
@@ -56,28 +55,14 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                 DocumentSnapshot appointment = appointmentList[index];
                 String appointmentID = appointment.id;
 
-                // Get Appointments Detail
-                Map<String, dynamic> data = appointment.data() as Map<String, dynamic>;
-                String appointmentData = data['appointment'];
-
                 // Display Appointment in List Tiles
-                return CustomCard(
-                  child: DismissibleWidget<DocumentSnapshot>(
-                    item: appointment,
-                    onDismissed: (direction) {
-                      setState(() {
-                        dismissItem(context, appointmentList, index, direction, firestoreService);
-                      });
-                    },
-                    child: ListTile(
-                      title: Text(appointmentData),
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => ShowAppointmentDialog(appointment: appointment))
-                        );
-                      },
-                    )
-                  )
+                return AppointmentCard(
+                  appointment: appointment,
+                  onDismissed: (direction) {
+                    setState(() {
+                      dismissItem(context, appointmentList, index, direction, firestoreService);
+                    });
+                  },
                 );
               }
             );

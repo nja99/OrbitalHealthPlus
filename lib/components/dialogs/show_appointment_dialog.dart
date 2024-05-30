@@ -25,7 +25,7 @@ class ShowAppointmentDialog extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Appointment Details'),
+        title: Text(title),
       ),
     );
   }

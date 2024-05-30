@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
-import "package:healthsphere/components/user_button.dart";
+import "package:healthsphere/components/buttons/user_button.dart";
 import "package:healthsphere/pages/auth/login_page.dart";
 import "package:healthsphere/pages/auth/register_page.dart";
 import "package:healthsphere/pages/home_page.dart";

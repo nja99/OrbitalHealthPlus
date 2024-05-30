@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:healthsphere/components/forms/form_textfield.dart";
 import "package:healthsphere/services/database/appointment_firestore_service.dart";
 import "package:intl/intl.dart";
+import "package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart" as dtpicker;
 
 class CreateAppointmentDialog extends StatefulWidget {
   
@@ -39,6 +40,9 @@ class _CreateAppointmentDialogState extends State<CreateAppointmentDialog> {
       _locationController.text = data['location'] ?? '';
       _selectedDate = DateTime.tryParse(data['date'] ?? '');
       _selectedTime = _selectedDate != null ? TimeOfDay.fromDateTime(_selectedDate!) : null;
+    } else {
+      _selectedDate = DateTime.now();
+      _selectedTime = const TimeOfDay(hour: 8, minute: 0);
     }
   }
 
@@ -69,6 +73,7 @@ class _CreateAppointmentDialogState extends State<CreateAppointmentDialog> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,43 +103,46 @@ class _CreateAppointmentDialogState extends State<CreateAppointmentDialog> {
                     FormTextField(
                       controller: _descriptionController, 
                       title: "Description",
-                      maxLines: 10,
+                      maxLines: 7,
                     ),
                     FormTextField(
                       controller: _locationController, 
                       title: "Location"
                     ),
 
-                    Text("Date: ${_selectedDate != null ? DateFormat("dd-mm-yyyy").format(_selectedDate!) : 'Not selected'}"),
-                    ElevatedButton(
-                      onPressed: () async {
-                        DateTime? pickedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime(2101),
+                    Text("Date: ${_selectedDate != null ? DateFormat("dd-MMM-yyyy").format(_selectedDate!) : 'Not selected'}"),
+                    OutlinedButton(
+                      onPressed: () {
+                        dtpicker.DatePicker.showDatePicker(
+                          context,
+                          showTitleActions: true,
+                          onChanged: (date) {
+                            setState(() {
+                              _selectedDate = date;
+                            });
+                          },
+                          currentTime: _selectedDate ?? DateTime.now(),
+                          theme: const dtpicker.DatePickerTheme(
+                            containerHeight: 400,
+                          )
                         );
-                        if (pickedDate != null && pickedDate != _selectedDate) {
-                          setState(() {
-                            _selectedDate = pickedDate;
-                          });
-                        }
                       },
                       child: const Text('Select Date'),
                     ),
                     const SizedBox(height: 10),
                     Text('Time: ${_selectedTime != null ? _selectedTime!.format(context) : 'Not selected'}'),
                     ElevatedButton(
-                      onPressed: () async {
-                        TimeOfDay? pickedTime = await showTimePicker(
-                          context: context,
-                          initialTime: TimeOfDay.now(),
+                      onPressed: () {
+                        dtpicker.DatePicker.showTime12hPicker(
+                          context,
+                          showTitleActions: true,
+                          onChanged: (time) {
+                            setState(() {
+                              _selectedTime = TimeOfDay.fromDateTime(time);
+                            });
+                          },
+                          currentTime: _selectedDate ?? DateTime.now()
                         );
-                        if (pickedTime != null && pickedTime != _selectedTime) {
-                          setState(() {
-                            _selectedTime = pickedTime;
-                          });
-                        }
                       },
                       child: const Text('Select Time'),
                     ),
