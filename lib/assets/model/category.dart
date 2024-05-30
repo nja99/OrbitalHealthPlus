@@ -13,30 +13,36 @@ class Category {
 
   final List<Category> categoryList = [
     Category(
-      name: 'Family Members',
+      name: 'Family',
       info: 'Search all profiles',
-      thumbnail:  'assets/images/family.png'
+      thumbnail:  'lib/assets/images/family.png'
     ),
     Category(
-      name: 'Blood Donation',
+      name: 'Donate',
       info: 'Donate blood today',
-      thumbnail:  'assets/images/blood.png'
+      thumbnail:  'lib/assets/images/blood.png'
     ),
     Category(
-      name: 'Medication Tracker',
+      name: 'Medication',
       info: ' All you need to know',
-      thumbnail:  'assets/images/medicine.png'
+      thumbnail:  'lib/assets/images/medicine.png'
     ),
     Category(
       name: 'Appointment',
       info: 'Book yours today',
-      thumbnail:  'assets/images/schedule.png'
+      thumbnail: 'lib/assets/images/schedule.png'
     ),
     Category(
       name: 'Particulars',
       info: 'More information',
-      thumbnail:  'assets/images/logo.png'
+      thumbnail:  'lib/assets/images/particulars.png'
     ),
+    Category(
+      name: 'Lab Report',
+      info: 'More information',
+      thumbnail:  'lib/assets/images/labreport.png'
+    ),
+
   ];
 
 

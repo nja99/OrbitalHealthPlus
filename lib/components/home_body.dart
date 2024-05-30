@@ -1,3 +1,4 @@
+import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:healthsphere/components/category_card.dart";
@@ -46,8 +47,8 @@ class HomeBody extends StatelessWidget {
             vertical: 8,
           ),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 0.8,
+            crossAxisCount: 3,
+            childAspectRatio: 1,
             crossAxisSpacing: 20,
             mainAxisSpacing: 24
           ),
