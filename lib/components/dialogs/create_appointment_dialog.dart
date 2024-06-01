@@ -1,7 +1,9 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
+import "package:healthsphere/components/date_time_widget.dart";
 import "package:healthsphere/components/forms/form_textfield.dart";
 import "package:healthsphere/services/database/appointment_firestore_service.dart";
+import "package:healthsphere/utils/time_of_day_extension.dart";
 import "package:intl/intl.dart";
 import "package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart" as dtpicker;
 
@@ -20,7 +22,6 @@ class CreateAppointmentDialog extends StatefulWidget {
   State<CreateAppointmentDialog> createState() => _CreateAppointmentDialogState();
 }
 
-
 class _CreateAppointmentDialogState extends State<CreateAppointmentDialog> {
 
   final GlobalKey<FormState> _formKey = GlobalKey();
@@ -38,11 +39,14 @@ class _CreateAppointmentDialogState extends State<CreateAppointmentDialog> {
       _titleController.text = data['title'] ?? '';
       _descriptionController.text = data['description'] ?? '';
       _locationController.text = data['location'] ?? '';
-      _selectedDate = DateTime.tryParse(data['date'] ?? '');
+      
+      // Retrieve and convert Timestamp to Date
+      Timestamp timestamp = data['date_time'];
+      _selectedDate = timestamp.toDate();
       _selectedTime = _selectedDate != null ? TimeOfDay.fromDateTime(_selectedDate!) : null;
     } else {
-      _selectedDate = DateTime.now();
-      _selectedTime = const TimeOfDay(hour: 8, minute: 0);
+      _selectedTime = const TimeOfDay(hour: 8, minute: 30);
+      _selectedDate = _selectedTime!.toDateTime(DateTime.now());
     }
   }
 
@@ -53,32 +57,38 @@ class _CreateAppointmentDialogState extends State<CreateAppointmentDialog> {
       String title = _titleController.text;
       String description = _descriptionController.text;
       String location = _locationController.text;
+      String status = "Upcoming";
 
       // Combine Date and Time into DateTime Object
-      DateTime appointmentDateTime = _selectedDate!.add(Duration(hours: _selectedTime!.hour, minutes: _selectedTime!.minute));
+      DateTime appointmentDateTime = _selectedTime!.toDateTime(_selectedDate!);
 
       // Format Date and Time for Storage
-      String formattedDateTime = appointmentDateTime.toIso8601String();
-
-      // Add appointment to DB
-      widget.firestoreService.addAppointment(title, description, location, formattedDateTime)
-        // Pop Dialog
-        .then((_) {
-          Navigator.of(context).pop();
-        })
-        // If Error print error message
-        .catchError((error) {
-          print("Failed to add appointment: $error");
-        });
+      Timestamp formattedDateTime = Timestamp.fromDate(appointmentDateTime);
+      
+      if (widget.appointment != null) {
+        // Update Appointment in DB        
+        widget.firestoreService.updateAppointment(widget.appointment!.id, title, description, location, formattedDateTime, status)
+          // Pop Dialog
+          .then((_) { Navigator.of(context).pop();})
+          .catchError((error) {print("Failed to update appointment: $error");});
+      } else {
+        // Add Appointment to DB
+        widget.firestoreService.addAppointment(title, description, location, formattedDateTime, status)
+          // Pop Dialog
+          .then((_) { Navigator.of(context).pop();})
+          .catchError((error) {print("Failed to add appointment: $error");});
+      }
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Create Appointment"),
+        title: Text(widget.appointment != null
+          ? "Update Appointment"
+          : "Create Appointment"
+        ),
       ),
       body: SafeArea(
         child: ListView(
@@ -90,6 +100,8 @@ class _CreateAppointmentDialogState extends State<CreateAppointmentDialog> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
+
+                    // Title Field
                     FormTextField(
                       controller: _titleController,
                       title: "Title",
@@ -100,25 +112,32 @@ class _CreateAppointmentDialogState extends State<CreateAppointmentDialog> {
                         return null;
                       },  
                     ),
+
+                    // Description Field
                     FormTextField(
                       controller: _descriptionController, 
                       title: "Description",
                       maxLines: 7,
                     ),
+
+                    // Location Field
                     FormTextField(
                       controller: _locationController, 
                       title: "Location"
                     ),
 
-                    Text("Date: ${_selectedDate != null ? DateFormat("dd-MMM-yyyy").format(_selectedDate!) : 'Not selected'}"),
-                    OutlinedButton(
-                      onPressed: () {
+                    // Date Field
+                    DateTimeWidget(
+                      title: "Date",
+                      value: DateFormat("dd-MMM-yyyy").format(_selectedDate!),
+                      icon: Icons.calendar_month, 
+                      onTap: (){
                         dtpicker.DatePicker.showDatePicker(
                           context,
                           showTitleActions: true,
                           onChanged: (date) {
                             setState(() {
-                              _selectedDate = date;
+                              _selectedDate = _selectedTime!.toDateTime(date);
                             });
                           },
                           currentTime: _selectedDate ?? DateTime.now(),
@@ -127,12 +146,14 @@ class _CreateAppointmentDialogState extends State<CreateAppointmentDialog> {
                           )
                         );
                       },
-                      child: const Text('Select Date'),
                     ),
-                    const SizedBox(height: 10),
-                    Text('Time: ${_selectedTime != null ? _selectedTime!.format(context) : 'Not selected'}'),
-                    ElevatedButton(
-                      onPressed: () {
+
+                    // Time Field
+                    DateTimeWidget(
+                      title: "Time", 
+                      value: _selectedTime!.format(context),
+                      icon: Icons.access_time, 
+                      onTap: (){
                         dtpicker.DatePicker.showTime12hPicker(
                           context,
                           showTitleActions: true,
@@ -141,10 +162,12 @@ class _CreateAppointmentDialogState extends State<CreateAppointmentDialog> {
                               _selectedTime = TimeOfDay.fromDateTime(time);
                             });
                           },
-                          currentTime: _selectedDate ?? DateTime.now()
+                          currentTime: _selectedDate,
+                          theme: const dtpicker.DatePickerTheme(
+                            containerHeight: 400,
+                          )
                         );
                       },
-                      child: const Text('Select Time'),
                     ),
                   ],
                 )

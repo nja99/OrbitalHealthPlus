@@ -7,7 +7,6 @@ class FormTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final int? maxLines;
 
-
   const FormTextField({
     super.key,
     required this.controller,
@@ -22,6 +21,8 @@ class FormTextField extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          
+          // Title
           Text(
             title,
             style: const TextStyle(
@@ -29,29 +30,21 @@ class FormTextField extends StatelessWidget {
               fontWeight: FontWeight.bold,
             )
           ),
+
+          // Input Box
           const SizedBox(height: 8),
-          TextFormField(
-            maxLines: maxLines,
-            controller: controller,
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.grey.shade100,
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.grey.shade400,
-                  width: 1.5
-                ),
-                borderRadius: BorderRadius.circular(12.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.grey.shade400, // Same as enabledBorder
-                  width: 1.5,
-                ),
-                borderRadius: BorderRadius.circular(12.0),
-              ),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade200,
+              borderRadius: BorderRadius.circular(12)
             ),
-            validator: validator,
+            child: TextFormField(
+              decoration: const InputDecoration.collapsed(hintText: ""),
+              maxLines: maxLines,
+              controller: controller,
+              validator: validator,
+            )
           )
         ]
       )

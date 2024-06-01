@@ -10,38 +10,59 @@ class AppointmentFirestoreService {
   CollectionReference get appointmentsCollection {
     String uid = _firebaseAuth.currentUser?.uid ?? '';
     return _firebaseFirestore
-      .collection('users')
-      .doc(uid)
-      .collection('appointments');
+        .collection('users')
+        .doc(uid)
+        .collection('appointments');
 }
 
   // CREATE
-  Future<void> addAppointment(String title, String description, String location, String formattedDateTime) {
+  Future<void> addAppointment(String title, String description, String location, Timestamp formattedDateTime, String status) {
     return appointmentsCollection
       .add({
-        'title': title,
-        'description': description,
-        'location': location,
-        'date_time': formattedDateTime
+          'title': title,
+          'description': description,
+          'location': location,
+          'date_time': formattedDateTime,
+          'status': status
       });
   }
 
   // READ
   Stream<QuerySnapshot> readAppointmentStream() {
     return appointmentsCollection
-      .orderBy('date_time')
-      .snapshots();
+        .orderBy('date_time')
+        .snapshots();
   }
 
-  // UPDATE
-  Future<void> updateAppointment(String appointmentID, String newAppointment) {
+    // Get Appointment Document Changes
+  Stream<DocumentSnapshot> getAppointmentStream(String appointmentId) {
+    return appointmentsCollection.doc(appointmentId).snapshots();
+  }
+
+  // UPDATE APPOINTMENT
+  Future<void> updateAppointment(String appointmentID, String newTitle, String newDescription, String newLocation, Timestamp newFormattedDateTime, String status) {
     return appointmentsCollection
       .doc(appointmentID)
-      .update({'appointment': newAppointment, 'time_stamp': Timestamp.now()});
+      .update({
+          'title': newTitle,
+          'description': newDescription,
+          'location': newLocation,
+          'date_time': newFormattedDateTime,
+          'status': status
+      });
+  }
+
+  // UPDATE APPOINTMENT STATUS
+  Future<void> updateAppointmentStatus(String appointmentID, String newStatus) {
+    return appointmentsCollection
+        .doc(appointmentID)
+        .update({'status': newStatus});
   }
 
   // DELETE
   Future<void> deleteAppointment(String appointmentID) {
     return appointmentsCollection.doc(appointmentID).delete();
   }
+
+
 }

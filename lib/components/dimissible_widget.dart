@@ -41,7 +41,7 @@ class DismissibleWidget<T> extends StatelessWidget {
     padding: const EdgeInsets.symmetric(horizontal: 20),
     color: Colors.red,
     child: const Icon(
-      Icons.delete,
+      Icons.cancel,
       color: Colors.white,
       size: 32,
     )
@@ -55,13 +55,21 @@ void dismissItem(BuildContext context, List<DocumentSnapshot> items, int index, 
 
   switch (direction) {
     case DismissDirection.startToEnd:
+      firestoreService.updateAppointmentStatus(appointmentID, "Completed")
+      .then((_) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Appointment Completed')));
+      }).catchError((error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Failed to delete appointment: $error')));
+      });
       break;
     case DismissDirection.endToStart:
       // Handle Right to Left
-      firestoreService.deleteAppointment(appointmentID)
+      firestoreService.updateAppointmentStatus(appointmentID, "Missed")
       .then((_) {
         ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text('Appointment deleted')));
+        .showSnackBar(const SnackBar(content: Text('Appointment Missed')));
       })
       .catchError((error) {
         ScaffoldMessenger.of(context)

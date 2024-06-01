@@ -4,7 +4,6 @@ ThemeData lightMode = ThemeData(
   fontFamily: "Urbanist",
   colorScheme: ColorScheme.light(
     surface: Colors.white,
-    
     primary: const Color(0xFF8a72f1),
     onPrimaryFixedVariant: const Color(0xFF6849ef),
 

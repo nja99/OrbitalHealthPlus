@@ -1,7 +1,5 @@
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
-import "package:flutter/widgets.dart";
 import "package:healthsphere/components/dialogs/show_appointment_dialog.dart";
 import "package:healthsphere/components/dimissible_widget.dart";
 import "package:intl/intl.dart";
@@ -23,10 +21,10 @@ class AppointmentCard extends StatelessWidget {
     // Get Appointment Details
     Map<String, dynamic> data = appointment.data() as Map<String, dynamic>;
     String title = data['title'];
-    String dateTimeString = data['date_time'];
+    Timestamp dateTime = data['date_time'];
 
     // Parse DateTime
-    DateTime appointmentDateTime = DateTime.parse(dateTimeString);
+    DateTime appointmentDateTime = dateTime.toDate();
     String day = DateFormat('dd').format(appointmentDateTime);
     String month = DateFormat('MMM').format(appointmentDateTime);
     String time = DateFormat('HH:mm').format(appointmentDateTime);
