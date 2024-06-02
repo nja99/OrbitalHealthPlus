@@ -1,16 +1,11 @@
-import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
-import "package:flutter/services.dart";
-import "package:healthsphere/components/home_app_bar.dart";
-import "package:healthsphere/components/home_appointment.dart";
-import "package:healthsphere/components/home_drawer.dart";
-import "package:healthsphere/components/home_events.dart";
-
-
+import "package:healthsphere/components/home/home_appointment.dart";
+import "package:healthsphere/components/home/home_drawer.dart";
+import "package:healthsphere/components/home/home_events.dart";
 
 class HomeScreen extends StatefulWidget {
   
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -24,9 +19,8 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
       key: _scaffoldKey,
       drawer: const HomeDrawer(),
-          body: Column(
+          body: const Column(
             children: [
-              HomeAppBar(scaffoldKey:_scaffoldKey),
               HomeAppointment(),
               HomeEvents(),
             ],

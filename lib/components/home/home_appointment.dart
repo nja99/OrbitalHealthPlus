@@ -34,7 +34,7 @@ class HomeAppointment extends StatelessWidget {
             ],
           ),
         ),
-      AppointmentPreviewCard(),
+      const AppointmentPreviewCard(),
       ],
     );
   }
