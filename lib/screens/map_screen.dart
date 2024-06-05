@@ -49,8 +49,8 @@ class _MapScreenState extends State<MapScreen> {
           maxChildSize: 0.8,
           builder: (_, controller) {
             return Container(
-              padding: const EdgeInsets.all(16),
-              margin: const EdgeInsets.only(top: 16), // Margin for spacing to show part of the map
+              padding: const EdgeInsets.all(8),
+              margin: const EdgeInsets.only(top: 8), // Margin for spacing to show part of the map
               decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -97,7 +97,7 @@ class _MapScreenState extends State<MapScreen> {
                             // Handle order action
                             },
                             style: ElevatedButton.styleFrom(foregroundColor: Colors.yellow),
-                            child: const Text('Order here', style: TextStyle(color: Colors.black)),
+                            child: const Text('Choose Location', style: TextStyle(color: Colors.black)),
                           ),
                         ),
                       ],
