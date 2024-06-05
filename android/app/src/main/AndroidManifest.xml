@@ -6,6 +6,9 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove"/>
     
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    
 
     <application
         android:label="healthsphere"
@@ -38,9 +41,8 @@
             android:name="flutterEmbedding"
             android:value="2" />
 
-
-
-
+        <meta-data android:name="com.google.android.geo.API_KEY" 
+            android:value="AIzaSyCsswj-U-Xo-6deDbv1YJ5-sf9j4F869hM"/>
 
             <!--facebook configs-->
     <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>

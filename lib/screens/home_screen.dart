@@ -19,11 +19,13 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
       key: _scaffoldKey,
       drawer: const HomeDrawer(),
-          body: const Column(
-            children: [
-              HomeAppointment(),
-              HomeEvents(),
-            ],
+          body: const SingleChildScrollView(
+            child: Column(
+              children: [
+                HomeAppointment(),
+                HomeEvents(),
+              ],
+            ),
           ),
     );
   }
