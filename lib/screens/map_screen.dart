@@ -16,7 +16,8 @@ class _MapScreenState extends State<MapScreen> {
   final Completer<GoogleMapController> _controller = Completer();
   BitmapDescriptor? markerbitmap;
 
-  LatLng initialLocation = const LatLng(1.3521, 103.8198); // Singapore's coordinates
+  LatLng initialLocation = const LatLng(1.3521, 103.8198);
+  LatLng? selectedLocation; // Singapore's coordinates
 
   @override
   void initState() {
@@ -94,7 +95,8 @@ class _MapScreenState extends State<MapScreen> {
                           padding: const EdgeInsets.only(bottom: 16.0),
                           child: ElevatedButton(
                             onPressed: () {
-                            // Handle order action
+                              Navigator.pop(context);
+                              Navigator.pop(context, clinic.address);
                             },
                             style: ElevatedButton.styleFrom(foregroundColor: Colors.yellow),
                             child: const Text('Choose Location', style: TextStyle(color: Colors.black)),
@@ -130,8 +132,6 @@ class _MapScreenState extends State<MapScreen> {
     // Implement your location fetching logic here.
     return initialLocation; // Replace this with actual user location
   }
-
-
 
 
 
