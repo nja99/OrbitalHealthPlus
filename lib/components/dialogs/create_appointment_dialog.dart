@@ -2,6 +2,7 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
 import "package:healthsphere/components/date_time_widget.dart";
 import "package:healthsphere/components/forms/form_textfield.dart";
+import "package:healthsphere/screens/map_screen.dart";
 import "package:healthsphere/services/database/appointment_firestore_service.dart";
 import "package:healthsphere/utils/time_of_day_extension.dart";
 import "package:intl/intl.dart";
@@ -30,6 +31,7 @@ class _CreateAppointmentDialogState extends State<CreateAppointmentDialog> {
   final TextEditingController _locationController = TextEditingController();
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
+  String location = '';
 
   @override
   void initState() {
@@ -81,6 +83,25 @@ class _CreateAppointmentDialogState extends State<CreateAppointmentDialog> {
     }
   }
 
+
+
+  Future<void> _pickLocation() async {
+    // Navigate to the MapScreen and await the result
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const MapScreen()),
+    );
+
+    // If a result was returned, update the location
+    if (result != null && result is String) {
+      setState(() {
+        location = result;
+      });
+    }
+  }
+
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,12 +141,17 @@ class _CreateAppointmentDialogState extends State<CreateAppointmentDialog> {
                       maxLines: 7,
                     ),
 
-                    // Location Field
-                    FormTextField(
-                      controller: _locationController, 
-                      title: "Location"
+                    // Location FieldR
+                    GestureDetector(
+                      onTap: _pickLocation,
+                      child: AbsorbPointer(
+                        child: FormTextField(
+                          controller: TextEditingController(text: location), 
+                          title: "Location",
+                          maxLines: 3,
+                        ),
+                      ),
                     ),
-
                     // Date Field
                     DateTimeWidget(
                       title: "Date",
