@@ -7,26 +7,30 @@ class DismissibleWidget<T> extends StatelessWidget {
   final T item;
   final Widget child;
   final DismissDirectionCallback onDismissed;
+  final bool isDismissible;
 
   const DismissibleWidget({
     super.key,
     required this.child,
     required this.item,
-    required this.onDismissed
+    required this.onDismissed,
+    required this.isDismissible
   });
 
   @override
   Widget build(BuildContext context){
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(15.0),
-      child: Dismissible(
-        key: ObjectKey(item),
-        background: buildSwipeActionLeft(),
-        secondaryBackground: buildSwipeActionRight(),
-        onDismissed: onDismissed,
-        child: child,
+    return isDismissible
+    ?  ClipRRect(
+        borderRadius: BorderRadius.circular(15.0),
+        child: Dismissible(
+          key: ObjectKey(item),
+          background: buildSwipeActionLeft(),
+          secondaryBackground: buildSwipeActionRight(),
+          onDismissed: onDismissed,
+          child: child,
+        )
       )
-    );
+    : child;
   }
 
   Widget buildSwipeActionLeft() => Container(

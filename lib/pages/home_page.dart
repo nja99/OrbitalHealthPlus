@@ -4,6 +4,7 @@ import 'package:healthsphere/components/buttons/circle_button.dart';
 import 'package:healthsphere/components/home/home_drawer.dart';
 import 'package:healthsphere/screens/appointment_screen.dart';
 import 'package:healthsphere/screens/home_screen.dart';
+import 'package:healthsphere/screens/medication_screen.dart';
 import 'package:healthsphere/utils/page_data.dart';
 
 class HomePage extends StatefulWidget {
@@ -27,7 +28,8 @@ class _HomePageState extends State<HomePage> {
 
   final List<PageData> _pages = [
     PageData(page: const HomeScreen(), title: "Home", showSearchBar: true),
-    PageData(page: const HomeScreen(), title: "Medications"),
+    PageData(page: const HomeScreen(), title: "Health Monitor"),
+    PageData(page: const MedicationScreen(), title: "Medications"),
     PageData(page: const AppointmentScreen(), title: "Appointments"),
     PageData(page: const HomeScreen(), title: "Home"),
   ];
@@ -120,12 +122,14 @@ class _HomePageState extends State<HomePage> {
         onTap: _navigateBottomBar,
         type: BottomNavigationBarType.fixed,
         selectedItemColor: const Color(0xFF4B25DD),
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.medication), label: "Medications"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_month), label: "Appointments"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
+          BottomNavigationBarItem(icon: Icon(Icons.monitor_heart), label: ""),
+          BottomNavigationBarItem(icon: Icon(Icons.medication), label: ""),
+          BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: ""),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label:""),
         ]);
   }
 }
