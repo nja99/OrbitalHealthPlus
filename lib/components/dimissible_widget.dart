@@ -1,32 +1,37 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
 import "package:healthsphere/services/database/appointment_firestore_service.dart";
+import "package:healthsphere/services/database/medications_firestore_service.dart";
 
 class DismissibleWidget<T> extends StatelessWidget {
 
   final T item;
   final Widget child;
   final DismissDirectionCallback onDismissed;
+  final bool isDismissible;
 
   const DismissibleWidget({
     super.key,
     required this.child,
     required this.item,
-    required this.onDismissed
+    required this.onDismissed,
+    required this.isDismissible
   });
 
   @override
   Widget build(BuildContext context){
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(15.0),
-      child: Dismissible(
-        key: ObjectKey(item),
-        background: buildSwipeActionLeft(),
-        secondaryBackground: buildSwipeActionRight(),
-        onDismissed: onDismissed,
-        child: child,
+    return isDismissible
+    ?  ClipRRect(
+        borderRadius: BorderRadius.circular(15.0),
+        child: Dismissible(
+          key: ObjectKey(item),
+          background: buildSwipeActionLeft(),
+          secondaryBackground: buildSwipeActionRight(),
+          onDismissed: onDismissed,
+          child: child,
+        )
       )
-    );
+    : child;
   }
 
   Widget buildSwipeActionLeft() => Container(
@@ -78,6 +83,21 @@ void dismissItem(BuildContext context, List<DocumentSnapshot> items, int index, 
       break;
     default:
       break;
+  }
+
+  void updateMedication (BuildContext context, List<DocumentSnapshot> items, int index, DismissDirection direction, MedicationFirestoreService firestoreService) {
+    
+    DocumentSnapshot medication = items[index];
+    String medicationID = medication.id;
+
+    switch (direction) {
+      case DismissDirection.startToEnd:
+        break;
+      case DismissDirection.endToStart:
+        break;
+      default:
+        break;
+    }
   }
 }
 

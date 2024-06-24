@@ -32,7 +32,7 @@ class _ShowAppointmentDialogState extends State<ShowAppointmentDialog> {
       body: StreamBuilder<DocumentSnapshot>(
         stream: firestoreService.getAppointmentStream(widget.appointment.id),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
+          if (!snapshot.hasData || !snapshot.data!.exists) {
             return const Center(child: CircularProgressIndicator());
           }
 
@@ -111,8 +111,8 @@ class _ShowAppointmentDialogState extends State<ShowAppointmentDialog> {
                         child: ElevatedButton(
                           child: const Text("DELETE"),
                           onPressed: () async {
-                            await firestoreService.deleteAppointment(widget.appointment.id);
                             Navigator.of(context).pop();
+                            await firestoreService.deleteAppointment(widget.appointment.id);
                           },
                         ),
                       )

@@ -51,6 +51,8 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                 Tab(text: "Completed"),
                 Tab(text: "Missed")
               ],
+              indicatorSize: TabBarIndicatorSize.tab,
+              dividerColor: Colors.transparent,
             ),
             Expanded(
               child: TabBarView(
@@ -65,6 +67,10 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
         )
       ),
     );
+  }
+
+  bool _isDismissible (String status) {
+    return status == "Upcoming";
   }
 
   Widget _buildAppointmentList(String status) {
@@ -106,6 +112,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: AppointmentCard(
                       appointment: appointment,
+                      isDismissible: _isDismissible(status),
                       onDismissed: (direction) {
                         setState(() {
                           dismissItem(context, appointmentList, index, direction, firestoreService);

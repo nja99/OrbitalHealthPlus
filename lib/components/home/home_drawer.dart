@@ -3,6 +3,7 @@ import 'package:healthsphere/components/home/home_drawer_tile.dart';
 import 'package:healthsphere/pages/auth/login_page.dart';
 import 'package:healthsphere/pages/home_page.dart';
 import 'package:healthsphere/pages/settings_page.dart';
+import 'package:healthsphere/pages/drugdatabase_page.dart';
 import 'package:healthsphere/screens/map_screen.dart';
 import 'package:healthsphere/services/auth/auth_service.dart';
 import 'package:healthsphere/services/service_locator.dart';
@@ -58,33 +59,47 @@ class _HomeDrawerState extends State<HomeDrawer> {
               },
             ),
 
-            // Setting list tile
-            HomeDrawerTile(
-              text: "S E T T I N G",
-              icon: Icons.settings,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SettingsPage(),
-                  ),
-                );
-              },
-            ),
+
+          // Setting list tile
+          HomeDrawerTile(
+            text: "S E T T I N G",
+            icon: Icons.settings,
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SettingsPage(),
+                ),
+              );
+            }
+          ),
+
+          HomeDrawerTile(
+            text: "D A T A B A S E", 
+            icon: Icons.data_array, 
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const DrugDatabasePage())
+              );
+            }
+          ),
 
             // Adjust size if necessary
             const SizedBox(height: 400),
 
-            // Logout list tile
-            HomeDrawerTile(
-              text: "L O G O U T",
-              icon: Icons.logout,
-              onTap: () {
-                userSignOut();
-                Navigator.pop(context);
-              },
-            ),
+          // Logout list tile
+          HomeDrawerTile(
+            text: "L O G O U T",
+            icon: Icons.logout,
+            onTap: () {
+              userSignOut();
+              Navigator.pop(context);
+            }
+          ),
 
             const SizedBox(height: 25),
           ],

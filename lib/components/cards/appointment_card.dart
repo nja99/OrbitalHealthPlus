@@ -8,11 +8,14 @@ class AppointmentCard extends StatelessWidget {
   
   final DocumentSnapshot appointment;
   final Function(DismissDirection) onDismissed;
+  final bool isDismissible;
 
   const AppointmentCard({
     super.key,
     required this.appointment,
-    required this.onDismissed
+    required this.onDismissed,
+    required this.isDismissible
+    
   });
 
   @override
@@ -30,13 +33,14 @@ class AppointmentCard extends StatelessWidget {
     String time = DateFormat('HH:mm').format(appointmentDateTime);
 
     return Card(
-      color: const Color(0xFFC8B4FF),
+      color: const Color(0xFFFFFEFC),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
       child: DismissibleWidget<DocumentSnapshot>(
           item: appointment,
           onDismissed: onDismissed,
+          isDismissible: isDismissible,
           child: ListTile(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             title: Row(
               children: [
                 Column(
@@ -60,7 +64,7 @@ class AppointmentCard extends StatelessWidget {
                 Container(
                   width: 1,
                   height: 50,
-                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
                   color: Colors.black,
                 ),
                 Expanded(
