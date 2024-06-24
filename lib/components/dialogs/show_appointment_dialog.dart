@@ -32,11 +32,7 @@ class _ShowAppointmentDialogState extends State<ShowAppointmentDialog> {
       body: StreamBuilder<DocumentSnapshot>(
         stream: firestoreService.getAppointmentStream(widget.appointment.id),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (!snapshot.data!.exists) {
+          if (!snapshot.hasData || !snapshot.data!.exists) {
             return const Center(child: CircularProgressIndicator());
           }
 

@@ -16,12 +16,12 @@ class MedicationConfig {
   ];
 
   static const List<String> instructionOptions = [
-    "No Specific Instructions",
-    "Taken with Food",
-    "Taken on Empty Stomach",
-    "In the Morning",
-    "Taken at Bedtime",
-    "Finish the Entire Course",
+    "No Instructions",
+    "With Food",
+    "Empty Stomach",
+    "Morning",
+    "Bedtime",
+    "Finish Course",
     "Sublingual"
   ];
 

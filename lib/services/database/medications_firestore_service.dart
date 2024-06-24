@@ -15,9 +15,21 @@ class MedicationFirestoreService {
         .collection('medications');
   }
 
-  // CREATE
-  Future<void> addMedication(String name, String purpose, String? route, String amount, String unit, String? frequency, String? instruction) {
-    return medicationsCollection.add({
+  // Medication Data Structure
+  Map<String, dynamic> constructMedicationData({
+    required String name,
+    required String purpose,
+    required String route,
+    required String amount,
+    required String unit,
+    required String frequency,
+    required String instruction,
+    required String firstDose,
+    required List<String> doseTimes,
+    int taken = 0,
+    int missed = 0,
+  }) {
+    return {
       'name': name,
       'purpose': purpose,
       'route': route,
@@ -25,12 +37,21 @@ class MedicationFirestoreService {
       'unit': unit,
       'frequency': frequency,
       'instruction': instruction,
-    });
+      'firstDose': firstDose,
+      'doseTimes': doseTimes,
+      'taken': taken,
+      'missed': missed,
+    };
+  }
+
+  // CREATE
+  Future<void> addMedication(Map<String, dynamic> data) {
+    return medicationsCollection.add(data);
   }
 
   // READ
   Stream<QuerySnapshot> readMedicationStream() {
-    return medicationsCollection.orderBy('date_time').snapshots();
+    return medicationsCollection.orderBy('firstDose').snapshots();
   }
 
   // Get Appointment Document Changes
@@ -39,14 +60,8 @@ class MedicationFirestoreService {
   }
 
   // UPDATE APPOINTMENT
-  Future<void> updateMedication(String medicationID, String newTitle, String newDescription, String newLocation, Timestamp newFormattedDateTime, String status) {
-    return medicationsCollection.doc(medicationID).update({
-      'title': newTitle,
-      'description': newDescription,
-      'location': newLocation,
-      'date_time': newFormattedDateTime,
-      'status': status
-    });
+Future<void> updateMedication(String id, Map<String, dynamic> data) {
+    return medicationsCollection.doc(id).update(data);
   }
 
   // UPDATE APPOINTMENT STATUS

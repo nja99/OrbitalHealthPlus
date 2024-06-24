@@ -7,15 +7,47 @@ class DrugsFirestoreService {
 
   final FirebaseFirestore _firebaseFirestore = getIt<FirebaseFirestore>();
 
-  Future<bool> drugExists(String drugName) async {
-    final docSnapshot = await _firebaseFirestore
-      .collection('drugs')
-      .doc(drugName)
-      .get();
-
-    return docSnapshot.exists;
+  // Retrieve Collection of Drugs
+  CollectionReference get drugsCollection {
+    return _firebaseFirestore.collection('drugs');
   }
 
+  // Read Drug Database
+  Stream<QuerySnapshot> readDrugsStream() {
+    return drugsCollection
+    .orderBy('genericName')
+    .snapshots();
+  }
+
+  // Get Drug Document Changes
+  Stream<DocumentSnapshot> getDrugsStream(String drugId) {
+    return drugsCollection.doc(drugId).snapshots();
+  }
+
+  // Check if Drug Exists
+  Future<bool> drugExists(String query) async {
+    final querySnapshot = await _firebaseFirestore
+      .collection('drugs')
+      .where('genericAndBrandNames', arrayContains: query)
+      .get();
+    
+    return querySnapshot.docs.isNotEmpty;
+  }
+
+  // Filter Drugs by Name
+  List<DocumentSnapshot> filterDrugs(List<DocumentSnapshot> drugList, String searchText) {
+    if (searchText.isEmpty) {
+      return drugList;
+    }
+
+    return drugList.where((drug) {
+      var names = List<String>.from(drug['genericAndBrandNames']);
+      return names
+          .any((name) => name.toLowerCase().contains(searchText.toLowerCase()));
+    }).toList();
+  }
+
+  // Scrape and store Drug Info into Firestore
   Future<Map<String, dynamic>> scrapeDrugInfo(String drugName) async {
     const functionUrl =
         "https://asia-southeast1-orbitalhealthsphere-73d9d.cloudfunctions.net/scrapeDrugs";

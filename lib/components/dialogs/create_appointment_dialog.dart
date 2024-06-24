@@ -64,16 +64,25 @@ class _CreateAppointmentDialogState extends State<CreateAppointmentDialog> {
 
       // Format Date and Time for Storage
       Timestamp formattedDateTime = Timestamp.fromDate(appointmentDateTime);
+
+      final appointmentData = widget.firestoreService.constructAppointmentData(
+        title: title,
+        description: description, 
+        dateTime: formattedDateTime,
+        location: location,
+        status: status
+      );
+
       
       if (widget.appointment != null) {
         // Update Appointment in DB        
-        widget.firestoreService.updateAppointment(widget.appointment!.id, title, description, location, formattedDateTime, status)
+        widget.firestoreService.updateAppointment(widget.appointment!.id, appointmentData)
           // Pop Dialog
           .then((_) { Navigator.of(context).pop();})
           .catchError((error) {print("Failed to update appointment: $error");});
       } else {
         // Add Appointment to DB
-        widget.firestoreService.addAppointment(title, description, location, formattedDateTime, status)
+        widget.firestoreService.addAppointment(appointmentData)
           // Pop Dialog
           .then((_) { Navigator.of(context).pop();})
           .catchError((error) {print("Failed to add appointment: $error");});

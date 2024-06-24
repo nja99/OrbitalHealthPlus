@@ -34,7 +34,7 @@ class FormTextField extends StatelessWidget {
           // Input Box
           const SizedBox(height: 8),
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsetsDirectional.fromSTEB(12, 15, 12, 15),
             decoration: BoxDecoration(
               color: Colors.grey.shade200,
               borderRadius: BorderRadius.circular(12)

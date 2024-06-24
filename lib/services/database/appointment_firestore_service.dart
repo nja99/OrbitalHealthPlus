@@ -15,16 +15,26 @@ class AppointmentFirestoreService {
         .collection('appointments');
 }
 
+// Construct Appointment Data
+  Map<String, dynamic> constructAppointmentData({
+    required String title,
+    required Timestamp dateTime,
+    String? location,
+    String? description,
+    String status = 'Upcoming'
+  }) {
+    return {
+      'title': title,
+      'date_time': dateTime,
+      'location': location ?? '',
+      'notes': description ?? '',
+      'status': status
+    };
+  }
+
   // CREATE
-  Future<void> addAppointment(String title, String description, String location, Timestamp formattedDateTime, String status) {
-    return appointmentsCollection
-      .add({
-          'title': title,
-          'description': description,
-          'location': location,
-          'date_time': formattedDateTime,
-          'status': status
-      });
+  Future<void> addAppointment(Map<String, dynamic> data) {
+    return appointmentsCollection.add(data);
   }
 
   // READ
@@ -34,22 +44,14 @@ class AppointmentFirestoreService {
         .snapshots();
   }
 
-    // Get Appointment Document Changes
+  // Get Appointment Document Changes
   Stream<DocumentSnapshot> getAppointmentStream(String appointmentId) {
     return appointmentsCollection.doc(appointmentId).snapshots();
   }
 
   // UPDATE APPOINTMENT
-  Future<void> updateAppointment(String appointmentID, String newTitle, String newDescription, String newLocation, Timestamp newFormattedDateTime, String status) {
-    return appointmentsCollection
-      .doc(appointmentID)
-      .update({
-          'title': newTitle,
-          'description': newDescription,
-          'location': newLocation,
-          'date_time': newFormattedDateTime,
-          'status': status
-      });
+  Future<void> updateAppointment(String id, Map<String, dynamic> data) {
+    return appointmentsCollection.doc(id).update(data);
   }
 
   // UPDATE APPOINTMENT STATUS

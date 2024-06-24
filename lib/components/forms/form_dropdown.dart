@@ -18,7 +18,7 @@ class FormDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(0, 5, 0, 5),
+      padding: const EdgeInsetsDirectional.fromSTEB(0, 5, 0, 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -41,6 +41,7 @@ class FormDropdown extends StatelessWidget {
             ),
   
             child: DropdownMenu<String> (
+              textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
               initialSelection: value,
               expandedInsets: const EdgeInsets.all(0),
               onSelected: onSelected,
