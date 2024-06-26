@@ -6,13 +6,16 @@ class FormTextField extends StatelessWidget {
   final String title;
   final String? Function(String?)? validator;
   final int? maxLines;
+  final Widget? prefixIcon;
 
   const FormTextField({
     super.key,
     required this.controller,
     required this.title,
     this.validator,
-    this.maxLines});
+    this.maxLines,
+    this.prefixIcon
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,13 +37,16 @@ class FormTextField extends StatelessWidget {
           // Input Box
           const SizedBox(height: 8),
           Container(
-            padding: const EdgeInsetsDirectional.fromSTEB(12, 15, 12, 15),
             decoration: BoxDecoration(
               color: Colors.grey.shade200,
               borderRadius: BorderRadius.circular(12)
             ),
             child: TextFormField(
-              decoration: const InputDecoration.collapsed(hintText: ""),
+              decoration: InputDecoration(
+                prefixIcon: prefixIcon,
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.all(12)
+              ),
               maxLines: maxLines,
               controller: controller,
               validator: validator,

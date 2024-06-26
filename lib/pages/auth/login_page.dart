@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 import 'package:healthsphere/components/buttons/square_tile.dart';
 import 'package:healthsphere/components/buttons/user_button.dart';
 import 'package:healthsphere/components/dialogs/custom_alert_dialog.dart';
@@ -57,10 +57,6 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
   } 
-
-
-
-
 
   @override
   Widget build(BuildContext context) {

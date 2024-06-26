@@ -48,21 +48,16 @@ class AppointmentCard extends StatelessWidget {
                   children: [
                     Text(
                       day,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold
-                      )
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)
                     ),
                     Text(
                       month,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold
-                      ),)
+                      style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold)
+                    )
                   ],
                 ),
                 Container(
-                  width: 1,
+                  width: 2,
                   height: 50,
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   color: Colors.black,
@@ -73,19 +68,13 @@ class AppointmentCard extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold
-                        ),
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 4),
 
                       Text(
                         time,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold
-                        ),
+                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                       )
                     ],
                   ))

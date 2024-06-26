@@ -16,11 +16,11 @@ class MedicationConfig {
   ];
 
   static const List<String> instructionOptions = [
-    "No Instructions",
+    "No Specific Instructions",
     "With Food",
-    "Empty Stomach",
-    "Morning",
-    "Bedtime",
+    "On Empty Stomach",
+    "In the Morning",
+    "Before Bedtime",
     "Finish Course",
     "Sublingual"
   ];
@@ -35,6 +35,36 @@ class MedicationConfig {
         return 'ml';
       default:
         return '';
+    }
+  }
+
+  static String getRouteImage (String route) {
+    switch(route) {
+      case 'Tablet/Capsule':
+        return "lib/assets/images/placeholders/tablet.png";
+      case "Liquid":
+        return "lib/assets/images/placeholders/liquid.png";
+      case "Injection":
+        return "lib/assets/images/placeholders/injection.png";
+      case "Topical":
+        return "lib/assets/images/placeholders/topical.png";
+      default:
+        return "lib/assets/images/placeholders/default.png";
+    }
+  }
+
+  static String getRouteIcon (String route) {
+    switch (route) {
+      case 'Tablet/Capsule':
+        return "lib/assets/images/icons/icon_tablet.png";
+      case "Liquid":
+        return "lib/assets/images/icons/icon_liquid.png";
+      case "Injection":
+        return "lib/assets/images/icons/icon_injection.png";
+      case "Topical":
+        return "lib/assets/images/icons/icon_topical.png";
+      default:
+        return "lib/assets/images/icons/icon_tablet.png";
     }
   }
 }

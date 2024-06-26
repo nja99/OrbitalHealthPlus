@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 import 'package:healthsphere/components/buttons/user_button.dart';
 import 'package:healthsphere/components/dialogs/custom_alert_dialog.dart';
 import 'package:healthsphere/components/forms/user_textfield.dart';
@@ -50,6 +50,8 @@ class _RegisterPageState extends State<RegisterPage> {
           setState(() {
             _isLoading = false;
           });
+          // Navigate to Login Page
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage()));
         }
       }
       // Catch Sign Up Errors

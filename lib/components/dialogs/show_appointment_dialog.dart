@@ -55,7 +55,7 @@ class _ShowAppointmentDialogState extends State<ShowAppointmentDialog> {
                 // Placeholder
                 Align(
                   alignment: Alignment.center,
-                  child: Image.asset("lib/assets/images/placeholder.png", height: 180),
+                  child: Image.asset("lib/assets/images/placeholders/doctor.png", height: 180),
                 ),
             
                 // Appointment Title
@@ -97,9 +97,7 @@ class _ShowAppointmentDialogState extends State<ShowAppointmentDialog> {
                           child: const Text("EDIT"),
                           onPressed: (){
                             Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => CreateAppointmentDialog(firestoreService: firestoreService, appointment: widget.appointment)
-                              )
+                              MaterialPageRoute(builder: (context) => CreateAppointmentDialog(firestoreService: firestoreService, appointment: widget.appointment))
                             );
                           }, 
                         ),

@@ -25,7 +25,7 @@ class MedicationFirestoreService {
     required String frequency,
     required String instruction,
     required String firstDose,
-    required List<String> doseTimes,
+    required List<Map<String,String>> doseTimes,
     int taken = 0,
     int missed = 0,
   }) {
@@ -51,7 +51,10 @@ class MedicationFirestoreService {
 
   // READ
   Stream<QuerySnapshot> readMedicationStream() {
-    return medicationsCollection.orderBy('firstDose').snapshots();
+    return medicationsCollection
+      .orderBy('firstDose')
+      .orderBy('name')
+      .snapshots();
   }
 
   // Get Appointment Document Changes
@@ -64,16 +67,71 @@ Future<void> updateMedication(String id, Map<String, dynamic> data) {
     return medicationsCollection.doc(id).update(data);
   }
 
-  // UPDATE APPOINTMENT STATUS
-  Future<void> updateMedicationStatus(String medicationID, String newStatus) {
-    return medicationsCollection
-        .doc(medicationID)
-        .update({'status': newStatus});
+  // UPDATE DOSAGE STATUS
+  Future<void> updateDoseStatus(String medicationID, String doseTime, String status) async {
+
+    try {
+      // Retrieve Document
+      DocumentSnapshot doc = await medicationsCollection.doc(medicationID).get();
+
+      if(!doc.exists) {
+        throw Exception("Medication Not Found");
+      }
+    
+      Map<String, dynamic> medicationData = doc.data() as Map<String, dynamic> ?? {};
+      List<dynamic> doseTimes = medicationData['doseTimes'] as List<dynamic> ?? [];
+
+      // Update Status of Dose at Time
+      bool flag = false;
+      for (var dose in doseTimes) {
+        if(dose['time'] == doseTime) {
+          dose['status'] = status;
+          flag = true;
+          break;
+        }
+      }
+
+      if (!flag) {
+        throw Exception("Dose Not Found");
+      }
+
+      if (status == 'taken' || status == 'missed') {
+        medicationData[status] = (medicationData[status] ?? 0) + 1;
+      } 
+
+      // Update Document
+      await medicationsCollection.doc(medicationID).update({
+        'doseTimes': doseTimes,
+        'taken': medicationData['taken'],
+        'missed': medicationData['missed']
+      });
+    } catch (error) {
+      print("Error Updating Dose Status $error");
+    }
   }
 
   // DELETE
   Future<void> deleteMedication(String medicationID) {
     return medicationsCollection.doc(medicationID).delete();
+  }
+
+  // RESET DOSE STATUS
+  @pragma("vm:entry-point")
+  Future<void> resetDoseStatus() async {
+    final currentUser = _firebaseAuth.currentUser;
+    
+    if (currentUser != null) {
+      final userID = currentUser.uid;
+      QuerySnapshot snapshot = await medicationsCollection.get();
+
+      for (var doc in snapshot.docs) {
+        List<dynamic> doseTimes = doc['doseTimes'];
+        for (var dose in doseTimes) {
+          dose['status'] = "pending";
+        }
+        doc.reference.update({'doseTimes': doseTimes});
+      }
+    }
   }
 }
 

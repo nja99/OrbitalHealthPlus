@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 import 'package:intl/intl.dart';
 
 extension TimeOfDayExtension on TimeOfDay {
@@ -7,7 +7,7 @@ extension TimeOfDayExtension on TimeOfDay {
   }
 
   String to24HourString() {
-    return '${this.hour.toString().padLeft(2, '0')}:${this.minute.toString().padLeft(2, '0')}';
+    return '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
   }
 
   String to12HourString() {

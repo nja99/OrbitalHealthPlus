@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 import 'package:healthsphere/services/auth/auth_service_locator.dart';
 import 'package:healthsphere/services/database/drugs_firestore_service.dart';
 import 'package:healthsphere/themes/custom_text_styles.dart';
@@ -34,7 +34,7 @@ class _ShowDrugDialogState extends State<ShowDrugDialog> {
 
   Widget _drugInfo() {
     return StreamBuilder<DocumentSnapshot>(
-      stream: firestoreService.getDrugsStream(widget.drug.id), 
+      stream: firestoreService.getDrugStream(widget.drug.id), 
       builder: (context, snapshot) {
 
         if (!snapshot.hasData || !snapshot.data!.exists) {
@@ -92,10 +92,10 @@ class _ShowDrugDialogState extends State<ShowDrugDialog> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        margin: const EdgeInsets.only(top: 5), // Adjust this value to align the bullet
+                        margin: const EdgeInsets.only(top: 7), // Adjust this value to align the bullet
                         child: const Icon(Icons.brightness_1, size: 6),
                       ),
-                      const SizedBox(width: 5),
+                      const SizedBox(width: 7),
                       Expanded(child: Text(effect, style: CustomTextStyles.bodyNormal, textAlign: TextAlign.justify)),
                     ],
                   )).toList(),
