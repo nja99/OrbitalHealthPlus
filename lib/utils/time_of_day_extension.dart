@@ -18,7 +18,7 @@ extension TimeOfDayExtension on TimeOfDay {
   static TimeOfDay toTimeOfDay(String timeString) {
     final parts = timeString.split(':');
     if (parts.length != 2) {
-      throw FormatException('Invalid time format, expected HH:mm');
+      throw const FormatException('Invalid time format, expected HH:mm');
     }
     return TimeOfDay(hour:int.parse(parts[0]), minute: int.parse(parts[1]));
   }

@@ -17,10 +17,6 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
   // Fire Store //
   final AppointmentFirestoreService firestoreService = getIt<AppointmentFirestoreService>();
 
-  // Text Controller //
-  final TextEditingController textController = TextEditingController();
-  
-
   @override
   Widget build(BuildContext context) {
     

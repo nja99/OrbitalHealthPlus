@@ -78,8 +78,8 @@ Future<void> updateMedication(String id, Map<String, dynamic> data) {
         throw Exception("Medication Not Found");
       }
     
-      Map<String, dynamic> medicationData = doc.data() as Map<String, dynamic> ?? {};
-      List<dynamic> doseTimes = medicationData['doseTimes'] as List<dynamic> ?? [];
+      Map<String, dynamic> medicationData = doc.data() as Map<String, dynamic>;
+      List<dynamic> doseTimes = medicationData['doseTimes'] as List<dynamic>;
 
       // Update Status of Dose at Time
       bool flag = false;

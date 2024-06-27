@@ -27,6 +27,12 @@ class _LoginPageState extends State<LoginPage> {
   final authService = getIt<AuthService>();
 
 
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
 
   // Login Function

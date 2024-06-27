@@ -27,7 +27,7 @@ class DrugsFirestoreService {
     return _firebaseFirestore.collection('drugs');
   }
 
-  // CRUD
+  // CRUD //
   // Read Drug Database
   Stream<QuerySnapshot> readDrugsStream() {
     return drugsCollection
@@ -39,20 +39,10 @@ class DrugsFirestoreService {
   Stream<DocumentSnapshot> getDrugStream(String drugId) {
     return drugsCollection.doc(drugId).snapshots();
   }
-
-  // Utilities
-  // Check if Drug Exists
-  Future<bool> drugExists(String query) async {
-    final querySnapshot = await drugsCollection
-      .where('genericAndBrandNames', arrayContains: query)
-      .get();
-    
-    return querySnapshot.docs.isNotEmpty;
-  }
-
+  
+  // Filters //
   // Filter Drugs by Name
-  List<DocumentSnapshot> filterDrugs(
-      List<DocumentSnapshot> drugList, String searchText) {
+  List<DocumentSnapshot> filterDrugs(List<DocumentSnapshot> drugList, String searchText) {
     if (searchText.isEmpty) {
       return drugList;
     }
@@ -62,6 +52,33 @@ class DrugsFirestoreService {
       return names
           .any((name) => name.toLowerCase().contains(searchText.toLowerCase()));
     }).toList();
+  }
+
+  Future<List<String>> searchDrugs(String query) async {
+    if (query.isEmpty) {
+      return [];
+    }
+
+    final querySnapshot = await drugsCollection.get();
+    final results = querySnapshot.docs
+      .map((doc) => List<String>.from(doc['genericAndBrandNames']))
+      .expand((names) => names)
+      .where((name) => name.toLowerCase().startsWith(query.toLowerCase()))
+      .take(3)
+      .toList();
+    
+    return results;
+  }
+
+  // Utilities //
+  // Check if Drug Exists
+  Future<bool> drugExists(String query) async {
+
+    final querySnapshot = await drugsCollection
+      .where('genericAndBrandNames', arrayContains: query)
+      .get();
+    
+    return querySnapshot.docs.isNotEmpty;
   }
 
   Future<String> getDrugPurpose (String drugName) async {
@@ -78,7 +95,7 @@ class DrugsFirestoreService {
     return '';
   }
 
-  // External Integration
+  // External Integration //
   // Scrape and store Drug Info into Firestore
   Future<Map<String, dynamic>> scrapeDrugInfo(String drugName) async {
     final functionUrl =

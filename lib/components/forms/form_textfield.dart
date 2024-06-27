@@ -7,6 +7,7 @@ class FormTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final int? maxLines;
   final Widget? prefixIcon;
+  final ValueChanged? onChanged;
 
   const FormTextField({
     super.key,
@@ -14,7 +15,8 @@ class FormTextField extends StatelessWidget {
     required this.title,
     this.validator,
     this.maxLines,
-    this.prefixIcon
+    this.prefixIcon,
+    this.onChanged
   });
 
   @override
@@ -50,6 +52,7 @@ class FormTextField extends StatelessWidget {
               maxLines: maxLines,
               controller: controller,
               validator: validator,
+              onChanged: onChanged,
             )
           )
         ]

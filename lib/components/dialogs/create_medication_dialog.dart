@@ -42,7 +42,8 @@ class _CreateMedicationDialogState extends State<CreateMedicationDialog> {
   String _dosageUnit = "";
   TimeOfDay? _firstDose;
 
-
+  // Search Result
+  List<String> _searchResults = [];
 
   @override
   void initState() {
@@ -61,6 +62,28 @@ class _CreateMedicationDialogState extends State<CreateMedicationDialog> {
       _firstDose = const TimeOfDay(hour: 8, minute: 30);
       _dosageUnit = MedicationConfig.getDosageUnit(_dosageRoute);
     }
+  }
+
+  @override
+  void dispose() {
+    _medicationName.dispose();
+    _medicationPurpose.dispose();
+    _dosageAmount.dispose();
+    super.dispose();
+  }
+
+  Future<void> _searchDrugs(String query) async {
+    if (query.isEmpty) {
+      setState(() {
+        _searchResults.clear();
+      });
+      return;
+    }
+
+    final results = await drugService.searchDrugs(query);
+    setState(() {
+      _searchResults = results;
+    });
   }
 
   Future<void> _saveMedication() async {
@@ -141,12 +164,28 @@ class _CreateMedicationDialogState extends State<CreateMedicationDialog> {
                     FormTextField(
                       controller: _medicationName, 
                       title: "Medicine Name",
+                      onChanged: (value) { 
+                        setState(() {
+                          _searchDrugs(value);
+                        });
+                      },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Please enter a medication";
                         }
                         return null;
                       }
+                    ),
+
+                    FormDropdown(
+                      title: "Meds", 
+                      value: _medicationName.text, 
+                      onSelected: (selection) {
+                        setState(() {
+                          _medicationName.text = selection!;
+                        });
+                      }, 
+                      items: _searchResults
                     ),
                     // Purpose Field (Auto-fill?)
                     FormTextField(

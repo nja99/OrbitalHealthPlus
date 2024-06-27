@@ -52,6 +52,14 @@ class _CreateAppointmentDialogState extends State<CreateAppointmentDialog> {
     }
   }
 
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    _locationController.dispose();
+    super.dispose();
+  }
+
   void _saveAppointment() {
     if (_formKey.currentState!.validate()) {
 

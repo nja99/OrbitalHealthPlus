@@ -29,7 +29,7 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   void addCustomIcon() async {
-    final customIcon = await BitmapDescriptor.fromAssetImage(
+    final customIcon = await BitmapDescriptor.asset(
       const ImageConfiguration(size: Size(128, 128)), // Specify a custom size here
       'lib/assets/images/marker_big.png', // Use the resized image
     );

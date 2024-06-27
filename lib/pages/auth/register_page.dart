@@ -24,6 +24,14 @@ class _RegisterPageState extends State<RegisterPage> {
     // Loading state
   bool _isLoading = false;
 
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
+
 
   // Login Function
   void userSignUp() async {

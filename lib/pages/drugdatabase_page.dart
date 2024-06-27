@@ -64,7 +64,7 @@ class _DrugDatabasePageState extends State<DrugDatabasePage> {
         var filteredList = firestoreService.filterDrugs(drugList, _searchText);
 
         if (filteredList.isEmpty) {
-          return Center(child: Text('No drugs found'));
+          return const Center(child: Text('No drugs found'));
         }
 
         return ListView.builder(

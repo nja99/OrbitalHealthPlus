@@ -21,9 +21,6 @@ class _MedicationScreenState extends State<MedicationScreen> {
   // Fire Store //
   final MedicationFirestoreService firestoreService = getIt<MedicationFirestoreService>();
 
-  // Text Controller //
-  final TextEditingController textController = TextEditingController();
-
   @override
   void initState() {
     super.initState();
