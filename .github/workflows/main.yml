@@ -1,0 +1,45 @@
+name: Flutter CI/CD Build and Release
+
+on: 
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checking Out Repository
+      uses: actions/checkout@v2
+
+    - name: Setting up JDK 11
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
+
+    - name: Installing Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.22.2'
+
+    - name: Getting Dependencies
+      run: flutter pub get
+
+    - name: Generating App Icon
+      run: flutter pub run flutter_launcher_icons:main
+
+    - name: Analyzing
+      run: flutter analyze
+
+    - name: Building Release APK
+      run: flutter build apk --release
+
+    - name: Uploading Release APK
+      uses: actions/upload-artifact@v2
+      with:
+        name: release-apk
+        path: build/app/outputs/flutter-apk/app-release.apk
+
+      
