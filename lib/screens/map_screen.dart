@@ -29,7 +29,7 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   void addCustomIcon() async {
-    final customIcon = await BitmapDescriptor.fromAssetImage(
+    final customIcon = await BitmapDescriptor.asset(
       const ImageConfiguration(size: Size(128, 128)), // Specify a custom size here
       'lib/assets/images/marker_big.png', // Use the resized image
     );
@@ -152,7 +152,7 @@ class _MapScreenState extends State<MapScreen> {
               myLocationEnabled: true, // Enable showing user's location
               myLocationButtonEnabled: false, // Disable the default location button
               markers: clinics.where((clinic) {
-                return clinic.name.isNotEmpty && clinic.location != null;
+                return clinic.name.isNotEmpty;
               }).map((clinic) {
                 return Marker(
                   markerId: MarkerId(clinic.name),

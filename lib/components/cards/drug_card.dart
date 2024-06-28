@@ -1,5 +1,5 @@
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import "package:healthsphere/components/dialogs/show_drug_dialog.dart";
 
 class DrugCard extends StatelessWidget {

@@ -1,7 +1,8 @@
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import "package:healthsphere/services/database/appointment_firestore_service.dart";
 import "package:healthsphere/services/database/medications_firestore_service.dart";
+import "package:healthsphere/utils/show_snackbar.dart";
 
 class DismissibleWidget<T> extends StatelessWidget {
 
@@ -57,47 +58,43 @@ class DismissibleWidget<T> extends StatelessWidget {
 void dismissItem(BuildContext context, List<DocumentSnapshot> items, int index, DismissDirection direction, AppointmentFirestoreService firestoreService){
   DocumentSnapshot appointment = items[index];
   String appointmentID = appointment.id;
+  String status;
 
   switch (direction) {
     case DismissDirection.startToEnd:
-      firestoreService.updateAppointmentStatus(appointmentID, "Completed")
-      .then((_) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Appointment Completed')));
-      }).catchError((error) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Failed to delete appointment: $error')));
-      });
+      // Handle Left to Right
+      status = "Completed";
       break;
     case DismissDirection.endToStart:
       // Handle Right to Left
-      firestoreService.updateAppointmentStatus(appointmentID, "Missed")
-      .then((_) {
-        ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text('Appointment Missed')));
-      })
-      .catchError((error) {
-        ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text('Failed to delete appointment: $error')));
-      });
+      status = "Missed";
       break;
     default:
-      break;
+      return;
   }
-
-  void updateMedication (BuildContext context, List<DocumentSnapshot> items, int index, DismissDirection direction, MedicationFirestoreService firestoreService) {
-    
-    DocumentSnapshot medication = items[index];
-    String medicationID = medication.id;
-
-    switch (direction) {
-      case DismissDirection.startToEnd:
-        break;
-      case DismissDirection.endToStart:
-        break;
-      default:
-        break;
-    }
-  }
+  firestoreService.updateAppointmentStatus(appointmentID, status)
+    .then((_) => showSnackBar(context, "Appointment $status"))
+    .catchError((error) => showSnackBar(context, "Failed to delete appointment: $error"));
 }
+
+void updateMedication (BuildContext context, DocumentSnapshot medication, String doseTime, DismissDirection direction, MedicationFirestoreService firestoreService,) {
+  String medicationID = medication.id;
+  String status;
+
+  switch (direction) {
+    case DismissDirection.startToEnd:
+      status = "taken";
+      break;
+    case DismissDirection.endToStart:
+      status = "missed";
+      break;
+    default:
+      return;
+  }
+  firestoreService.updateDoseStatus(medicationID, doseTime, status)
+    .then((_) => showSnackBar(context, "Medication $status"))
+    .catchError((error) => showSnackBar(context, "Error updating status"));
+}
+
+
 

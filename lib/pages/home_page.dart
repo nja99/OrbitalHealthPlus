@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
 
   final List<PageData> _pages = [
     PageData(page: const HomeScreen(), title: "Home", showSearchBar: true),
-    PageData(page: const HomeScreen(), title: "Health Monitor"),
+    // PageData(page: const HomeScreen(), title: "Health Monitor"),
     PageData(page: const MedicationScreen(), title: "Medications"),
     PageData(page: const AppointmentScreen(), title: "Appointments"),
     PageData(page: const HomeScreen(), title: "Home"),
@@ -126,7 +126,7 @@ class _HomePageState extends State<HomePage> {
         showUnselectedLabels: false,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
-          BottomNavigationBarItem(icon: Icon(Icons.monitor_heart), label: ""),
+          // BottomNavigationBarItem(icon: Icon(Icons.monitor_heart), label: ""),
           BottomNavigationBarItem(icon: Icon(Icons.medication), label: ""),
           BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: ""),
           BottomNavigationBarItem(icon: Icon(Icons.person), label:""),

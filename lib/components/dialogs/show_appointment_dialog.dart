@@ -1,5 +1,5 @@
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import "package:healthsphere/components/dialogs/create_appointment_dialog.dart";
 import "package:healthsphere/services/auth/auth_service_locator.dart";
 import "package:healthsphere/services/database/appointment_firestore_service.dart";
@@ -55,7 +55,7 @@ class _ShowAppointmentDialogState extends State<ShowAppointmentDialog> {
                 // Placeholder
                 Align(
                   alignment: Alignment.center,
-                  child: Image.asset("lib/assets/images/placeholder.png", height: 180),
+                  child: Image.asset("lib/assets/images/placeholders/doctor.png", height: 180),
                 ),
             
                 // Appointment Title
@@ -97,9 +97,7 @@ class _ShowAppointmentDialogState extends State<ShowAppointmentDialog> {
                           child: const Text("EDIT"),
                           onPressed: (){
                             Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => CreateAppointmentDialog(firestoreService: firestoreService, appointment: widget.appointment)
-                              )
+                              MaterialPageRoute(builder: (context) => CreateAppointmentDialog(firestoreService: firestoreService, appointment: widget.appointment))
                             );
                           }, 
                         ),

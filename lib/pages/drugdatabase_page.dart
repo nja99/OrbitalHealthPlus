@@ -48,7 +48,8 @@ class _DrugDatabasePageState extends State<DrugDatabasePage> {
               placeholder: "Search Drugs",
             )
           ),
-          Expanded(child: _buildDrugList())
+          Expanded(child: _buildDrugList()),
+          const SizedBox(height: 20)
         ],
       )
     );
@@ -64,7 +65,7 @@ class _DrugDatabasePageState extends State<DrugDatabasePage> {
         var filteredList = firestoreService.filterDrugs(drugList, _searchText);
 
         if (filteredList.isEmpty) {
-          return Center(child: Text('No drugs found'));
+          return const Center(child: Text('No drugs found'));
         }
 
         return ListView.builder(
@@ -73,7 +74,6 @@ class _DrugDatabasePageState extends State<DrugDatabasePage> {
 
             // Retrieve Drug Information
             DocumentSnapshot drug = filteredList[index];
-            String drugID = drug.id;
 
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),

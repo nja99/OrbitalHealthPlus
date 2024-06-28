@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:healthsphere/components/date_time_widget.dart";
 import "package:healthsphere/components/forms/form_dropdown.dart";
@@ -8,7 +8,6 @@ import "package:healthsphere/services/database/drugs_firestore_service.dart";
 import "package:healthsphere/services/database/medications_firestore_service.dart";
 import "package:healthsphere/services/service_locator.dart";
 import "package:healthsphere/utils/time_of_day_extension.dart";
-import "package:intl/intl.dart";
 import "package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart" as dtpicker;
 
 
@@ -40,28 +39,52 @@ class _CreateMedicationDialogState extends State<CreateMedicationDialog> {
   String? _dosageRoute = MedicationConfig.routeOptions.first;
   String? _dosageFrequency = MedicationConfig.frequencyOptions.first;
   String? _dosageInstruction = MedicationConfig.instructionOptions.first;
+  // ignore: unused_field
   String _dosageUnit = "";
   TimeOfDay? _firstDose;
 
-
+  // Search Result
+  List<String> _searchResults = [];
 
   @override
   void initState() {
     super.initState();
     if (widget.medication != null) {
       final data = widget.medication!.data() as Map<String,dynamic>;
-      _medicationName.text = data['name'];
-      _medicationPurpose.text = data['purpose'];
-      _dosageAmount.text = data['amount'];
-      _dosageRoute = data['route'];
+      _medicationName.text = data['name'] ?? '';
+      _medicationPurpose.text = data['purpose'] ?? '';
+      _dosageAmount.text = data['amount'] ?? '';
+      _dosageRoute = data['route'] ?? '';
       _dosageUnit = MedicationConfig.getDosageUnit(_dosageRoute);
       _dosageFrequency = data['frequency'];
       _dosageInstruction = data['instruction'];
-      _firstDose = TimeOfDayExtension.toTimeOfDay(data['doseTime']);
+      _firstDose = TimeOfDayExtension.toTimeOfDay(data['firstDose']);
     } else {
       _firstDose = const TimeOfDay(hour: 8, minute: 30);
       _dosageUnit = MedicationConfig.getDosageUnit(_dosageRoute);
     }
+  }
+
+  @override
+  void dispose() {
+    _medicationName.dispose();
+    _medicationPurpose.dispose();
+    _dosageAmount.dispose();
+    super.dispose();
+  }
+
+  Future<void> _searchDrugs(String query) async {
+    if (query.isEmpty) {
+      setState(() {
+        _searchResults.clear();
+      });
+      return;
+    }
+
+    final results = await drugService.searchDrugs(query);
+    setState(() {
+      _searchResults = results;
+    });
   }
 
   Future<void> _saveMedication() async {
@@ -84,10 +107,10 @@ class _CreateMedicationDialogState extends State<CreateMedicationDialog> {
       double interval = 24 / frequency;
 
       // Generate dose times
-      List<String> doseTimes = [];
+      List<Map<String,String>> doseTimes = [];
       for (int i = 0; i < frequency; i++) {
         TimeOfDay doseTime = _firstDose!.replacing(hour: (_firstDose!.hour + (interval * i).floor()) % 24);
-        doseTimes.add(doseTime.to24HourString());
+        doseTimes.add({"time": doseTime.to24HourString(), "status": "pending"});
       }
 
       final medicationData = widget.firestoreService.constructMedicationData(
@@ -95,7 +118,7 @@ class _CreateMedicationDialogState extends State<CreateMedicationDialog> {
         purpose: purpose,
         route: _dosageRoute!,
         amount: amount,
-        unit: _dosageUnit,
+        unit: MedicationConfig.getDosageUnit(_dosageRoute),
         frequency: _dosageFrequency!,
         instruction: _dosageInstruction!,
         firstDose: _firstDose!.to24HourString(),
@@ -142,6 +165,10 @@ class _CreateMedicationDialogState extends State<CreateMedicationDialog> {
                     FormTextField(
                       controller: _medicationName, 
                       title: "Medicine Name",
+                      onChanged: (value) { 
+                        setState(() {
+                        });
+                      },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Please enter a medication";
@@ -149,6 +176,7 @@ class _CreateMedicationDialogState extends State<CreateMedicationDialog> {
                         return null;
                       }
                     ),
+                    
                     // Purpose Field (Auto-fill?)
                     FormTextField(
                       controller: _medicationPurpose,

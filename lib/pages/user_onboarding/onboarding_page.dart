@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
 import "package:healthsphere/components/buttons/user_button.dart";
 import "package:healthsphere/pages/auth/login_page.dart";
@@ -6,6 +6,7 @@ import "package:healthsphere/pages/auth/register_page.dart";
 import "package:healthsphere/pages/home_page.dart";
 import "package:healthsphere/services/auth/auth_service.dart";
 import "package:healthsphere/services/auth/auth_service_locator.dart";
+import "package:shared_preferences/shared_preferences.dart";
 
 class OnBoardingPage extends StatefulWidget {
 
@@ -73,13 +74,10 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
               // Sign Up with E-mail
               UserButton(
                 buttonText: "Sign Up with Email", 
-                onPressed: () { 
-                      Navigator.push(context,
-                        MaterialPageRoute(
-                          builder: (context) => const RegisterPage(),
-                        ),
-                      );
-                    },
+                onPressed: () async { 
+                  await _completeOnboarding();
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const RegisterPage()));
+                },
                 iconData: Icons.email
               ),
 
@@ -98,11 +96,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                 buttonText: "Sign Up with Google", 
                 onPressed: () async => {
                       await authService.signInWithGoogle(),
-                      Navigator.push(context,
-                          MaterialPageRoute(
-                            builder: (context) => const HomePage(),
-                          ),
-                        ),
+                      await _completeOnboarding(),
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage())),
                       },
                 iconData: FontAwesomeIcons.google,
               ),
@@ -130,11 +125,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                         fontSize: 16
                       ),
                     ),
-                    onTap: () { 
-                      Navigator.push(context,
-                        MaterialPageRoute(
-                          builder: (context) => const LoginPage(),
-                        ),
+                    onTap: () async { 
+                      await _completeOnboarding();
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()),
                       );
                     },
                   ),
@@ -146,4 +139,10 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       )
     );
   }
+  
+  Future<void> _completeOnboarding() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isFirstLaunch', false);
+  }
+
 }

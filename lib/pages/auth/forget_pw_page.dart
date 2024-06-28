@@ -30,6 +30,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   Future passwordReset() async { 
     try {
       await _authService.resetPassword(_emailController.text);
+      if (!mounted) return;
       showCustomDialog(context, "Password Reset link sent!", "Please check your email!");
       // Remove Loading Circle
     }

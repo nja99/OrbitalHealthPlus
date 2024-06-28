@@ -1,5 +1,5 @@
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import "package:healthsphere/components/dialogs/show_appointment_dialog.dart";
 import "package:healthsphere/components/dimissible_widget.dart";
 import "package:intl/intl.dart";
@@ -48,21 +48,16 @@ class AppointmentCard extends StatelessWidget {
                   children: [
                     Text(
                       day,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold
-                      )
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)
                     ),
                     Text(
                       month,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold
-                      ),)
+                      style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold)
+                    )
                   ],
                 ),
                 Container(
-                  width: 1,
+                  width: 2,
                   height: 50,
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   color: Colors.black,
@@ -73,19 +68,13 @@ class AppointmentCard extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold
-                        ),
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 4),
 
                       Text(
                         time,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold
-                        ),
+                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                       )
                     ],
                   ))
