@@ -3,6 +3,7 @@ import 'package:healthsphere/components/buttons/user_button.dart';
 import 'package:healthsphere/components/dialogs/custom_alert_dialog.dart';
 import 'package:healthsphere/components/forms/user_textfield.dart';
 import 'package:healthsphere/pages/auth/login_page.dart';
+import 'package:healthsphere/pages/home_page.dart';
 import 'package:healthsphere/services/auth/auth_provider.dart';
 import 'package:healthsphere/utils/loading_overlay.dart';
 import 'package:provider/provider.dart';
@@ -39,27 +40,23 @@ class _RegisterPageState extends State<RegisterPage> {
     // Get Auth Provider
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
-
     // Show loading indicator
     setState(() {
       _isLoading = true;
     });
-
 
     // Check if Password Matches -> Create User
     if (passwordController.text == confirmPasswordController.text) {
       // Attempt to create user
       try {
         await authProvider.register(emailController.text, passwordController.text);
-        // Sign Out after successful sign-up
-        await authProvider.signOut();
         
         if (mounted) {
           setState(() {
             _isLoading = false;
           });
           // Navigate to Login Page
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage()));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
         }
       }
       // Catch Sign Up Errors

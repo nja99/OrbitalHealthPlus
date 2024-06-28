@@ -25,6 +25,17 @@ class _ShowMedicationDialogState extends State<ShowMedicationDialog> {
   final MedicationFirestoreService firestoreService = getIt<MedicationFirestoreService>();
   final DrugsFirestoreService drugFirestoreService = getIt<DrugsFirestoreService>();
 
+  bool isFirstCall = true;
+
+  Future<DocumentSnapshot> _refreshMedication () async {
+    if (isFirstCall) {
+      isFirstCall = false;
+      return widget.medication;
+    } else {
+      return await firestoreService.getMedication(widget.medication.id);
+    }
+  }
+
   Future<String> _getDrugPurpose(String? purpose, String name) async {
     if (purpose != null && purpose.isNotEmpty) {
       return purpose;
@@ -142,10 +153,10 @@ class _ShowMedicationDialogState extends State<ShowMedicationDialog> {
                             child: ElevatedButton(
                               child: const Text("EDIT"),
                               onPressed: () async {
+                                final updatedMedication = await _refreshMedication();
                                 await Navigator.of(context).push(
-                                  MaterialPageRoute(builder: (context) => CreateMedicationDialog(firestoreService: firestoreService, medication: widget.medication))
+                                  MaterialPageRoute(builder: (context) => CreateMedicationDialog(firestoreService: firestoreService, medication: updatedMedication))
                                 );
-                                setState(() {});
                               },
                             ),
                           ),
