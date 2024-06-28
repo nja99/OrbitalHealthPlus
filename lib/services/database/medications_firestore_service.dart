@@ -121,7 +121,6 @@ Future<void> updateMedication(String id, Map<String, dynamic> data) {
     final currentUser = _firebaseAuth.currentUser;
     
     if (currentUser != null) {
-      final userID = currentUser.uid;
       QuerySnapshot snapshot = await medicationsCollection.get();
 
       for (var doc in snapshot.docs) {

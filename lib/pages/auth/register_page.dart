@@ -1,11 +1,11 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import 'package:healthsphere/components/buttons/user_button.dart';
 import 'package:healthsphere/components/dialogs/custom_alert_dialog.dart';
 import 'package:healthsphere/components/forms/user_textfield.dart';
 import 'package:healthsphere/pages/auth/login_page.dart';
-import 'package:healthsphere/services/auth/auth_service.dart';
-import 'package:healthsphere/services/service_locator.dart';
+import 'package:healthsphere/services/auth/auth_provider.dart';
 import 'package:healthsphere/utils/loading_overlay.dart';
+import 'package:provider/provider.dart';
 
 class RegisterPage extends StatefulWidget {
 
@@ -36,8 +36,8 @@ class _RegisterPageState extends State<RegisterPage> {
   // Login Function
   void userSignUp() async {
 
-    // Get Auth Service
-    final authService = getIt<AuthService>();
+    // Get Auth Provider
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
 
     // Show loading indicator
@@ -50,9 +50,9 @@ class _RegisterPageState extends State<RegisterPage> {
     if (passwordController.text == confirmPasswordController.text) {
       // Attempt to create user
       try {
-        await authService.signUpWithEmailPassword(emailController.text, passwordController.text);
+        await authProvider.register(emailController.text, passwordController.text);
         // Sign Out after successful sign-up
-        await authService.signOut();
+        await authProvider.signOut();
         
         if (mounted) {
           setState(() {
@@ -144,12 +144,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     const Text("Already have an Account?"),
                     const SizedBox(width: 4),
                     GestureDetector(
-                      onTap: () { Navigator.push(context,
-                          MaterialPageRoute(
-                            builder: (context) => const LoginPage(),
-                          ),
-                        ); 
-                      },
+                      onTap: () { Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const LoginPage())); },
                       child: const Text(
                         "Login Now",
                         style: TextStyle(

@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import 'package:healthsphere/components/buttons/square_tile.dart';
 import 'package:healthsphere/components/buttons/user_button.dart';
 import 'package:healthsphere/components/dialogs/custom_alert_dialog.dart';
@@ -6,9 +6,11 @@ import 'package:healthsphere/components/forms/user_textfield.dart';
 import 'package:healthsphere/pages/auth/forget_pw_page.dart';
 import 'package:healthsphere/pages/auth/register_page.dart';
 import 'package:healthsphere/pages/home_page.dart';
+import 'package:healthsphere/services/auth/auth_provider.dart';
 import 'package:healthsphere/services/auth/auth_service.dart';
 import 'package:healthsphere/services/service_locator.dart';
 import 'package:healthsphere/utils/loading_overlay.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -37,22 +39,25 @@ class _LoginPageState extends State<LoginPage> {
 
   // Login Function
   void userSignIn() async {
+
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
     // Show loading indicator
     setState(() {
       _isLoading = true;
     });
     try {
-      await authService.signInWithEmailPassword(emailController.text, passwordController.text);
+      await authProvider.signIn(emailController.text, passwordController.text);
       // Remove Loading Circle
       if (mounted) {
         setState(() {
           _isLoading = false;
         });
       }
-      Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const HomePage()),
-            );
+
+      if (!mounted) return;
+
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()), );
     }
     catch (e) {
       if (mounted) {
@@ -183,13 +188,11 @@ class _LoginPageState extends State<LoginPage> {
                     SquareTile(
                       imagePath: 'lib/assets/images/google_logo.png',
                       height: 40.0,
-                      onTap: () async => {
-                      await authService.signInWithGoogle(),
-                      Navigator.push(context,
-                          MaterialPageRoute(
-                            builder: (context) => const HomePage(),
-                          ),
-                        ),
+                      onTap: () async {
+                      await authService.signInWithGoogle();
+                      
+                      if (!mounted) return;
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
                       }
                     ),
                     const SizedBox(width: 25),

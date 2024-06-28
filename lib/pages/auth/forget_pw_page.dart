@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import 'package:healthsphere/components/buttons/user_button.dart';
 import 'package:healthsphere/components/forms/user_textfield.dart';
 import 'package:healthsphere/services/auth/auth_service.dart';
@@ -30,6 +30,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   Future passwordReset() async { 
     try {
       await _authService.resetPassword(_emailController.text);
+      if (!mounted) return;
       showCustomDialog(context, "Password Reset link sent!", "Please check your email!");
       // Remove Loading Circle
     }

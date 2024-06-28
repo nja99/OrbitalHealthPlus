@@ -1,10 +1,11 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import 'package:healthsphere/components/home/home_drawer_tile.dart';
+import 'package:healthsphere/functions/schedule_daily_reset.dart';
 import 'package:healthsphere/pages/auth/login_page.dart';
 import 'package:healthsphere/pages/settings_page.dart';
 import 'package:healthsphere/pages/drugdatabase_page.dart';
-import 'package:healthsphere/services/auth/auth_service.dart';
-import 'package:healthsphere/services/service_locator.dart';
+import 'package:healthsphere/services/auth/auth_provider.dart';
+import 'package:provider/provider.dart';
 
 class HomeDrawer extends StatefulWidget {
   const HomeDrawer({super.key});
@@ -15,17 +16,17 @@ class HomeDrawer extends StatefulWidget {
 
 class _HomeDrawerState extends State<HomeDrawer> {
   void userSignOut() async {
-    final authService = getIt<AuthService>();
-    await authService.signOut();
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginPage()),
-    );
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    await authProvider.signOut();
+
+    if(!mounted) return;
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()),);
   }
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      width: MediaQuery.of(context).size.width * 0.55,
       backgroundColor: Theme.of(context).colorScheme.tertiary,
       child: SingleChildScrollView( // Wrap ListView with SingleChildScrollView
         child: ListView(
@@ -40,7 +41,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
 
             // Divider line
             Padding(
-              padding: const EdgeInsets.all(25.0),
+              padding: const EdgeInsets.all(10.0),
               child: Divider(
                 color: Theme.of(context).colorScheme.tertiary,
               ),
@@ -48,41 +49,29 @@ class _HomeDrawerState extends State<HomeDrawer> {
 
             // Home list tile
             HomeDrawerTile(
-              text: "H O M E",
+              text: "HOME",
               icon: Icons.home,
               onTap: () {
-                Navigator.pop(
-                  context
-                );
+                Navigator.pop(context);
               },
             ),
 
-
           // Setting list tile
           HomeDrawerTile(
-            text: "S E T T I N G",
+            text: "SETTINGS",
             icon: Icons.settings,
             onTap: () {
               Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const SettingsPage(),
-                ),
-              );
+              Navigator.push(context,MaterialPageRoute(builder: (context) => const SettingsPage()));
             }
           ),
 
           HomeDrawerTile(
-            text: "D A T A B A S E", 
+            text: "DATABASE", 
             icon: Icons.data_array, 
             onTap: () {
               Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const DrugDatabasePage())
-              );
+              Navigator.push(context,MaterialPageRoute(builder: (context) => const DrugDatabasePage()));
             }
           ),
 
@@ -91,7 +80,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
 
           // Logout list tile
           HomeDrawerTile(
-            text: "L O G O U T",
+            text: "LOGOUT",
             icon: Icons.logout,
             onTap: () {
               userSignOut();

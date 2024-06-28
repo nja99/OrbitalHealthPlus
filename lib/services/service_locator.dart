@@ -8,8 +8,8 @@ final GetIt getIt = GetIt.instance;
 
 void setUp() {
   setUpAuthServices();
-  setUpDatabaseServices();
   setUpUserServices();
+  setUpDatabaseServices();
 
   // Register RemoteConfig as Lazy Singleton
   getIt.registerLazySingleton<FirebaseRemoteConfig>(() => FirebaseRemoteConfig.instance);

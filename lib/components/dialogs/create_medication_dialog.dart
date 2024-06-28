@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:healthsphere/components/date_time_widget.dart";
 import "package:healthsphere/components/forms/form_dropdown.dart";
@@ -39,6 +39,7 @@ class _CreateMedicationDialogState extends State<CreateMedicationDialog> {
   String? _dosageRoute = MedicationConfig.routeOptions.first;
   String? _dosageFrequency = MedicationConfig.frequencyOptions.first;
   String? _dosageInstruction = MedicationConfig.instructionOptions.first;
+  // ignore: unused_field
   String _dosageUnit = "";
   TimeOfDay? _firstDose;
 
@@ -166,7 +167,6 @@ class _CreateMedicationDialogState extends State<CreateMedicationDialog> {
                       title: "Medicine Name",
                       onChanged: (value) { 
                         setState(() {
-                          _searchDrugs(value);
                         });
                       },
                       validator: (value) {
@@ -176,17 +176,7 @@ class _CreateMedicationDialogState extends State<CreateMedicationDialog> {
                         return null;
                       }
                     ),
-
-                    FormDropdown(
-                      title: "Meds", 
-                      value: _medicationName.text, 
-                      onSelected: (selection) {
-                        setState(() {
-                          _medicationName.text = selection!;
-                        });
-                      }, 
-                      items: _searchResults
-                    ),
+                    
                     // Purpose Field (Auto-fill?)
                     FormTextField(
                       controller: _medicationPurpose,

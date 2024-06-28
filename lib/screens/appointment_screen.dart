@@ -1,5 +1,5 @@
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import "package:healthsphere/components/cards/appointment_card.dart";
 import "package:healthsphere/components/dialogs/create_appointment_dialog.dart";
 import "package:healthsphere/components/dimissible_widget.dart";
@@ -84,7 +84,6 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
               
               // Retrieve Appointments
               DocumentSnapshot appointment = appointmentList[index];
-              String appointmentID = appointment.id;
 
               // Retrieve Year of Appointment
               Timestamp timestamp = appointment['date_time'];

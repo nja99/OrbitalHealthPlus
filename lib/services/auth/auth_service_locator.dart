@@ -1,6 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'auth_service.dart';
+import 'package:healthsphere/services/auth/auth_service.dart';
 
 // Create a singleton instance of GetIt for dependency injection
 final GetIt getIt = GetIt.instance;

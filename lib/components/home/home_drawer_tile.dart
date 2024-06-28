@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 
 class HomeDrawerTile extends StatelessWidget {
   final String text;
@@ -15,7 +15,7 @@ class HomeDrawerTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20.0),
+      padding: const EdgeInsets.only(left: 5),
       child: ListTile(
         title: Text(
           text,

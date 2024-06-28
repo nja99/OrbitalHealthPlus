@@ -3,13 +3,18 @@ import 'package:healthsphere/services/service_locator.dart';
 import 'package:healthsphere/services/user/user_profile_service.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-
 class AuthService {
 
   // Get instance of Firebase Auth
   final FirebaseAuth _firebaseAuth = getIt<FirebaseAuth>();
   final UserProfileService _userProfileService = UserProfileService();
 
+  // Get Current User
+  User? getCurrentUser() {
+    return _firebaseAuth.currentUser;
+  }
+
+  // Sign In with Google
   signInWithGoogle() async {
 
     await GoogleSignIn().signOut();
@@ -27,13 +32,6 @@ class AuthService {
     // finally, lets sign in
 
     return await _firebaseAuth.signInWithCredential(credential);
-  }
-
-  
-
-  // Get Current User
-  User? getCurrentUser() {
-    return _firebaseAuth.currentUser;
   }
 
   // Sign In

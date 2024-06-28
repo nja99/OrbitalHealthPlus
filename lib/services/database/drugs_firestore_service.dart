@@ -59,7 +59,11 @@ class DrugsFirestoreService {
       return [];
     }
 
-    final querySnapshot = await drugsCollection.get();
+    final querySnapshot = await drugsCollection
+      .where('genericAndBrandNames', arrayContainsAny: [query.toLowerCase()])
+      .limit(5)
+      .get();
+
     final results = querySnapshot.docs
       .map((doc) => List<String>.from(doc['genericAndBrandNames']))
       .expand((names) => names)
