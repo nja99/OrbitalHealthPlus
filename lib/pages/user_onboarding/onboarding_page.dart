@@ -70,9 +70,11 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                   )
                 ),
               ),
-
-              // Sign Up with E-mail
-              UserButton(
+              Container(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    UserButton(
                 buttonText: "Sign Up with Email", 
                 onPressed: () async { 
                   await _completeOnboarding();
@@ -133,6 +135,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                   ),
                 ],
               ),
+                  ],
+                ),
+              )
             ],
           ),
         ),

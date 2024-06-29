@@ -81,10 +81,10 @@ class _ProfileCollectionPageState extends State<ProfileCollectionPage> {
           firstName: firstNameController.text,
           lastName: lastNameController.text, 
           dateOfBirth: _selectedDate!,
-          height: double.parse(heightController.text), 
-          weight: double.parse(weightController.text),
-          sex: _sex!, 
-          bloodType: _bloodType!
+          height: heightController.text.isNotEmpty ? double.parse(heightController.text) : 0.0, 
+          weight: weightController.text.isNotEmpty ? double.parse(weightController.text) : 0.0,
+          sex: _sex ?? '', 
+          bloodType: _bloodType ?? ''
         );
 
         await userProfileService.storeUserProfile(user, userData);
@@ -174,6 +174,9 @@ class _ProfileCollectionPageState extends State<ProfileCollectionPage> {
                     onTap: () {
                       dtpicker.DatePicker.showDatePicker(
                         context,
+                        minTime: DateTime(1920),
+                        currentTime: DateTime(2000),
+                        maxTime: DateTime.now(),
                         showTitleActions: true,
                         theme: const dtpicker.DatePickerTheme(
                           containerHeight: 400,
