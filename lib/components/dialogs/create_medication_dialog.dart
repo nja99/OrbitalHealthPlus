@@ -32,6 +32,7 @@ class _CreateMedicationDialogState extends State<CreateMedicationDialog> {
   final DrugsFirestoreService drugService = getIt<DrugsFirestoreService>();
 
   final GlobalKey<FormState> _formKey = GlobalKey();
+  
   final TextEditingController _medicationName = TextEditingController();
   final TextEditingController _medicationPurpose = TextEditingController();
   final TextEditingController _dosageAmount = TextEditingController();
@@ -39,7 +40,6 @@ class _CreateMedicationDialogState extends State<CreateMedicationDialog> {
   String? _dosageRoute = MedicationConfig.routeOptions.first;
   String? _dosageFrequency = MedicationConfig.frequencyOptions.first;
   String? _dosageInstruction = MedicationConfig.instructionOptions.first;
-  // ignore: unused_field
   String _dosageUnit = "";
   TimeOfDay? _firstDose;
 
@@ -89,6 +89,7 @@ class _CreateMedicationDialogState extends State<CreateMedicationDialog> {
 
   Future<void> _saveMedication() async {
     if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
       String name = _medicationName.text;
       String purpose = _medicationPurpose.text;
       String amount = _dosageAmount.text;
@@ -118,7 +119,7 @@ class _CreateMedicationDialogState extends State<CreateMedicationDialog> {
         purpose: purpose,
         route: _dosageRoute!,
         amount: amount,
-        unit: MedicationConfig.getDosageUnit(_dosageRoute),
+        unit: _dosageUnit,
         frequency: _dosageFrequency!,
         instruction: _dosageInstruction!,
         firstDose: _firstDose!.to24HourString(),
@@ -165,10 +166,6 @@ class _CreateMedicationDialogState extends State<CreateMedicationDialog> {
                     FormTextField(
                       controller: _medicationName, 
                       title: "Medicine Name",
-                      onChanged: (value) { 
-                        setState(() {
-                        });
-                      },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Please enter a medication";
@@ -195,6 +192,7 @@ class _CreateMedicationDialogState extends State<CreateMedicationDialog> {
                             onSelected: (newValue) {
                               setState(() {
                                 _dosageRoute = newValue;
+                                _dosageUnit = MedicationConfig.getDosageUnit(_dosageRoute);
                               });
                             },
                             items: MedicationConfig.routeOptions,

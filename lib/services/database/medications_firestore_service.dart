@@ -62,8 +62,12 @@ class MedicationFirestoreService {
     return medicationsCollection.doc(medicationID).snapshots();
   }
 
+  Future<DocumentSnapshot> getMedication(String medicationId) async {
+    return medicationsCollection.doc(medicationId).get();
+  }
+
   // UPDATE APPOINTMENT
-Future<void> updateMedication(String id, Map<String, dynamic> data) {
+  Future<void> updateMedication(String id, Map<String, dynamic> data) {
     return medicationsCollection.doc(id).update(data);
   }
 

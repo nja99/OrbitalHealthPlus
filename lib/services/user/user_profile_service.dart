@@ -10,11 +10,34 @@ class UserProfileService {
     return _firestore.collection('users').doc(user.uid);
   }
 
+  // User Profile Data Structure
+  Map<String, dynamic> constructUserData({
+    required String firstName,
+    required String lastName,
+    required DateTime dateOfBirth,
+    required double height,
+    required double weight,
+    required String sex,
+    required String bloodType
+  }) {
+    return {
+      'firstName': firstName,
+      'lastName': lastName,
+      'dateOfBirth': Timestamp.fromDate(dateOfBirth),
+      'height': height,
+      'weight': weight,
+      'sex': sex,
+      'bloodType': bloodType,
+      'profileCreated': true,
+    };
+  }
+
   Future<void> createUserProfile(User user) async {
     DocumentReference userDoc = _getUserDocument(user);
     await userDoc.set({
       'email': user.email,
       'createdAt': Timestamp.now(),
+      'profileCreated': false,
     }, SetOptions(merge: true)); // Merge to avoid overwriting existing data
 
     CollectionReference appointmentsCollection = userDoc.collection('appointments');
@@ -22,5 +45,18 @@ class UserProfileService {
   
     await appointmentsCollection.add(<String,dynamic>{});
     await medicationsCollection.add(<String, dynamic>{});
+  }
+
+  Future<void> storeUserProfile (User user, Map<String, dynamic> userData) async {
+    DocumentReference userDoc = _getUserDocument(user);
+    await userDoc.set(userData, SetOptions(merge: true));
+  }
+
+  Future<bool> isProfileCreated(User user) async {
+    DocumentSnapshot userProfile = await _getUserDocument(user).get();
+    if (userProfile.exists) {
+      return userProfile['profileCreated'] ?? false;
+    }
+    return false;
   }
 }

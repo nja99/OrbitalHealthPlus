@@ -39,7 +39,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> register(String email, String password) async {
-    await _authService.signInWithEmailPassword(email, password);
+    await _authService.signUpWithEmailPassword(email, password);
     _user = _firebaseAuth.currentUser;
     notifyListeners();
   }

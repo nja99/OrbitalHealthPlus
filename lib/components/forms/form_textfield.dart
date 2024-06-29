@@ -40,14 +40,14 @@ class FormTextField extends StatelessWidget {
           const SizedBox(height: 8),
           Container(
             decoration: BoxDecoration(
-              color: Colors.grey.shade200,
-              borderRadius: BorderRadius.circular(12)
+              color: Colors.grey.shade300,
+              borderRadius: BorderRadius.circular(25)
             ),
             child: TextFormField(
               decoration: InputDecoration(
                 prefixIcon: prefixIcon,
                 border: InputBorder.none,
-                contentPadding: const EdgeInsets.all(12)
+                contentPadding: const EdgeInsets.all(14)
               ),
               maxLines: maxLines,
               controller: controller,

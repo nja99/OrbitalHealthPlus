@@ -177,15 +177,15 @@ class _CreateAppointmentDialogState extends State<CreateAppointmentDialog> {
                         dtpicker.DatePicker.showDatePicker(
                           context,
                           showTitleActions: true,
+                          currentTime: _selectedDate ?? DateTime.now(),
+                          theme: const dtpicker.DatePickerTheme(
+                            containerHeight: 400,
+                          ),
                           onChanged: (date) {
                             setState(() {
                               _selectedDate = _selectedTime!.toDateTime(date);
                             });
                           },
-                          currentTime: _selectedDate ?? DateTime.now(),
-                          theme: const dtpicker.DatePickerTheme(
-                            containerHeight: 400,
-                          )
                         );
                       },
                     ),
@@ -199,15 +199,16 @@ class _CreateAppointmentDialogState extends State<CreateAppointmentDialog> {
                         dtpicker.DatePicker.showTime12hPicker(
                           context,
                           showTitleActions: true,
+                          currentTime: _selectedDate,
+                          theme: const dtpicker.DatePickerTheme(
+                            containerHeight: 400
+                          ),
                           onChanged: (time) {
                             setState(() {
                               _selectedTime = TimeOfDay.fromDateTime(time);
                             });
                           },
-                          currentTime: _selectedDate,
-                          theme: const dtpicker.DatePickerTheme(
-                            containerHeight: 400,
-                          )
+
                         );
                       },
                     ),

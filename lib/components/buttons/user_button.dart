@@ -16,7 +16,7 @@ class UserButton extends StatelessWidget {
   @override
   Widget build(BuildContext context){
     return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(30, 12, 30, 12),
+      padding: const EdgeInsets.symmetric(vertical: 12),
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(

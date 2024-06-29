@@ -2,10 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:healthsphere/components/buttons/circle_button.dart';
 import 'package:healthsphere/components/home/home_drawer.dart';
-import 'package:healthsphere/screens/appointment_screen.dart';
-import 'package:healthsphere/screens/home_screen.dart';
-import 'package:healthsphere/screens/medication_screen.dart';
-import 'package:healthsphere/utils/page_data.dart';
+import 'package:healthsphere/config/page_config.dart';
 
 class HomePage extends StatefulWidget {
 
@@ -26,22 +23,13 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  final List<PageData> _pages = [
-    PageData(page: const HomeScreen(), title: "Home", showSearchBar: true),
-    // PageData(page: const HomeScreen(), title: "Health Monitor"),
-    PageData(page: const MedicationScreen(), title: "Medications"),
-    PageData(page: const AppointmentScreen(), title: "Appointments"),
-    PageData(page: const HomeScreen(), title: "Home"),
-  ];
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       body: IndexedStack(
         index: _selectedIndex,
-        children: _pages.map((item) => item.page).toList(),
+        children: pages.map((item) => item.page).toList(),
       ),
       appBar: _buildAppBar(),
       drawer: const HomeDrawer(),
@@ -50,7 +38,7 @@ class _HomePageState extends State<HomePage> {
 
   AppBar _buildAppBar() {
 
-    double toolbarHeight =_pages[_selectedIndex].showSearchBar ? 160 : 100;
+    double toolbarHeight = pages[_selectedIndex].showSearchBar ? 160 : 100;
 
     return AppBar(
       automaticallyImplyLeading: false,
@@ -98,7 +86,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             const SizedBox(height: 20),
-            if (_pages[_selectedIndex].showSearchBar) 
+            if (pages[_selectedIndex].showSearchBar) 
               Padding(
                 padding: const EdgeInsets.only(bottom: 10),
                 child: SizedBox(

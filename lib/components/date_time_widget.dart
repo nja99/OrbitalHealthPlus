@@ -35,19 +35,21 @@ class DateTimeWidget extends StatelessWidget {
           // Selector
           const SizedBox(height: 8),
           InkWell(
-            borderRadius: BorderRadius.circular(12.0),
+            borderRadius: BorderRadius.circular(25.0),
             onTap: onTap,
             child: Container(
               padding: const EdgeInsets.all(12.0),
               decoration: BoxDecoration(
-                color: Colors.grey.shade200,
-                borderRadius: BorderRadius.circular(12.0)
+                color: Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(25.0)
               ),
-              child: Row(children: [
-                Icon(icon),
-                const SizedBox(width: 12.0),
-                Text(value)
-              ],),
+              child: Row(
+                children: [
+                  Icon(icon),
+                  const SizedBox(width: 12.0),
+                  Text(value)
+                ],
+              ),
             ),
           ),
         ],

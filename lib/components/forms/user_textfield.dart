@@ -4,12 +4,18 @@ class UserTextField extends StatefulWidget {
   final TextEditingController controller;
   final String labelText;
   final bool obscureText;
+  final bool readOnly;
+  final String? Function(String?)? validator;
+  final VoidCallback? onTap;
 
   const UserTextField({
     super.key,
     required this.controller,
     required this.labelText,
-    required this.obscureText
+    this.obscureText = false,
+    this.readOnly = false,
+    this.validator,
+    this.onTap
     });
 
   @override
@@ -28,10 +34,13 @@ class _UserTextFieldState extends State<UserTextField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(35, 12, 35, 0),
-      child: TextField(
+      padding: const EdgeInsets.only(top: 12),
+      child: TextFormField(
         controller: widget.controller,
+        validator: widget.validator,
         obscureText: _isObscured,
+        readOnly: widget.readOnly,
+        onTap: widget.onTap,
         decoration: InputDecoration(
           enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(
@@ -45,8 +54,6 @@ class _UserTextFieldState extends State<UserTextField> {
               width: 1.5
             ),
           ),
-          fillColor: Theme.of(context).colorScheme.surface,
-          filled: true,
           contentPadding: const EdgeInsetsDirectional.fromSTEB(0, 16, 16, 8),
           labelText: widget.labelText,
           labelStyle: TextStyle(

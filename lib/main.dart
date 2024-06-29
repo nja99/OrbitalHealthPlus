@@ -3,8 +3,10 @@ import 'package:healthsphere/functions/schedule_daily_reset.dart';
 import 'package:healthsphere/pages/auth/login_page.dart';
 import 'package:healthsphere/pages/home_page.dart';
 import 'package:healthsphere/pages/user_onboarding/onboarding_page.dart';
+import 'package:healthsphere/pages/user_onboarding/profile_collection_page.dart';
 import 'package:healthsphere/services/auth/auth_provider.dart';
 import 'package:healthsphere/services/service_locator.dart';
+import 'package:healthsphere/services/user/user_profile_service.dart';
 import 'package:healthsphere/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -60,9 +62,11 @@ class MyApp extends StatelessWidget {
     required this.isFirstLaunch
   });
 
+
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
+    final userProfileService = getIt<UserProfileService>();
 
     return MaterialApp(
       debugShowCheckedModeBanner:false,
@@ -70,7 +74,18 @@ class MyApp extends StatelessWidget {
         ? const OnBoardingPage() 
         : authProvider.user == null
           ? const LoginPage()
-          : const HomePage(),
+          : FutureBuilder<bool>(
+            future: userProfileService.isProfileCreated(authProvider.user!),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              } else if (snapshot.hasData && snapshot.data == true) {
+                return const HomePage();
+              } else {
+                return const ProfileCollectionPage();
+              }
+            }
+          ),
       theme: Provider.of<ThemeProvider>(context).themeData
     );
   }

@@ -31,13 +31,17 @@ class MedicationCard extends StatelessWidget {
     String instruction = data['instruction'];
 
     Color cardColor;
+    Color onCardColor;
 
     if (status == 'taken') {
       cardColor = const Color(0xFFE6F1D9);
+      onCardColor = const Color(0xFFCCEBB3);
     } else if (status == 'missed') {
       cardColor = const Color(0xFFEFDADA);
+      onCardColor = const Color(0xFFD4A8A8);
     } else {
       cardColor = const Color(0xFFE5E8F7);
+      onCardColor = const Color(0xFFC5D4FA);
     }
 
     return SizedBox(
@@ -58,9 +62,9 @@ class MedicationCard extends StatelessWidget {
                   children: [
                     const SizedBox(height: 4),
                     Container(
-                      padding: const EdgeInsets.all(5),
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: const Color(0xFFC5D4FA)),
-                      child: Image.asset(MedicationConfig.getRouteIcon(route), height: 40)
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: onCardColor),
+                      child: Image.asset(MedicationConfig.getRouteIcon(route), height: 35)
                     ),
                   ]
                 ),
@@ -75,7 +79,7 @@ class MedicationCard extends StatelessWidget {
                       children: [
                         Container(
                           width: 85,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: const Color(0xFFC5D4FA)),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: onCardColor),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 3),
                             child: Text("$amount $unit", style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold), textAlign: TextAlign.center)
@@ -85,7 +89,7 @@ class MedicationCard extends StatelessWidget {
                         if (instruction != "No Specific Instructions")
                           Container(
                             width: 120,
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: const Color(0xFFC5D4FA)),
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: onCardColor),
                             child: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 3),
                               child: Text(instruction,style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold), textAlign: TextAlign.center)

@@ -41,14 +41,32 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
         ),
         body: Column(
           children: [
-            const TabBar(
-              tabs: [
-                Tab(text: "Upcoming"),
-                Tab(text: "Completed"),
-                Tab(text: "Missed")
-              ],
-              indicatorSize: TabBarIndicatorSize.tab,
-              dividerColor: Colors.transparent,
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Container(
+                height: 35,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEFE9E7),
+                  borderRadius: BorderRadius.circular(30)
+                ),
+                child: TabBar(
+                  tabs: const  [
+                    Tab(text: "Upcoming"),
+                    Tab(text: "Completed"),
+                    Tab(text: "Missed")
+                  ],
+                  splashFactory: NoSplash.splashFactory,
+                  unselectedLabelColor: const Color(0xFF757574),
+                  dividerColor: Colors.transparent,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  indicator: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  
+                ),
+              ),
             ),
             Expanded(
               child: TabBarView(

@@ -5,6 +5,7 @@ import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:healthsphere/config/firebase_options.dart';
 import 'package:healthsphere/services/database/medications_firestore_service.dart';
 import 'package:healthsphere/services/service_locator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -47,6 +48,7 @@ void onStart(ServiceInstance service) async {
   tz.initializeTimeZones();
   tz.setLocalLocation(tz.getLocation('UTC'));
 
+  await checkAndPerformReset();
   scheduleMidnightTask();
 
   service.on('stopService').listen((event) {
@@ -66,10 +68,30 @@ Future<void> scheduleMidnightTask() async {
   DateTime localMidnight = DateTime(now.year, now.month, now.day).add(const Duration(days: 1));
   Duration timeDifference = localMidnight.difference(now);
 
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setString("expectedResetTime", localMidnight.toIso8601String());
+
   midnightTimer = Timer(timeDifference, () async {
     await resetDoseAtMidnight();
     scheduleMidnightTask();
   });
+}
+
+Future<void> checkAndPerformReset() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  
+  DateTime now = DateTime.now();
+  String? expectedResetTimeString = prefs.getString("expectedResetTime");
+
+  if (expectedResetTimeString != null) {
+    DateTime expectedResetTime = DateTime.parse(expectedResetTimeString);
+
+    if(now.isAfter(expectedResetTime)) {
+      await resetDoseAtMidnight();
+    }
+  }
+
+  scheduleMidnightTask();
 }
 
 Future<void> resetDoseAtMidnight() async {
