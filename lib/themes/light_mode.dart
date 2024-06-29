@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 ThemeData lightMode = ThemeData(
   fontFamily: "Urbanist",
+  scaffoldBackgroundColor: const Color(0xFFF8F4F3),
   colorScheme: ColorScheme.light(
     surface: Colors.white,
     primary: const Color(0xFF8a72f1),
@@ -14,7 +15,6 @@ ThemeData lightMode = ThemeData(
     onTertiaryFixedVariant: Colors.grey.shade600,
     
     inverseSurface: const Color.fromARGB(255, 0, 0, 0),
-    
     
   )
 );

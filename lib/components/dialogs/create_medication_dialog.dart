@@ -32,6 +32,7 @@ class _CreateMedicationDialogState extends State<CreateMedicationDialog> {
   final DrugsFirestoreService drugService = getIt<DrugsFirestoreService>();
 
   final GlobalKey<FormState> _formKey = GlobalKey();
+  
   final TextEditingController _medicationName = TextEditingController();
   final TextEditingController _medicationPurpose = TextEditingController();
   final TextEditingController _dosageAmount = TextEditingController();

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:healthsphere/utils/build_dropdown_entries.dart';
 
 class FormDropdown extends StatelessWidget {
   
   final String title;
   final String? value;
-  final ValueChanged<String?> onSelected;
   final List<String> items;
+  final ValueChanged<String?> onSelected;
 
   const FormDropdown({
     super.key,
@@ -34,10 +35,10 @@ class FormDropdown extends StatelessWidget {
           // Dropdown
           const SizedBox(height: 8),
           Container(
-            padding: const EdgeInsetsDirectional.fromSTEB(12, 0, 0, 0),
+            padding: const EdgeInsetsDirectional.fromSTEB(14, 0, 0, 0),
             decoration: BoxDecoration(
-              color: Colors.grey.shade200,
-              borderRadius: BorderRadius.circular(12)
+              color: Colors.grey.shade300,
+              borderRadius: BorderRadius.circular(25)
             ),
   
             child: DropdownMenu<String> (
@@ -45,7 +46,7 @@ class FormDropdown extends StatelessWidget {
               initialSelection: value,
               expandedInsets: const EdgeInsets.all(0),
               onSelected: onSelected,
-              dropdownMenuEntries: _buildDropdownEntries(items),
+              dropdownMenuEntries: buildDropdownEntries(items),
               inputDecorationTheme: const InputDecorationTheme(
                 border: InputBorder.none,
                 filled: false
@@ -55,14 +56,5 @@ class FormDropdown extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  List<DropdownMenuEntry<String>> _buildDropdownEntries(List<String> items) {
-    return items.map((String item){ 
-      return DropdownMenuEntry<String> (
-        value: item,
-        label: item,
-      );
-    }).toList();
   }
 }

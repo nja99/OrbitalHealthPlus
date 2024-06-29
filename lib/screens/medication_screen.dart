@@ -178,9 +178,10 @@ class _MedicationScreenState extends State<MedicationScreen> {
       ],
     );
   }
+
   Color _getBorderColor(int index, List<String> times) {
     if (times.length == 1) {
-      return Colors.blue;
+      return Theme.of(context).colorScheme.primary;
     }
 
     TimeOfDay now = TimeOfDay.now();
@@ -189,8 +190,14 @@ class _MedicationScreenState extends State<MedicationScreen> {
         ? TimeOfDayExtension.toTimeOfDay(times[index])
         : TimeOfDayExtension.toTimeOfDay(times[0]);
 
+    if (index == times.length) {
+      if (now.hour > currentTime.hour || now.hour == currentTime.hour && now.minute >= currentTime.minute) {
+        return Theme.of(context).colorScheme.primary;
+      }
+    }
+
     if (_isTimeBetween(now, currentTime, nextTime)) {
-      return Colors.blue;
+      return Theme.of(context).colorScheme.primary;
     } else {
       return Colors.grey;
     }

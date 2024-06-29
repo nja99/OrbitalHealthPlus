@@ -3,7 +3,7 @@ import 'package:healthsphere/components/buttons/user_button.dart';
 import 'package:healthsphere/components/dialogs/custom_alert_dialog.dart';
 import 'package:healthsphere/components/forms/user_textfield.dart';
 import 'package:healthsphere/pages/auth/login_page.dart';
-import 'package:healthsphere/pages/home_page.dart';
+import 'package:healthsphere/pages/user_onboarding/profile_collection_page.dart';
 import 'package:healthsphere/services/auth/auth_provider.dart';
 import 'package:healthsphere/utils/loading_overlay.dart';
 import 'package:provider/provider.dart';
@@ -56,7 +56,7 @@ class _RegisterPageState extends State<RegisterPage> {
             _isLoading = false;
           });
           // Navigate to Login Page
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const ProfileCollectionPage()));
         }
       }
       // Catch Sign Up Errors
@@ -86,73 +86,74 @@ class _RegisterPageState extends State<RegisterPage> {
     return loadingOverlay(
       _isLoading,
       Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.surface,
         body: SafeArea(
           child: Center(
-            child: ListView(
-              children: [
-                const SizedBox(height: 50),
-                // Logo
-                const SizedBox(height: 60),
-                Image.asset("lib/assets/images/logo_light.png", height: 160),
-      
-                // Create account text
-                Text(
-                  'Let\'s create an account for you!',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontSize: 14,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 35),
+              child: ListView(
+                children: [
+                  const SizedBox(height: 50),
+                  // Logo
+                  const SizedBox(height: 60),
+                  Image.asset("lib/assets/images/logo_light.png", height: 160),
+                    
+                  // Create account text
+                  Text(
+                    'Let\'s create an account for you!',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 14,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-      
-                // Email
-                const SizedBox(height: 25),
-                UserTextField(
-                  controller: emailController,
-                  labelText: "E-mail",
-                  obscureText: false,
-                ),
-      
-                // Password
-                const SizedBox(height: 15),
-                UserTextField(
-                  controller: passwordController,
-                  labelText: "Password",
-                  obscureText: true,
-                ),
-      
-                // Confirm Password
-                const SizedBox(height: 15),
-                UserTextField(
-                  controller: confirmPasswordController,
-                  labelText: "Confirm Password",
-                  obscureText: true,
-                ),
-                
-                // Sign Up Button
-                const SizedBox(height: 25),
-                UserButton(buttonText: "Sign Up", onPressed: userSignUp),
-                // Already have an account
-                const SizedBox(height: 25),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text("Already have an Account?"),
-                    const SizedBox(width: 4),
-                    GestureDetector(
-                      onTap: () { Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const LoginPage())); },
-                      child: const Text(
-                        "Login Now",
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold,
+                    
+                  // Email
+                  const SizedBox(height: 25),
+                  UserTextField(
+                    controller: emailController,
+                    labelText: "E-mail",
+                  ),
+                    
+                  // Password
+                  const SizedBox(height: 15),
+                  UserTextField(
+                    controller: passwordController,
+                    labelText: "Password",
+                    obscureText: true,
+                  ),
+                    
+                  // Confirm Password
+                  const SizedBox(height: 15),
+                  UserTextField(
+                    controller: confirmPasswordController,
+                    labelText: "Confirm Password",
+                    obscureText: true,
+                  ),
+                  
+                  // Sign Up Button
+                  const SizedBox(height: 25),
+                  UserButton(buttonText: "Sign Up", onPressed: userSignUp),
+                  // Already have an account
+                  const SizedBox(height: 25),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("Already have an Account?"),
+                      const SizedBox(width: 4),
+                      GestureDetector(
+                        onTap: () { Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const LoginPage())); },
+                        child: const Text(
+                          "Login Now",
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
