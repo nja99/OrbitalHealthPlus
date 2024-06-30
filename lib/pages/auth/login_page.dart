@@ -188,10 +188,15 @@ class _LoginPageState extends State<LoginPage> {
                         imagePath: 'lib/assets/images/google_logo.png',
                         height: 40.0,
                         onTap: () async {
-                          await authService.signInWithGoogle();
-                          
-                          if (context.mounted) {
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
+                          try {
+                            await authService.signInWithGoogle();
+                            if (mounted) {
+                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
+                            }
+                          } catch (e) {
+                            if (mounted) {
+                              showCustomDialog(context, e.toString(), "Google sign-in failed. Please try again.");
+                            }
                           }
                         }
                       ),
