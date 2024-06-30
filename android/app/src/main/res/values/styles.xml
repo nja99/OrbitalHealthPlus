@@ -16,7 +16,7 @@
         <item name="android:windowBackground">?android:colorBackground</item>
     </style>
 
-    <!-- FacebOOK sTRINGS-->
+    <!-- Facebook Strings-->
     <string name="app_name">HealthPlus</string>
     <string name="facebook_app_id">1668265887245897</string>
     <string name="fb_login_protocol_scheme">fb1668265887245897</string>

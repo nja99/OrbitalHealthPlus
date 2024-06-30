@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name">HealthSphere</string>
-    <string name="facebook_app_id">1668265887245897</string>
-    <string name="fb_login_protocol_scheme">fb1668265887245897</string>
-    <string name="facebook_client_token">d23cb913b8fceab3adf4887adb8326ba</string>
-</resources>
