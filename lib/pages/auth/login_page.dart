@@ -188,10 +188,11 @@ class _LoginPageState extends State<LoginPage> {
                         imagePath: 'lib/assets/images/google_logo.png',
                         height: 40.0,
                         onTap: () async {
-                        await authService.signInWithGoogle();
-                        
-                        if (!mounted) return;
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
+                          await authService.signInWithGoogle();
+                          
+                          if (context.mounted) {
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
+                          }
                         }
                       ),
                       const SizedBox(width: 25),

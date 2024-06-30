@@ -15,4 +15,11 @@
     <style name="NormalTheme" parent="@android:style/Theme.Light.NoTitleBar">
         <item name="android:windowBackground">?android:colorBackground</item>
     </style>
+
+    <!-- Facebook Strings-->
+    <string name="app_name">HealthPlus</string>
+    <string name="facebook_app_id">1668265887245897</string>
+    <string name="fb_login_protocol_scheme">fb1668265887245897</string>
+    <string name="facebook_client_token">d23cb913b8fceab3adf4887adb8326ba</string>
+
 </resources>

@@ -154,9 +154,9 @@ class _ShowMedicationDialogState extends State<ShowMedicationDialog> {
                               child: const Text("EDIT"),
                               onPressed: () async {
                                 final updatedMedication = await _refreshMedication();
-                                await Navigator.of(context).push(
-                                  MaterialPageRoute(builder: (context) => CreateMedicationDialog(firestoreService: firestoreService, medication: updatedMedication))
-                                );
+                                if (context.mounted) {
+                                  await Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreateMedicationDialog(firestoreService: firestoreService, medication: updatedMedication)));
+                                }
                               },
                             ),
                           ),

@@ -78,7 +78,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                 buttonText: "Sign Up with Email", 
                 onPressed: () async { 
                   await _completeOnboarding();
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const RegisterPage()));
+                  if(context.mounted) {
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const RegisterPage()));
+                  }
                 },
                 iconData: Icons.email
               ),
@@ -97,10 +99,13 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
               UserButton(
                 buttonText: "Sign Up with Google", 
                 onPressed: () async => {
-                      await authService.signInWithGoogle(),
-                      await _completeOnboarding(),
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage())),
-                      },
+                  await authService.signInWithGoogle(),
+                  await _completeOnboarding(),
+                  
+                  if (context.mounted) {
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage())),
+                  }
+                },
                 iconData: FontAwesomeIcons.google,
               ),
 
@@ -129,8 +134,10 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                     ),
                     onTap: () async { 
                       await _completeOnboarding();
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()),
-                      );
+
+                      if (context.mounted) {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));
+                      }
                     },
                   ),
                 ],
