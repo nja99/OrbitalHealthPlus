@@ -1,0 +1,17 @@
+{
+    "name": "functions",
+    "version": "1.0.0",
+    "main": "drug_scraper.js",
+    "scripts": {
+        "start": "node drug_scraper.js"
+    },
+    "dependencies": {
+        "chrome-aws-lambda": "^9.1.0",
+        "firebase-admin": "^12.1.1",
+        "puppeteer-core": "^9.1.0"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": ""
+}

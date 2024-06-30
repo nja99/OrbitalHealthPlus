@@ -1,0 +1,149 @@
+import "package:cloud_firestore/cloud_firestore.dart";
+import 'package:flutter/material.dart';
+import "package:healthsphere/components/cards/appointment_card.dart";
+import "package:healthsphere/components/dialogs/create_appointment_dialog.dart";
+import "package:healthsphere/components/dimissible_widget.dart";
+import "package:healthsphere/services/auth/auth_service_locator.dart";
+import "package:healthsphere/services/database/appointment_firestore_service.dart";
+
+class AppointmentScreen extends StatefulWidget {
+  const AppointmentScreen({super.key});
+
+  @override
+  State<AppointmentScreen> createState() => _AppointmentScreenState();
+}
+
+class _AppointmentScreenState extends State<AppointmentScreen> {
+  // Fire Store //
+  final AppointmentFirestoreService firestoreService = getIt<AppointmentFirestoreService>();
+
+  @override
+  Widget build(BuildContext context) {
+    
+    return DefaultTabController(
+      length: 3, // Number of tabs
+      child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          heroTag: "createAppointment",
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => CreateAppointmentDialog(
+                  firestoreService: firestoreService,
+                ),
+              ),
+            );
+          },
+          child: const Icon(
+            Icons.add,
+            color: Color(0xFF4B39EF),
+          ),
+        ),
+        body: Column(
+          children: [
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Container(
+                height: 35,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEFE9E7),
+                  borderRadius: BorderRadius.circular(30)
+                ),
+                child: TabBar(
+                  tabs: const  [
+                    Tab(text: "Upcoming"),
+                    Tab(text: "Completed"),
+                    Tab(text: "Missed")
+                  ],
+                  splashFactory: NoSplash.splashFactory,
+                  unselectedLabelColor: const Color(0xFF757574),
+                  dividerColor: Colors.transparent,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  indicator: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  
+                ),
+              ),
+            ),
+            Expanded(
+              child: TabBarView(
+                children: [
+                  _buildAppointmentList("Upcoming"),
+                  _buildAppointmentList("Completed"),
+                  _buildAppointmentList("Missed")
+                ],
+              )
+            )
+          ],
+        )
+      ),
+    );
+  }
+
+  bool _isDismissible (String status) {
+    return status == "Upcoming";
+  }
+
+  Widget _buildAppointmentList(String status) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: firestoreService.readAppointmentStream(), 
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          List<DocumentSnapshot> appointmentList = snapshot.data!.docs
+              .where((doc) => doc['status'] == status)
+              .toList();
+          
+          return ListView.builder(
+            itemCount: appointmentList.length,
+            itemBuilder: (context, index) {
+              
+              // Retrieve Appointments
+              DocumentSnapshot appointment = appointmentList[index];
+
+              // Retrieve Year of Appointment
+              Timestamp timestamp = appointment['date_time'];
+              DateTime appointmentDate = timestamp.toDate();
+              int year = appointmentDate.year;
+
+              // Check If Year Divider is Required
+              bool showYearDivider = index == 0 || (appointmentList[index - 1]['date_time'] as Timestamp).toDate().year != year;
+
+              // Display Appointment in List Tiles
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Display Year Divider
+                  if (showYearDivider)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Center(child: Text(year.toString(), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
+                    ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: AppointmentCard(
+                      appointment: appointment,
+                      isDismissible: _isDismissible(status),
+                      onDismissed: (direction) {
+                        setState(() {
+                          dismissItem(context, appointmentList, index, direction, firestoreService);
+                        });
+                      },
+                    ),
+                  )
+                ],
+              );
+            }
+          );
+        }
+        else {
+          return const Center(child: CircularProgressIndicator());
+        }
+      }
+    );
+  }
+
+
+}
