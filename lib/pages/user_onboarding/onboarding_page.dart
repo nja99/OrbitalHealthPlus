@@ -64,7 +64,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                         style: TextStyle(
                           fontSize: 36,
                           color: Color(0xFF101213),
-                          fontWeight: FontWeight.bold
+                          fontWeight: FontWeight.w600
                         ),)
                     )
                   )
@@ -128,7 +128,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                       "Log In!",
                       style: TextStyle(
                         color: Colors.blue,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         fontSize: 16
                       ),
                     ),

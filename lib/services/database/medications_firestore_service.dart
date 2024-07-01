@@ -128,11 +128,14 @@ class MedicationFirestoreService {
       QuerySnapshot snapshot = await medicationsCollection.get();
 
       for (var doc in snapshot.docs) {
-        List<dynamic> doseTimes = doc['doseTimes'];
-        for (var dose in doseTimes) {
-          dose['status'] = "pending";
+        final data = doc.data() as Map<String, dynamic>?;
+        if ( data!= null && data.containsKey('doseTimes')) {
+          List<dynamic> doseTimes = data['doseTimes'];
+          for (var dose in doseTimes) {
+            dose['status'] = "pending";
+          }
+          doc.reference.update({'doseTimes': doseTimes});
         }
-        doc.reference.update({'doseTimes': doseTimes});
       }
     }
   }

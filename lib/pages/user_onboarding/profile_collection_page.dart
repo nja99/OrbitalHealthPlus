@@ -136,7 +136,7 @@ class _ProfileCollectionPageState extends State<ProfileCollectionPage> {
                   ),
                   
                   // First Name Field
-                  const SizedBox(height: 60),
+                  const SizedBox(height: 40),
                   UserTextField(
                     controller: firstNameController, 
                     labelText: "First Name",
@@ -237,7 +237,7 @@ class _ProfileCollectionPageState extends State<ProfileCollectionPage> {
                       )
                     ],
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 50),
                   UserButton(
                     buttonText: "Save Profile", 
                     onPressed: saveUserProfile

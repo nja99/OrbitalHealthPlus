@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import "package:healthsphere/components/cards/appointment_card.dart";
 import "package:healthsphere/components/dialogs/create_appointment_dialog.dart";
 import "package:healthsphere/components/dimissible_widget.dart";
+import "package:healthsphere/components/expanded_container.dart";
 import "package:healthsphere/services/auth/auth_service_locator.dart";
 import "package:healthsphere/services/database/appointment_firestore_service.dart";
 
@@ -23,6 +24,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
     return DefaultTabController(
       length: 3, // Number of tabs
       child: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.inverseSurface,
         floatingActionButton: FloatingActionButton(
           heroTag: "createAppointment",
           onPressed: () {
@@ -34,49 +36,60 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
               ),
             );
           },
-          child: const Icon(
+          elevation: 5,
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          shape: const CircleBorder(),
+          child: Icon(
             Icons.add,
-            color: Color(0xFF4B39EF),
+            color: Theme.of(context).colorScheme.primary
           ),
         ),
         body: Column(
           children: [
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Container(
-                height: 35,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFEFE9E7),
-                  borderRadius: BorderRadius.circular(30)
-                ),
-                child: TabBar(
-                  tabs: const  [
-                    Tab(text: "Upcoming"),
-                    Tab(text: "Completed"),
-                    Tab(text: "Missed")
-                  ],
-                  splashFactory: NoSplash.splashFactory,
-                  unselectedLabelColor: const Color(0xFF757574),
-                  dividerColor: Colors.transparent,
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  indicator: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(30),
+            const SizedBox(height: 50),
+            ExpandedContainer(
+              padding: const EdgeInsetsDirectional.symmetric(horizontal: 12),
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(20, 12, 20, 10),
+                    child: Container(
+                      height: 35,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.tertiary,
+                        borderRadius: BorderRadius.circular(30)
+                      ),
+                      child: TabBar(
+                        tabs: const  [
+                          Tab(text: "Upcoming"),
+                          Tab(text: "Completed"),
+                          Tab(text: "Missed")
+                        ],
+                        splashFactory: NoSplash.splashFactory,
+                        unselectedLabelColor: Theme.of(context).colorScheme.onTertiary,
+                        dividerColor: Colors.transparent,
+                        indicatorSize: TabBarIndicatorSize.tab,
+                        indicator: BoxDecoration(
+                            color: Theme.of(context).colorScheme.surface,
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        
+                      ),
                     ),
-                  
-                ),
+                  ),
+                  Expanded(
+                    child: TabBarView(
+                      children: [
+                        _buildAppointmentList("Upcoming"),
+                        _buildAppointmentList("Completed"),
+                        _buildAppointmentList("Missed")
+                      ],
+                    )
+                  )
+                ],
               ),
             ),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  _buildAppointmentList("Upcoming"),
-                  _buildAppointmentList("Completed"),
-                  _buildAppointmentList("Missed")
-                ],
-              )
-            )
           ],
         )
       ),
@@ -119,7 +132,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                   if (showYearDivider)
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Center(child: Text(year.toString(), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
+                      child: Center(child: Text(year.toString(), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600))),
                     ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),

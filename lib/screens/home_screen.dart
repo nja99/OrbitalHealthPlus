@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import "package:healthsphere/components/expanded_container.dart";
 import "package:healthsphere/components/home/home_appointment.dart";
 import "package:healthsphere/components/home/home_drawer.dart";
 import "package:healthsphere/components/home/home_events.dart";
@@ -18,15 +19,24 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
+      backgroundColor: Theme.of(context).colorScheme.inverseSurface,
       drawer: const HomeDrawer(),
-          body: const SingleChildScrollView(
-            child: Column(
-              children: [
-                HomeAppointment(),
-                HomeEvents(),
-              ],
+      body: const Column(
+        children: [ 
+          SizedBox(height: 50),
+          ExpandedContainer(
+            padding: EdgeInsetsDirectional.fromSTEB(10, 12, 10, 0),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  HomeAppointment(),
+                  HomeEvents(),
+                ],
+              ),
             ),
           ),
+        ],
+      ),
     );
   }
 }

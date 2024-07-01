@@ -146,7 +146,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           "Login Now",
                           style: TextStyle(
                             color: Colors.blue,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),

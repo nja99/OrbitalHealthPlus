@@ -14,7 +14,7 @@ class CircleButton extends StatelessWidget {
         width: 50,
         decoration: BoxDecoration(
           shape: BoxShape.circle, 
-          color: Theme.of(context).colorScheme.primary
+          color: Theme.of(context).colorScheme.inverseSurface
         ),
         child: Icon(
           icon,
