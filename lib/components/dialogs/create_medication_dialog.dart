@@ -73,20 +73,6 @@ class _CreateMedicationDialogState extends State<CreateMedicationDialog> {
     super.dispose();
   }
 
-  Future<void> _searchDrugs(String query) async {
-    if (query.isEmpty) {
-      setState(() {
-        _searchResults.clear();
-      });
-      return;
-    }
-
-    final results = await drugService.searchDrugs(query);
-    setState(() {
-      _searchResults = results;
-    });
-  }
-
   Future<void> _saveMedication() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
@@ -211,7 +197,7 @@ class _CreateMedicationDialogState extends State<CreateMedicationDialog> {
                                   alignment: Alignment.center,
                                   child: const Text(
                                     "Apply As Needed",
-                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
                                   )
                                 )
                               else 
@@ -241,7 +227,7 @@ class _CreateMedicationDialogState extends State<CreateMedicationDialog> {
                                           MedicationConfig.getDosageUnit(_dosageRoute),
                                           style: const TextStyle(
                                             fontSize: 14,
-                                            fontWeight: FontWeight.bold
+                                            fontWeight: FontWeight.w600
                                           ),
                                         )
                                       )

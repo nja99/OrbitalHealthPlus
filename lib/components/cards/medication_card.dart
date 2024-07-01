@@ -45,8 +45,9 @@ class MedicationCard extends StatelessWidget {
     }
 
     return SizedBox(
-      height: 80,
+      height: 90,
       child: Card(
+        elevation: 5,
         color: cardColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
         child: DismissibleWidget( 
@@ -54,7 +55,7 @@ class MedicationCard extends StatelessWidget {
           onDismissed: onDismissed, 
           isDismissible: isDismissible,
           child: ListTile(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 15),
+            contentPadding: const EdgeInsets.only(top: 6, left: 15, right: 15),
             title: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -62,7 +63,7 @@ class MedicationCard extends StatelessWidget {
                   children: [
                     const SizedBox(height: 4),
                     Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: onCardColor),
                       child: Image.asset(MedicationConfig.getRouteIcon(route), height: 35)
                     ),
@@ -72,7 +73,7 @@ class MedicationCard extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    Text(name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                     const SizedBox(height: 5),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,17 +83,17 @@ class MedicationCard extends StatelessWidget {
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: onCardColor),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 3),
-                            child: Text("$amount $unit", style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold), textAlign: TextAlign.center)
+                            child: Text("$amount $unit", style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600), textAlign: TextAlign.center)
                           )
                         ),
                         const SizedBox(width: 10),
                         if (instruction != "No Specific Instructions")
                           Container(
-                            width: 120,
+                            width: 130,
                             decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: onCardColor),
                             child: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 3),
-                              child: Text(instruction,style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold), textAlign: TextAlign.center)
+                              child: Text(instruction,style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600), textAlign: TextAlign.center)
                             )
                           )
                       ],

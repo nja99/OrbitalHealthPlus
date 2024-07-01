@@ -28,7 +28,7 @@ class DateTimeWidget extends StatelessWidget {
             title,
             style: const TextStyle(
               fontSize: 16.0,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
             )
           ),
 
@@ -40,7 +40,7 @@ class DateTimeWidget extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(12.0),
               decoration: BoxDecoration(
-                color: Colors.grey.shade300,
+                color: Theme.of(context).colorScheme.tertiary,
                 borderRadius: BorderRadius.circular(25.0)
               ),
               child: Row(

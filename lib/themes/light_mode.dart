@@ -2,19 +2,24 @@ import 'package:flutter/material.dart';
 
 ThemeData lightMode = ThemeData(
   fontFamily: "Urbanist",
-  scaffoldBackgroundColor: const Color(0xFFF8F4F3),
-  colorScheme: ColorScheme.light(
-    surface: Colors.white,
-    primary: const Color(0xFF8a72f1),
-    onPrimaryFixedVariant: const Color(0xFF6849ef),
+  scaffoldBackgroundColor: const Color(0xFFFAFAFA),
+  colorScheme: const ColorScheme.light(
+    surface: Color(0xFFFFFFFF),
+    onSurface: Color(0xFF000000),
+    onSurfaceVariant: Color(0xFF000000),
 
-    secondary: const Color(0xFF4B39EF),
-    onSecondaryFixedVariant: const Color.fromARGB(255, 160, 149, 255),
+    primary: Color(0xFF4B39EF),
+    onPrimaryFixedVariant: Color(0xFF6849EF),
 
-    tertiary: Colors.grey.shade300,
-    onTertiaryFixedVariant: Colors.grey.shade600,
+    secondary: Color(0xFF8a72f1),
+    onSecondaryFixedVariant: Color(0xFFA095FF),
+
+    tertiary: Color(0xFFEBEBEC),
+    onTertiary: Color(0xFF757574),
+    onTertiaryFixedVariant: Color(0xFF757575),
     
-    inverseSurface: const Color.fromARGB(255, 0, 0, 0),
+    inverseSurface: Color(0xFF6849EF),
+    
     
   )
 );

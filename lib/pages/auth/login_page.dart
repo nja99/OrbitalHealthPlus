@@ -114,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 3),
                   // Forgot Password
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    padding: const EdgeInsets.symmetric(vertical: 3),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -132,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                             "Forgot Password?",
                             style: TextStyle(
                               color: Colors.blue,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
@@ -164,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                             padding: const EdgeInsets.symmetric(horizontal: 10.0),
                             child: Text(
                               "Or continue with",
-                              style: TextStyle(color: Theme.of(context).colorScheme.inverseSurface)
+                              style: TextStyle(color: Theme.of(context).colorScheme.onSurface)
                             ),
                           ),
                           Expanded(
@@ -228,7 +228,7 @@ class _LoginPageState extends State<LoginPage> {
                           "Register Now",
                           style: TextStyle(
                             color: Colors.blue,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),

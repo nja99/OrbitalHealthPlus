@@ -33,7 +33,8 @@ class AppointmentCard extends StatelessWidget {
     String time = DateFormat('HH:mm').format(appointmentDateTime);
 
     return Card(
-      color: const Color(0xFFFFFEFC),
+      elevation: 5,
+      color: Theme.of(context).colorScheme.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
       child: DismissibleWidget<DocumentSnapshot>(
           item: appointment,
@@ -48,11 +49,11 @@ class AppointmentCard extends StatelessWidget {
                   children: [
                     Text(
                       day,
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)
                     ),
                     Text(
                       month,
-                      style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold)
+                      style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w600)
                     )
                   ],
                 ),
@@ -68,13 +69,13 @@ class AppointmentCard extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                       ),
                       const SizedBox(height: 4),
 
                       Text(
                         time,
-                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
                       )
                     ],
                   ))

@@ -7,51 +7,40 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {},
-      child: Container(
+
+    return Card(
+      elevation: 5,
+      color: Theme.of(context).colorScheme.surface,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: SizedBox(
         height: 80,
         width: 50,
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
+        child: InkWell(
+          onTap: () {},
           borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Theme.of(context).colorScheme.inverseSurface.withOpacity(0.1),
-              blurRadius: 4.0,
-              spreadRadius: 0.05,
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 10),
-            Align(
-              alignment: Alignment.topCenter,
-              child: Image.asset(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 15),
+              Image.asset(
                 category.thumbnail,
                 height: 45,
               ),
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: Center(
+              const SizedBox(height: 10),
+              Expanded(
                 child: Text(
                   category.name,
-                  textAlign: TextAlign.center,
-                  style:TextStyle(
-                    color: Theme.of(context).colorScheme.inverseSurface,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ),
-            ),
-          ],
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600
+                  )
+                )
+              )
+            ],
+          ),
         ),
-      ),
+      )
     );
   }
 }

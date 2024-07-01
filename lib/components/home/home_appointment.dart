@@ -15,9 +15,9 @@ class HomeAppointment extends StatelessWidget {
               Text(
                 'My Appointments',
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.inverseSurface,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                   fontSize: 20,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               TextButton(
@@ -27,7 +27,7 @@ class HomeAppointment extends StatelessWidget {
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.primary,
                     fontSize: 20,
-                    fontWeight: FontWeight.w700, 
+                    fontWeight: FontWeight.w600, 
                   ),
                 ),
               ),
@@ -69,9 +69,9 @@ class AppointmentPreviewCard extends StatelessWidget {
                   child: Text(
                     'No Appointment yet',
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.inverseSurface,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                       fontSize: 20,
-                      fontWeight: FontWeight.w700, 
+                      fontWeight: FontWeight.w600, 
                     ),
                   ),
                 ),

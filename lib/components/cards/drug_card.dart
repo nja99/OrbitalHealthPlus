@@ -29,11 +29,11 @@ class DrugCard extends StatelessWidget {
           children: [
             Text(
               name,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)
             ),
             Text(
               type,
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
             )
           ],
         ),

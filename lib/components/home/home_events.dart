@@ -17,9 +17,9 @@ class HomeEvents extends StatelessWidget {
               Text(
                 'Explore Categories',
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.inverseSurface,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                   fontSize: 20,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               TextButton(
@@ -29,7 +29,7 @@ class HomeEvents extends StatelessWidget {
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.primary,
                     fontSize: 20,
-                    fontWeight: FontWeight.w700, 
+                    fontWeight: FontWeight.w600, 
                   ),
                 ),
               ),

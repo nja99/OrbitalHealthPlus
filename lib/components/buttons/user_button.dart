@@ -24,7 +24,7 @@ class UserButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(50),
           ),
-          backgroundColor: Theme.of(context).colorScheme.secondary,
+          backgroundColor: Theme.of(context).colorScheme.primary,
           elevation: 5,
 
         ),
@@ -39,7 +39,7 @@ class UserButton extends StatelessWidget {
                 buttonText,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.surface,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   fontSize: 16
                 ),)
             ],

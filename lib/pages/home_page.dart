@@ -27,13 +27,13 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
+      appBar: _buildAppBar(),
+      drawer: const HomeDrawer(),
+      bottomNavigationBar: _buildBottomNavigationBar(),
       body: IndexedStack(
         index: _selectedIndex,
         children: pages.map((item) => item.page).toList(),
-      ),
-      appBar: _buildAppBar(),
-      drawer: const HomeDrawer(),
-      bottomNavigationBar: _buildBottomNavigationBar());
+      ));
   }
 
   AppBar _buildAppBar() {
@@ -41,21 +41,13 @@ class _HomePageState extends State<HomePage> {
     double toolbarHeight = pages[_selectedIndex].showSearchBar ? 160 : 100;
 
     return AppBar(
+      backgroundColor: Theme.of(context).colorScheme.inverseSurface,
+      scrolledUnderElevation: 0,
+      elevation: 0,
       automaticallyImplyLeading: false,
       flexibleSpace: Container(
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(20),
-            bottomRight: Radius.circular(20)
-          ),
-          gradient: LinearGradient(
-            colors: [
-              Color(0xFF887FF2),
-              Color(0xFF6849EF)
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight
-          )
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.inverseSurface,
         ),
       ),
       toolbarHeight: toolbarHeight,
@@ -104,20 +96,37 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  BottomNavigationBar _buildBottomNavigationBar() {
-    return BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _navigateBottomBar,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: const Color(0xFF4B25DD),
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
-          // BottomNavigationBarItem(icon: Icon(Icons.monitor_heart), label: ""),
-          BottomNavigationBarItem(icon: Icon(Icons.medication), label: ""),
-          BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: ""),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label:""),
-        ]);
+  Widget _buildBottomNavigationBar() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(100), 
+          topRight: Radius.circular(100)
+        ),
+        boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 40)]
+      ),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(100), 
+          topRight: Radius.circular(100)
+        ),
+        child: BottomNavigationBar(
+          currentIndex: _selectedIndex,
+          onTap: _navigateBottomBar,
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: Theme.of(context).colorScheme.secondary,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
+            // BottomNavigationBarItem(icon: Icon(Icons.monitor_heart), label: ""),
+            BottomNavigationBarItem(icon: Icon(Icons.medication), label: ""),
+            BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: ""),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label:""),
+          ]
+        ),
+      ),
+    );
   }
 }

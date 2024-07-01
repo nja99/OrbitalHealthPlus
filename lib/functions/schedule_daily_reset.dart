@@ -82,6 +82,7 @@ Future<void> checkAndPerformReset() async {
   
   DateTime now = DateTime.now();
   String? expectedResetTimeString = prefs.getString("expectedResetTime");
+  print(expectedResetTimeString);
 
   if (expectedResetTimeString != null) {
     DateTime expectedResetTime = DateTime.parse(expectedResetTimeString);

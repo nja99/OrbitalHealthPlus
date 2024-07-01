@@ -32,7 +32,7 @@ class FormTextField extends StatelessWidget {
             title,
             style: const TextStyle(
               fontSize: 16.0, 
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
             )
           ),
 
@@ -40,7 +40,7 @@ class FormTextField extends StatelessWidget {
           const SizedBox(height: 8),
           Container(
             decoration: BoxDecoration(
-              color: Colors.grey.shade300,
+              color: Theme.of(context).colorScheme.tertiary,
               borderRadius: BorderRadius.circular(25)
             ),
             child: TextFormField(

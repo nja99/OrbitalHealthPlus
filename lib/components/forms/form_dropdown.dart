@@ -28,7 +28,7 @@ class FormDropdown extends StatelessWidget {
             title,
             style: const TextStyle(
               fontSize: 16.0,
-              fontWeight: FontWeight.bold
+              fontWeight: FontWeight.w600
             ),
           ),
 
@@ -37,7 +37,7 @@ class FormDropdown extends StatelessWidget {
           Container(
             padding: const EdgeInsetsDirectional.fromSTEB(14, 0, 0, 0),
             decoration: BoxDecoration(
-              color: Colors.grey.shade300,
+              color: Theme.of(context).colorScheme.tertiary,
               borderRadius: BorderRadius.circular(25)
             ),
   

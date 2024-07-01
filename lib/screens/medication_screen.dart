@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import "package:healthsphere/components/cards/medication_card.dart";
 import "package:healthsphere/components/dialogs/create_medication_dialog.dart";
 import "package:healthsphere/components/dimissible_widget.dart";
+import "package:healthsphere/components/expanded_container.dart";
 import "package:healthsphere/services/auth/auth_service_locator.dart";
 import "package:healthsphere/services/database/medications_firestore_service.dart";
 import "package:healthsphere/utils/time_of_day_extension.dart";
@@ -23,6 +24,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.inverseSurface,
       floatingActionButton: FloatingActionButton(
         heroTag: "createMedication",
         onPressed: () {
@@ -32,12 +34,22 @@ class _MedicationScreenState extends State<MedicationScreen> {
             )
           );
         },
-        child: const Icon(
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        shape: const CircleBorder(),
+        child: Icon(
           Icons.add,
-          color: Color(0xFF4B39EF),
+          color: Theme.of(context).colorScheme.primary,
         ),
       ),
-      body: _buildMedicationList(),
+      body: Column(
+        children: [
+          const SizedBox(height: 50),
+          ExpandedContainer(
+            padding: const EdgeInsetsDirectional.fromSTEB(4, 12, 1, 0), 
+            child: _buildMedicationList()
+          ),
+        ],
+      ),
     ); 
   }
 
@@ -62,16 +74,16 @@ class _MedicationScreenState extends State<MedicationScreen> {
               // List Header
               if (index == 0) {
                 return const Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(14, 14, 14, 8),
+                  padding: EdgeInsetsDirectional.fromSTEB(20, 14, 14, 8),
                   child: Row(
                     children: [
                       SizedBox(
-                        width: 60,
-                        child: Text("Time", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                        width: 45,
+                        child: Text("Time", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
                       ),
                       SizedBox(width: 10),
                       Expanded(
-                        child: Text("Medication", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold))
+                        child: Text("Medication", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600))
                       )
                     ],
                   ),
@@ -144,12 +156,12 @@ class _MedicationScreenState extends State<MedicationScreen> {
                       Text(
                         timeParts[0],
                         style: const TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.bold),
+                            fontSize: 14, fontWeight: FontWeight.w600),
                       ),
                       Text(
                         timeParts[1],
                         style: const TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.bold),
+                            fontSize: 12, fontWeight: FontWeight.w600),
                       ),
                     ],
                   ),
