@@ -25,23 +25,26 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
       length: 3, // Number of tabs
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.inverseSurface,
-        floatingActionButton: FloatingActionButton(
-          heroTag: "createAppointment",
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => CreateAppointmentDialog(
-                  firestoreService: firestoreService,
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(bottom: 70),
+          child: FloatingActionButton(
+            heroTag: "createAppointment",
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => CreateAppointmentDialog(
+                    firestoreService: firestoreService,
+                  ),
                 ),
-              ),
-            );
-          },
-          elevation: 5,
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          shape: const CircleBorder(),
-          child: Icon(
-            Icons.add,
-            color: Theme.of(context).colorScheme.primary
+              );
+            },
+            elevation: 5,
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            shape: const CircleBorder(),
+            child: Icon(
+              Icons.add,
+              color: Theme.of(context).colorScheme.primary
+            ),
           ),
         ),
         body: Column(
@@ -53,7 +56,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                 children: [
                   const SizedBox(height: 20),
                   Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(20, 12, 20, 10),
+                    padding: const EdgeInsetsDirectional.fromSTEB(20, 5, 20, 10),
                     child: Container(
                       height: 35,
                       decoration: BoxDecoration(
@@ -70,6 +73,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                         unselectedLabelColor: Theme.of(context).colorScheme.onTertiary,
                         dividerColor: Colors.transparent,
                         indicatorSize: TabBarIndicatorSize.tab,
+                        indicatorPadding: const EdgeInsets.all(3),
                         indicator: BoxDecoration(
                             color: Theme.of(context).colorScheme.surface,
                             borderRadius: BorderRadius.circular(30),

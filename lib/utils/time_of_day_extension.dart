@@ -22,4 +22,12 @@ extension TimeOfDayExtension on TimeOfDay {
     }
     return TimeOfDay(hour:int.parse(parts[0]), minute: int.parse(parts[1]));
   }
+
+  static bool isTimeBetween(TimeOfDay now, TimeOfDay start, TimeOfDay end) {
+    final nowMinutes = now.hour * 60 + now.minute;
+    final startMinutes = start.hour * 60 + start.minute;
+    final endMinutes = end.hour * 60 + end.minute;
+
+    return nowMinutes >= startMinutes && nowMinutes < endMinutes;
+  }
 }

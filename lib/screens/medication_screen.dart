@@ -25,32 +25,58 @@ class _MedicationScreenState extends State<MedicationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.inverseSurface,
-      floatingActionButton: FloatingActionButton(
-        heroTag: "createMedication",
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => CreateMedicationDialog(firestoreService: firestoreService)
-            )
-          );
-        },
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        shape: const CircleBorder(),
-        child: Icon(
-          Icons.add,
-          color: Theme.of(context).colorScheme.primary,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 70),
+        child: FloatingActionButton(
+          heroTag: "createMedication",
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => CreateMedicationDialog(firestoreService: firestoreService)
+              )
+            );
+          },
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          shape: const CircleBorder(),
+          child: Icon(
+            Icons.add,
+            color: Theme.of(context).colorScheme.primary,
+          ),
         ),
       ),
       body: Column(
         children: [
           const SizedBox(height: 50),
           ExpandedContainer(
-            padding: const EdgeInsetsDirectional.fromSTEB(4, 12, 1, 0), 
-            child: _buildMedicationList()
+            padding: const EdgeInsetsDirectional.fromSTEB(4, 5, 1, 0), 
+            child: Column(
+              children: [
+                _buildListHeader(),
+                Expanded(child: _buildMedicationList()),
+              ],
+            )
           ),
         ],
       ),
     ); 
+  }
+  
+  Widget _buildListHeader() {
+    return const Padding(
+      padding: EdgeInsetsDirectional.fromSTEB(20, 14, 14, 8),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 45,
+            child: Text("Time", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+          ),
+          SizedBox(width: 10),
+          Expanded(
+            child: Text("Medication", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600))
+          )
+        ],
+      ),
+    );
   }
 
   Widget _buildMedicationList() {
@@ -69,35 +95,18 @@ class _MedicationScreenState extends State<MedicationScreen> {
             });
 
           return ListView.builder(
-            itemCount: sortedTimes.length + 1,
+            itemCount: sortedTimes.length,
             itemBuilder: (context, index) {
-              // List Header
-              if (index == 0) {
-                return const Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(20, 14, 14, 8),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: 45,
-                        child: Text("Time", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-                      ),
-                      SizedBox(width: 10),
-                      Expanded(
-                        child: Text("Medication", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600))
-                      )
-                    ],
-                  ),
-                );
-              } else {
-                // Retrieve Medications
-                String time = sortedTimes[index - 1];
-                List<DocumentSnapshot> medications = groupedMedications[time]!;
+              
+              // Retrieve Medications
+              String time = sortedTimes[index];
+              List<DocumentSnapshot> medications = groupedMedications[time]!;
 
-                // Border Color
-                Color borderColor = _getBorderColor(index, sortedTimes);
-                
-                return _buildMedicationSection(time, medications, borderColor);
-              }
+              // Border Color
+              Color borderColor = _getBorderColor(index, sortedTimes);
+              
+              return _buildMedicationSection(time, medications, borderColor);
+
             }
           );
         } else {
@@ -197,30 +206,22 @@ class _MedicationScreenState extends State<MedicationScreen> {
     }
 
     TimeOfDay now = TimeOfDay.now();
-    TimeOfDay currentTime = TimeOfDayExtension.toTimeOfDay(times[index - 1]);
-    TimeOfDay nextTime = index < times.length
-        ? TimeOfDayExtension.toTimeOfDay(times[index])
+    TimeOfDay currentTime = TimeOfDayExtension.toTimeOfDay(times[index]);
+    TimeOfDay nextTime = index < times.length - 1
+        ? TimeOfDayExtension.toTimeOfDay(times[index+1])
         : TimeOfDayExtension.toTimeOfDay(times[0]);
 
-    if (index == times.length) {
+    if (index == times.length - 1) {
       if (now.hour > currentTime.hour || now.hour == currentTime.hour && now.minute >= currentTime.minute) {
         return Theme.of(context).colorScheme.primary;
       }
     }
 
-    if (_isTimeBetween(now, currentTime, nextTime)) {
+    if (TimeOfDayExtension.isTimeBetween(now, currentTime, nextTime)) {
       return Theme.of(context).colorScheme.primary;
     } else {
       return Colors.grey;
     }
-  }
-
-  bool _isTimeBetween(TimeOfDay now, TimeOfDay start, TimeOfDay end) {
-    final nowMinutes = now.hour * 60 + now.minute;
-    final startMinutes = start.hour * 60 + start.minute;
-    final endMinutes = end.hour * 60 + end.minute;
-
-    return nowMinutes >= startMinutes && nowMinutes < endMinutes;
   }
 
   String _getStatusForTime(DocumentSnapshot medication, String time) {
