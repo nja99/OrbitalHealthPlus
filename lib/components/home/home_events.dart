@@ -1,10 +1,22 @@
 import 'package:flutter/material.dart';
 import "package:healthsphere/components/cards/category_card.dart";
 import 'package:healthsphere/assets/model/category.dart';
+import 'package:healthsphere/pages/settings_page.dart';
+import 'package:healthsphere/screens/appointment_screen.dart';
+import 'package:healthsphere/screens/familyhub_screen.dart';
+import 'package:healthsphere/screens/medication_screen.dart';
 
-class HomeEvents extends StatelessWidget {
-  const HomeEvents({super.key});
+class HomeEvents extends StatefulWidget {
+final Function(int) onCategorySelected;
+  final int currentIndex;
 
+  const HomeEvents({Key? key, required this.onCategorySelected, required this.currentIndex}) : super(key: key);
+
+  @override
+  State<HomeEvents> createState() => _HomeEventsState();
+}
+
+class _HomeEventsState extends State<HomeEvents> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -51,7 +63,30 @@ class HomeEvents extends StatelessWidget {
           ),
           itemBuilder: (context, index) {
             return CategoryCard(
-              category: categoryList[index],
+            category: categoryList[index],
+            onTap: () {
+              int newIndex;
+              switch (categoryList[index].name) {
+                case 'Family':
+                  newIndex = 3;
+                  break;
+                case 'Medication':
+                  newIndex = 1;
+                  break;
+                case 'Appointment':
+                  newIndex = 2;
+                  break;
+                case 'Particulars':
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SettingsPage()),
+                );
+                newIndex = widget.currentIndex;
+                default:
+                  newIndex = 0;
+              }
+              widget.onCategorySelected(newIndex);
+            },
             );
           },
         ),
