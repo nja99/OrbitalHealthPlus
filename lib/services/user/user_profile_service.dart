@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:healthsphere/services/service_locator.dart';
 
+
 class UserProfileService {
   
   final FirebaseFirestore _firestore = getIt<FirebaseFirestore>();
@@ -58,5 +59,18 @@ class UserProfileService {
       return userProfile['profileCreated'] ?? false;
     }
     return false;
+  }
+
+  Future<Map<String, dynamic>?> getUserProfile(User user) async {
+    try {
+      DocumentSnapshot userDoc = await _getUserDocument(user).get();
+      if (userDoc.exists) {
+        return userDoc.data() as Map<String, dynamic>?;
+      }
+      return null;
+    } catch (e) {
+      print('Error fetching user profile: $e');
+      return null;
+    }
   }
 }
