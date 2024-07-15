@@ -3,8 +3,14 @@ import "package:healthsphere/assets/model/category.dart";
 
 class CategoryCard extends StatelessWidget {
   final Category category;
-  const CategoryCard({super.key, required this.category});
+  final VoidCallback onTap;
+  const CategoryCard({
+    Key? key,
+    required this.category,
+    required this.onTap,
+  }) : super(key: key);
 
+  
   @override
   Widget build(BuildContext context) {
 
@@ -16,7 +22,7 @@ class CategoryCard extends StatelessWidget {
         height: 80,
         width: 50,
         child: InkWell(
-          onTap: () {},
+          onTap: onTap,
           borderRadius: BorderRadius.circular(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,

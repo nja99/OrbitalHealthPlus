@@ -23,6 +23,10 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void _onCategorySelected(int index) {
+    _navigateBottomBar(index);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +36,7 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: _buildBottomNavigationBar(),
       body: IndexedStack(
         index: _selectedIndex,
-        children: pages.map((item) => item.page).toList(),
+        children:  pages.map((page) => page.pageBuilder(_onCategorySelected, _selectedIndex)).toList(),
       ));
   }
 

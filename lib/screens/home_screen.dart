@@ -6,7 +6,11 @@ import "package:healthsphere/components/home/home_events.dart";
 
 class HomeScreen extends StatefulWidget {
   
-  const HomeScreen({super.key});
+  final Function(int) onCategorySelected;
+  final int currentIndex;
+
+  const HomeScreen({Key? key, required this.onCategorySelected, required this.currentIndex}) : super(key: key);
+
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -14,6 +18,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   
   @override
   Widget build(BuildContext context) {
@@ -21,7 +26,7 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
       key: _scaffoldKey,
       backgroundColor: Theme.of(context).colorScheme.inverseSurface,
       drawer: const HomeDrawer(),
-      body: const Column(
+      body: Column(
         children: [ 
           SizedBox(height: 50),
           ExpandedContainer(
@@ -30,7 +35,7 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
               child: Column(
                 children: [
                   HomeAppointment(),
-                  HomeEvents(),
+                  HomeEvents(onCategorySelected: widget.onCategorySelected, currentIndex: widget.currentIndex),
                 ],
               ),
             ),
