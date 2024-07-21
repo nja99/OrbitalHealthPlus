@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:healthsphere/components/home/home_drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:healthsphere/screens/addloved.dart';
 import 'package:healthsphere/services/service_locator.dart';
 import 'package:healthsphere/services/user/user_profile_service.dart';
 
@@ -19,6 +20,9 @@ class _FamilyScreenState extends State<FamilyScreen> {
   final User? _currentUser = FirebaseAuth.instance.currentUser;
   Map<String, dynamic>? _userData;
 
+  List<Map<String, dynamic>> _dependents = [];
+  List<Map<String, dynamic>> _caregivers = [];
+
   Future<void> _fetchUserData() async {
     if (_currentUser != null) {
       _userData = await _userProfileService.getUserProfile(_currentUser!);
@@ -28,15 +32,75 @@ class _FamilyScreenState extends State<FamilyScreen> {
     }
   }
 
-  Future<void> _refreshProfile() async {
-  await _fetchUserData();
-  setState(() {});
+
+//////////////////////////////////////////////////////////////////
+  Future<void> _fetchDependents() async {
+  if (_currentUser != null) {
+    List<Map<String, dynamic>> fetchedDependents = await _userProfileService.getDependents(_currentUser!);
+    if (mounted) {
+      setState(() {
+        _dependents = fetchedDependents;
+      });
+    }
   }
+}
+Future<void> _fetchCaregivers() async {
+    if (_currentUser != null) {
+      List<Map<String, dynamic>> fetchedCaregivers = await _userProfileService.getCaregivers(_currentUser!);
+      if (mounted) {
+        setState(() {
+          _caregivers = fetchedCaregivers;
+        });
+      }
+    }
+  }
+  Future<void> _addLovedOne() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AddLovedOnePage()),
+    );
+    if (result == true) {
+      _fetchDependents();
+      print("hi");
+    }
+  }
+  Future<void> _deleteCaregiver(String caregiverUid) async {
+  try {
+    await _userProfileService.removeCaregiver(_currentUser!, caregiverUid);
+    // Refresh the caregivers list
+    await _fetchCaregivers();
+    setState(() {});
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error deleting caregiver: ${e.toString()}')),
+    );
+  }
+}
+  Future<void> _refreshProfile() async {
+    await _fetchUserData();
+    setState(() {});
+  }
+  Future<void> _switchAccount(String userId) async {
+    try {
+      await _userProfileService.switchAccount(userId);
+      // Refresh the screen or navigate to a new screen as needed
+      _fetchUserData();
+      _fetchDependents();
+      setState(() {});
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error switching account: ${e.toString()}')),
+      );
+    }
+  }
+  
 
   @override
   void initState() {
     super.initState();
     _fetchUserData();
+    _fetchDependents();
+    _fetchCaregivers();
   }
 
   @override
@@ -60,29 +124,25 @@ class _FamilyScreenState extends State<FamilyScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const SizedBox(height: 10),
+                  _buildSectionTitle('My Current Account'),
                   Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Text(
-                      'Health Profiles',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                    ),
+                    padding: const EdgeInsets.all(10),
+                    child: _buildProfileCard(_userData),
                   ),
                   Expanded(
                     child: RefreshIndicator(
                       onRefresh: _refreshProfile,
                       child: ListView(
-                      children: [
-                        _buildProfileCard(),
-                        _buildSectionTitle('My caregivers (1)'),
-                        _buildAddButton('Add caregivers'),
-                        _buildSectionTitle('People under my care'),
-                        _buildAddButton('Add loved ones'),
-                        _buildSectionTitle('Family & friends'),
-                      ],
+                        children: [
+                          // ... existing code ...
+                          _buildSectionTitle('My caregivers'),
+                          ..._caregivers.map((caregiver) => _buildProfileCard(caregiver, isCaregiver: true)),
+                          _buildSectionTitle('People under my care'),
+                          ..._dependents.map((dependent) => _buildProfileCard(dependent, isDependent: true)),
+                          _buildAddButton('Add loved ones'),
+                          _buildSectionTitle('Family & friends'),
+                        ],
                       ),
                     ),
                   ),
@@ -97,37 +157,39 @@ class _FamilyScreenState extends State<FamilyScreen> {
 
 
 
-  Widget _buildProfileCard() {
-  if (_userData == null) {
-    return const Center(child: CircularProgressIndicator());
+Widget _buildProfileCard(Map<String, dynamic>? data, {bool isDependent = false, bool isCaregiver = false}) {
+  if (data == null) {
+    return SizedBox.shrink();
   }
 
-  String fullName = "${_userData!['firstName']} ${_userData!['lastName']}";
+  String fullName = "${data['firstName']} ${data['lastName']}";
 
   return Card(
-    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
     child: ListTile(
       leading: CircleAvatar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        child: Text(
-          fullName.isNotEmpty ? fullName[0].toUpperCase() : '?',
-          style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
-        ),
+        child: Text(fullName.isNotEmpty ? fullName[0].toUpperCase() : '?'),
       ),
       title: Text(fullName),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Sex: ${_userData!['sex'] ?? 'N/A'}'),
-          Text('Blood Type: ${_userData!['bloodType'] ?? 'N/A'}'),
-          Text('Height: ${_userData!['height']?.toString() ?? 'N/A'} cm'),
-          Text('Weight: ${_userData!['weight']?.toString() ?? 'N/A'} kg'),
+          Text('Height: ${data['height']?.toString() ?? 'N/A'} cm'),
+          Text('Weight: ${data['weight']?.toString() ?? 'N/A'} kg'),
         ],
       ),
-      trailing: const Icon(Icons.chevron_right),
-      onTap: () {
-        // Handle profile tap - maybe navigate to a detailed profile view
-      },
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (isCaregiver)
+            IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () => _deleteCaregiver(data['uid']),
+            ),
+          if (isDependent || isCaregiver)
+            Icon(Icons.chevron_right),
+        ],
+      ),
+      onTap: (isDependent || isCaregiver) ? () => _switchAccount(data['uid']) : null,
     ),
   );
 }
@@ -151,19 +213,17 @@ class _FamilyScreenState extends State<FamilyScreen> {
   }
 
   Widget _buildAddButton(String label) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: ElevatedButton.icon(
-        icon: const Icon(Icons.add),
-        label: Text(label),
-        onPressed: () {
-          // Handle add button tap
-        },
-        style: ElevatedButton.styleFrom(
-          foregroundColor: Theme.of(context).colorScheme.onPrimary,
-          backgroundColor: Theme.of(context).colorScheme.primary,
-        ),
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+    child: ElevatedButton.icon(
+      icon: const Icon(Icons.add),
+      label: Text(label),
+      onPressed: _addLovedOne,  // Change this line
+      style: ElevatedButton.styleFrom(
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
-    );
-  }
+    ),
+  );
+}
 }
