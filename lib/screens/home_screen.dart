@@ -28,7 +28,7 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
       drawer: const HomeDrawer(),
       body: Column(
         children: [ 
-          SizedBox(height: 50),
+          const SizedBox(height: 50),
           ExpandedContainer(
             padding: EdgeInsetsDirectional.fromSTEB(10, 12, 10, 0),
             child: SingleChildScrollView(

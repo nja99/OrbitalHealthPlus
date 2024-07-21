@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:healthsphere/components/buttons/circle_button.dart';
 import 'package:healthsphere/components/home/home_drawer.dart';
 import 'package:healthsphere/config/page_config.dart';
+import 'package:healthsphere/services/service_locator.dart';
+import 'package:healthsphere/services/user/user_profile_service.dart';
 
 class HomePage extends StatefulWidget {
 
@@ -16,15 +19,34 @@ class _HomePageState extends State<HomePage> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int _selectedIndex = 0;
+  String _userName = '';
+  final UserProfileService _userProfileService = getIt<UserProfileService>();
 
   void _navigateBottomBar(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
+  Future<void> _fetchUserName() async {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      Map<String, dynamic>? userData = await _userProfileService.getUserProfile(currentUser);
+      if (userData != null && userData.containsKey('firstName')) {
+        setState(() {
+          _userName = userData['firstName'];
+        });
+      }
+    }
+  }
 
   void _onCategorySelected(int index) {
     _navigateBottomBar(index);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserName();
   }
 
   @override
@@ -71,7 +93,7 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
                 Text(
-                  "Hello, \nGood Morning!",
+                  "Hello${_userName.isNotEmpty ? ', $_userName' : ''}!\nGood Morning!",
                   textAlign: TextAlign.end,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.surface,
