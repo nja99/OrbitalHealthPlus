@@ -25,6 +25,7 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Theme.of(context).colorScheme.inverseSurface,
+      extendBody: true,
       drawer: const HomeDrawer(),
       body: Column(
         children: [ 

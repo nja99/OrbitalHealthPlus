@@ -1,4 +1,5 @@
 import "package:cloud_firestore/cloud_firestore.dart";
+import "package:firebase_auth/firebase_auth.dart";
 import 'package:flutter/material.dart';
 import "package:healthsphere/components/cards/medication_card.dart";
 import "package:healthsphere/components/dialogs/create_medication_dialog.dart";
@@ -6,6 +7,7 @@ import "package:healthsphere/components/dimissible_widget.dart";
 import "package:healthsphere/components/expanded_container.dart";
 import "package:healthsphere/services/auth/auth_service_locator.dart";
 import "package:healthsphere/services/database/medications_firestore_service.dart";
+import "package:healthsphere/services/notification/notification_service.dart";
 import "package:healthsphere/utils/time_of_day_extension.dart";
 
 class MedicationScreen extends StatefulWidget {
@@ -20,11 +22,21 @@ class _MedicationScreenState extends State<MedicationScreen> {
 
   // Fire Store //
   final MedicationFirestoreService firestoreService = getIt<MedicationFirestoreService>();
+  final FirebaseAuth _firebaseAuth = getIt<FirebaseAuth>();
+
+  User? _currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentUser = _firebaseAuth.currentUser;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.inverseSurface,
+      extendBody: true,
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 70),
         child: FloatingActionButton(
@@ -93,6 +105,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
               TimeOfDay timeB = TimeOfDayExtension.toTimeOfDay(b);
               return timeA.hour != timeB.hour ? timeA.hour.compareTo(timeB.hour) : timeA.minute.compareTo(timeB.minute);
             });
+          NotificationService.scheduleMedicationReminders(_currentUser!.uid.hashCode, "It's time to take your Medication! ${_currentUser!.displayName}", sortedTimes);
 
           return ListView.builder(
             itemCount: sortedTimes.length,
@@ -233,5 +246,6 @@ class _MedicationScreenState extends State<MedicationScreen> {
     }
     return 'pending'; // Default status if not found
   }
+
 }
 

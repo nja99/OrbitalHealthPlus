@@ -108,6 +108,7 @@ Future<void> _fetchCaregivers() async {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Theme.of(context).colorScheme.inverseSurface,
+      extendBody: true,
       drawer: const HomeDrawer(),
       body: Column(
         children: [
