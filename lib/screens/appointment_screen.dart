@@ -25,6 +25,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
       length: 3, // Number of tabs
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.inverseSurface,
+        extendBody: true,
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 70),
           child: FloatingActionButton(

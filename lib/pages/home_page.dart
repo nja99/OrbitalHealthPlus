@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
 
   AppBar _buildAppBar() {
 
-    double toolbarHeight = pages[_selectedIndex].showSearchBar ? 160 : 100;
+    double toolbarHeight = pages[_selectedIndex].showSearchBar ? 190 : 130;
 
     return AppBar(
       backgroundColor: Theme.of(context).colorScheme.inverseSurface,
@@ -83,6 +83,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,7 +105,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 40),
             if (pages[_selectedIndex].showSearchBar) 
               Padding(
                 padding: const EdgeInsets.only(bottom: 10),

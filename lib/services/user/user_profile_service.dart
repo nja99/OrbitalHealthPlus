@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:healthsphere/services/service_locator.dart';
-
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class UserProfileService {
-  
   
   final FirebaseFirestore _firestore = getIt<FirebaseFirestore>();
 
@@ -35,11 +35,16 @@ class UserProfileService {
   }
 
   Future<void> createUserProfile(User user) async {
+
+    tz.initializeTimeZones();
+    final String localTimeZone = tz.local.name;
+
     DocumentReference userDoc = _getUserDocument(user);
     await userDoc.set({
       'email': user.email,
       'createdAt': Timestamp.now(),
       'profileCreated': false,
+      'timezone': localTimeZone
     }, SetOptions(merge: true)); // Merge to avoid overwriting existing data
 
     CollectionReference appointmentsCollection = userDoc.collection('appointments');
@@ -50,6 +55,10 @@ class UserProfileService {
   }
 
   Future<void> storeUserProfile (User user, Map<String, dynamic> userData) async {
+    if (userData.containsKey('firstName')) {
+      await user.updateDisplayName(userData['firstName']);
+    }
+    
     DocumentReference userDoc = _getUserDocument(user);
     await userDoc.set(userData, SetOptions(merge: true));
   }

@@ -119,25 +119,5 @@ class MedicationFirestoreService {
     return medicationsCollection.doc(medicationID).delete();
   }
 
-  // RESET DOSE STATUS
-  @pragma("vm:entry-point")
-  Future<void> resetDoseStatus() async {
-    final currentUser = _firebaseAuth.currentUser;
-    
-    if (currentUser != null) {
-      QuerySnapshot snapshot = await medicationsCollection.get();
-
-      for (var doc in snapshot.docs) {
-        final data = doc.data() as Map<String, dynamic>?;
-        if ( data!= null && data.containsKey('doseTimes')) {
-          List<dynamic> doseTimes = data['doseTimes'];
-          for (var dose in doseTimes) {
-            dose['status'] = "pending";
-          }
-          doc.reference.update({'doseTimes': doseTimes});
-        }
-      }
-    }
-  }
 }
 
