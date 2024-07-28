@@ -9,7 +9,11 @@ class HomeScreen extends StatefulWidget {
   final Function(int) onCategorySelected;
   final int currentIndex;
 
-  const HomeScreen({Key? key, required this.onCategorySelected, required this.currentIndex}) : super(key: key);
+  const HomeScreen({
+    super.key, 
+    required this.onCategorySelected, 
+    required this.currentIndex
+  });
 
 
   @override
@@ -31,11 +35,11 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
         children: [ 
           const SizedBox(height: 50),
           ExpandedContainer(
-            padding: EdgeInsetsDirectional.fromSTEB(10, 12, 10, 0),
+            padding: const EdgeInsetsDirectional.fromSTEB(10, 12, 10, 0),
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  HomeAppointment(),
+                  HomeAppointment(onCategorySelected: widget.onCategorySelected),
                   HomeEvents(onCategorySelected: widget.onCategorySelected, currentIndex: widget.currentIndex),
                 ],
               ),
