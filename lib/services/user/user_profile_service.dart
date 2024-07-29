@@ -39,13 +39,24 @@ class UserProfileService {
   }
 
   Future<void> migrateUserDocuments() async {
-  QuerySnapshot userDocs = await _firestore.collection('users').get();
-
-  for (QueryDocumentSnapshot doc in userDocs.docs) {
-    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-    if (!data.containsKey('caregivers')) {
-      await doc.reference.set({'caregivers': []}, SetOptions(merge: true));
+  try {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
+      print('No authenticated user');
+      return;
     }
+
+    DocumentSnapshot userDoc = await _firestore.collection('users').doc(currentUser.uid).get();
+    
+    if (!userDoc.exists || !(userDoc.data() as Map<String, dynamic>?)?['caregivers'] is List) {
+      await _firestore.collection('users').doc(currentUser.uid).set({
+        'caregivers': []
+      }, SetOptions(merge: true));
+    }
+    
+    print('Migration completed successfully');
+  } catch (e) {
+    print('Error during migration: $e');
   }
 }
 
@@ -94,7 +105,79 @@ class UserProfileService {
   }
 
 
+
+
+
+
+
+
+
+
+Stream<List<Map<String, dynamic>>> getDependentsStream(User user) {
+    return _firestore
+      .collection('users')
+      .doc(user.uid)
+      .collection('dependents')
+      .snapshots()
+      .map((snapshot) => snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList());
+  }
+
+  Stream<List<Map<String, dynamic>>> getCaregiversStream(User user) {
+    return _firestore
+      .collection('users')
+      .doc(user.uid)
+      .snapshots()
+      .map((snapshot) {
+        List<String> caregiverEmails = List<String>.from(snapshot.data()?['caregivers'] ?? []);
+        return caregiverEmails;
+      })
+      .asyncMap((emails) async {
+        List<Map<String, dynamic>> caregivers = [];
+        for (String email in emails) {
+          QuerySnapshot caregiverQuery = await _firestore.collection('users')
+              .where('email', isEqualTo: email)
+              .limit(1)
+              .get();
+          if (caregiverQuery.docs.isNotEmpty) {
+            caregivers.add(caregiverQuery.docs.first.data() as Map<String, dynamic>);
+          }
+        }
+        return caregivers;
+      });
+  }
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   Future<void> addDependent(User currentUser, String dependentEmail) async {
+  print('Adding dependent: $dependentEmail for user: ${currentUser.email}');
+  
+  // Check if already a dependent
+  bool isAlreadyDependent = await isAlreadyAddedAsLovedOne(currentUser, dependentEmail);
+  if (isAlreadyDependent) {
+    print('$dependentEmail is already a dependent of ${currentUser.email}');
+    throw Exception('This person is already added as a loved one.');
+  }
+
   final dependentDoc = await _firestore.collection('users').where('email', isEqualTo: dependentEmail).get();
   if (dependentDoc.docs.isNotEmpty) {
     final dependentData = dependentDoc.docs.first.data();
@@ -104,52 +187,184 @@ class UserProfileService {
         .collection('dependents')
         .doc(dependentEmail)
         .set({
-      'email': dependentEmail,  // Make sure this line is included
+      'email': dependentEmail,
       'firstName': dependentData['firstName'] ?? '',
       'lastName': dependentData['lastName'] ?? '',
       'height': dependentData['height'] ?? 'N/A',
       'weight': dependentData['weight'] ?? 'N/A',
     });
+    print('Dependent added successfully');
+  } else {
+    print('No user found with email: $dependentEmail');
+    throw Exception('No user found with this email');
   }
 }
 
-
-  Future<void> addCaregiver(String dependentEmail, String caregiverEmail) async {
+Future<void> addCaregiver(String dependentEmail, String caregiverEmail) async {
+  print('Adding caregiver: $caregiverEmail for dependent: $dependentEmail');
+  
   var querySnapshot = await _firestore.collection('users')
       .where('email', isEqualTo: dependentEmail)
       .get();
-
+  
   if (querySnapshot.docs.isNotEmpty) {
     DocumentReference userDoc = _firestore.collection('users').doc(querySnapshot.docs.first.id);
+    
+    // Check if already a caregiver
+    DocumentSnapshot snapshot = await userDoc.get();
+    if (snapshot.exists) {
+      Map<String, dynamic> userData = snapshot.data() as Map<String, dynamic>;
+      List<dynamic> caregivers = userData['caregivers'] ?? [];
+      if (caregivers.contains(caregiverEmail)) {
+        print('$caregiverEmail is already a caregiver of $dependentEmail');
+        throw Exception('This person is already added as a caregiver.');
+      }
+    }
 
     await _firestore.runTransaction((transaction) async {
-      DocumentSnapshot snapshot = await transaction.get(userDoc);
-
-      if (!snapshot.exists || !(snapshot.data() as Map<String, dynamic>?)?['caregivers'] is List) {
-        transaction.set(userDoc, {'caregivers': [caregiverEmail]}, SetOptions(merge: true));
-      } else {
-        List<dynamic> currentCaregivers = (snapshot.data() as Map<String, dynamic>)['caregivers'];
-        if (!currentCaregivers.contains(caregiverEmail)) {
-          currentCaregivers.add(caregiverEmail);
-          transaction.update(userDoc, {'caregivers': currentCaregivers});
-        }
-      }
+      transaction.update(userDoc, {
+        'caregivers': FieldValue.arrayUnion([caregiverEmail])
+      });
     });
+    print('Caregiver added successfully');
+  } else {
+    print('No user found with email: $dependentEmail');
+    throw Exception('No user found with this email');
   }
 }
 
 
-Future<List<Map<String, dynamic>>> getDependents(User user) async {
-  QuerySnapshot dependentsSnapshot = await _firestore
-      .collection('users')
-      .doc(user.uid)
-      .collection('dependents')
-      .get();
 
-  return dependentsSnapshot.docs
-      .map((doc) => doc.data() as Map<String, dynamic>)
-      .toList();
+
+Future<void> removeDependent(User currentUser, String dependentEmail) async {
+  try {
+    // Remove from dependents collection
+    await _firestore
+        .collection('users')
+        .doc(currentUser.uid)
+        .collection('dependents')
+        .doc(dependentEmail)
+        .delete();
+
+    // Remove from caregivers array
+    await _firestore
+        .collection('users')
+        .doc(currentUser.uid)
+        .update({
+          'caregivers': FieldValue.arrayRemove([dependentEmail])
+        });
+
+    // Remove current user from dependent's caregivers
+    QuerySnapshot dependentDoc = await _firestore
+        .collection('users')
+        .where('email', isEqualTo: dependentEmail)
+        .get();
+    
+    if (dependentDoc.docs.isNotEmpty) {
+      await _firestore
+          .collection('users')
+          .doc(dependentDoc.docs.first.id)
+          .update({
+            'caregivers': FieldValue.arrayRemove([currentUser.email])
+          });
+    }
+  } catch (e) {
+    print('Error removing dependent: $e');
+    throw e;
+  }
 }
+
+
+
+Future<void> removeCaregiver(User currentUser, String caregiverEmail) async {
+    try {
+      // Remove from current user's caregivers list
+      await _firestore.collection('users').doc(currentUser.uid).update({
+        'caregivers': FieldValue.arrayRemove([caregiverEmail])
+      });
+      // Remove from dependents collection
+      await _firestore.collection('users')
+          .doc(currentUser.uid)
+          .collection('dependents')
+          .doc(caregiverEmail)
+          .delete();
+      // Remove current user from caregiver's dependents
+      QuerySnapshot caregiverDoc = await _firestore.collection('users')
+          .where('email', isEqualTo: caregiverEmail)
+          .limit(1)
+          .get();
+      if (caregiverDoc.docs.isNotEmpty) {
+        String caregiverId = caregiverDoc.docs.first.id;
+        await _firestore.collection('users')
+            .doc(caregiverId)
+            .update({
+              'dependents': FieldValue.arrayRemove([currentUser.email])
+            });
+      }
+      print('Caregiver removed successfully');
+    } catch (e) {
+      print('Error removing caregiver: $e');
+      throw e;
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Future<bool> isAlreadyAddedAsLovedOne(User currentUser, String email) async {
+  try {
+    // Check dependents
+    QuerySnapshot dependentSnapshot = await _firestore
+        .collection('users')
+        .doc(currentUser.uid)
+        .collection('dependents')
+        .where('email', isEqualTo: email)
+        .get();
+    
+    if (dependentSnapshot.docs.isNotEmpty) {
+      return true;
+    }
+
+    // Check caregivers
+    DocumentSnapshot userDoc = await _firestore.collection('users').doc(currentUser.uid).get();
+    if (userDoc.exists) {
+      Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+      List<dynamic> caregivers = userData['caregivers'] ?? [];
+      if (caregivers.contains(email)) {
+        return true;
+      }
+    }
+
+    return false;
+  } catch (e) {
+    print('Error checking if loved one is already added: $e');
+    return false;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   Future<User?> switchAccount(String email) async {
@@ -181,100 +396,4 @@ Future<List<Map<String, dynamic>>> getDependents(User user) async {
   }
 }
 
-
-
-
-Future<void> removeDependent(User currentUser, String dependentEmail) async {
-  await _firestore
-      .collection('users')
-      .doc(currentUser.uid)
-      .collection('dependents')
-      .doc(dependentEmail)
-      .delete();
-}
-
-
-Future<bool> isAlreadyAddedAsLovedOne(User currentUser, String email) async {
-  // Check dependents
-  QuerySnapshot dependentSnapshot = await _firestore
-      .collection('users')
-      .doc(currentUser.uid)
-      .collection('dependents')
-      .where('email', isEqualTo: email)
-      .get();
-  if (dependentSnapshot.docs.isNotEmpty) {
-    return true;
-  }
-
-  // Check caregivers
-  DocumentSnapshot userDoc = await _firestore.collection('users').doc(currentUser.uid).get();
-
-  if (userDoc.exists && userDoc.data() != null) {
-    Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
-    if (userData['caregivers'] is List) {
-      List<dynamic> caregivers = userData['caregivers'];
-      return caregivers.contains(email);
-    }
-  }
-
-  return false;
-}
-
-
-
-Future<void> removeCaregiver(User currentUser, String caregiverEmail) async {
-  try {
-    // Remove caregiver from current user's caregivers list
-    await _firestore.collection('users').doc(currentUser.uid).update({
-      'caregivers': FieldValue.arrayRemove([caregiverEmail])
-    });
-
-    // Remove current user from caregiver's dependents
-    QuerySnapshot caregiverDoc = await _firestore.collection('users')
-        .where('email', isEqualTo: caregiverEmail)
-        .limit(1)
-        .get();
-
-    if (caregiverDoc.docs.isNotEmpty) {
-      String caregiverId = caregiverDoc.docs.first.id;
-      await _firestore.collection('users')
-          .doc(caregiverId)
-          .collection('dependents')
-          .doc(currentUser.email)
-          .delete();
-    }
-
-    print('Caregiver removed successfully');
-  } catch (e) {
-    print('Error removing caregiver: $e');
-    throw e;
-  }
-}
-
-
-
-Future<List<Map<String, dynamic>>> getCaregivers(User currentUser) async {
-  DocumentSnapshot userDoc = await _firestore.collection('users').doc(currentUser.uid).get();
-
-  List<String> caregiverEmails = [];
-  if (userDoc.exists && userDoc.data() != null) {
-    Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
-    if (userData['caregivers'] is List) {
-      caregiverEmails = List<String>.from(userData['caregivers']);
-    }
-  }
-
-  List<Map<String, dynamic>> caregivers = [];
-  for (String email in caregiverEmails) {
-    QuerySnapshot caregiverQuery = await _firestore.collection('users')
-        .where('email', isEqualTo: email)
-        .limit(1)
-        .get();
-    
-    if (caregiverQuery.docs.isNotEmpty) {
-      caregivers.add(caregiverQuery.docs.first.data() as Map<String, dynamic>);
-    }
-  }
-  return caregivers;
-}
 }
