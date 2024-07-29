@@ -1,10 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/services.dart';
+import 'package:healthsphere/functions/schedule_daily_reset.dart';
 import 'package:healthsphere/pages/auth/login_page.dart';
 import 'package:healthsphere/pages/home_page.dart';
 import 'package:healthsphere/pages/user_onboarding/onboarding_page.dart';
 import 'package:healthsphere/pages/user_onboarding/profile_collection_page.dart';
 import 'package:healthsphere/services/auth/auth_provider.dart';
-import 'package:healthsphere/services/notification/notification_service.dart';
 import 'package:healthsphere/services/service_locator.dart';
 import 'package:healthsphere/services/user/user_profile_service.dart';
 import 'package:healthsphere/themes/theme_provider.dart';
@@ -14,31 +16,48 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'config/firebase_options.dart';
 
-void main() async {
-  
-  WidgetsFlutterBinding.ensureInitialized();
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+// Import other necessary packages
 
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await NotificationService.initialize();
-  
-  // Initialize Service Providers
-  setUp();
-  await getIt.allReady();
+void main() {
+  runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    
+    // Initialize Service Providers
+    setUp();
+    await getIt.allReady();
 
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent, // Make status bar transparent
-    statusBarIconBrightness:
-        Brightness.light, // Set the color of status bar icons
-  ));
-  
+    // Initialize the app and perform migrations
+    final userProfileService = getIt<UserProfileService>();
+    await userProfileService.initializeApp();
 
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown
-  ]).then((_) async {
+    // Set Up Daily Resets
+    scheduleDailyReset();
+
+    // Set system UI overlay style
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.light,
+    ));
+
+    // Set preferred orientations
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown
+    ]);
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
-    
+
+    FlutterError.onError = (FlutterErrorDetails details) {
+      print('Error: ${details.exception}');
+      print('Stack trace: ${details.stack}');
+    };
+
     runApp(
       MultiProvider(
         providers: [
@@ -48,8 +67,12 @@ void main() async {
         child: MyApp(isFirstLaunch: isFirstLaunch),
       )
     );
+  }, (error, stack) {
+    print('Uncaught error: $error');
+    print('Stack trace: $stack');
   });
 }
+
 
 class MyApp extends StatelessWidget {
 
