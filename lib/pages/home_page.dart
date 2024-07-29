@@ -53,6 +53,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
+      extendBody: true,         // Extends content to NavBar whitespace
       appBar: _buildAppBar(),
       drawer: const HomeDrawer(),
       bottomNavigationBar: _buildBottomNavigationBar(),
@@ -64,7 +65,7 @@ class _HomePageState extends State<HomePage> {
 
   AppBar _buildAppBar() {
 
-    double toolbarHeight = pages[_selectedIndex].showSearchBar ? 160 : 100;
+    double toolbarHeight = pages[_selectedIndex].showSearchBar ? 190 : 130;
 
     return AppBar(
       backgroundColor: Theme.of(context).colorScheme.inverseSurface,
@@ -82,6 +83,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,7 +105,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 40),
             if (pages[_selectedIndex].showSearchBar) 
               Padding(
                 padding: const EdgeInsets.only(bottom: 10),
@@ -123,34 +125,37 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildBottomNavigationBar() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(100), 
-          topRight: Radius.circular(100)
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(100), 
+            topRight: Radius.circular(100)
+          ),
+          boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 40)]
         ),
-        boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 40)]
-      ),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(100), 
-          topRight: Radius.circular(100)
-        ),
-        child: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          onTap: _navigateBottomBar,
-          type: BottomNavigationBarType.fixed,
-          selectedItemColor: Theme.of(context).colorScheme.secondary,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
-            // BottomNavigationBarItem(icon: Icon(Icons.monitor_heart), label: ""),
-            BottomNavigationBarItem(icon: Icon(Icons.medication), label: ""),
-            BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: ""),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label:""),
-          ]
+        child: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(100), 
+            topRight: Radius.circular(100)
+          ),
+          child: BottomNavigationBar(
+            currentIndex: _selectedIndex,
+            onTap: _navigateBottomBar,
+            type: BottomNavigationBarType.fixed,
+            selectedItemColor: Theme.of(context).colorScheme.secondary,
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            items: const [
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
+              // BottomNavigationBarItem(icon: Icon(Icons.monitor_heart), label: ""),
+              BottomNavigationBarItem(icon: Icon(Icons.medication), label: ""),
+              BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: ""),
+              BottomNavigationBarItem(icon: Icon(Icons.person), label:""),
+            ]
+          ),
         ),
       ),
     );

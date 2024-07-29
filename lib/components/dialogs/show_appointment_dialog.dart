@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import "package:healthsphere/components/dialogs/create_appointment_dialog.dart";
 import "package:healthsphere/services/auth/auth_service_locator.dart";
 import "package:healthsphere/services/database/appointment_firestore_service.dart";
+import "package:healthsphere/services/notification/notification_service.dart";
 import "package:healthsphere/themes/custom_text_styles.dart";
 import "package:intl/intl.dart";
 
@@ -111,6 +112,7 @@ class _ShowAppointmentDialogState extends State<ShowAppointmentDialog> {
                           onPressed: () async {
                             Navigator.of(context).pop();
                             await firestoreService.deleteAppointment(widget.appointment.id);
+                            await NotificationService.cancelAppointment(widget.appointment.id.hashCode);
                           },
                         ),
                       )

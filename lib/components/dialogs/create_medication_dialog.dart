@@ -43,9 +43,6 @@ class _CreateMedicationDialogState extends State<CreateMedicationDialog> {
   String _dosageUnit = "";
   TimeOfDay? _firstDose;
 
-  // Search Result
-  List<String> _searchResults = [];
-
   @override
   void initState() {
     super.initState();

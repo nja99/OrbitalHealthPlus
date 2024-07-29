@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=C:\Users\muham\Desktop\repo\flutter"
-export "FLUTTER_APPLICATION_PATH=C:\Users\muham\Desktop\repo\OrbitalHealthSphere"
+export "FLUTTER_ROOT=C:\Flutter\flutter"
+export "FLUTTER_APPLICATION_PATH=C:\Users\Ng Jian An\Desktop\HealthPlus\healthplus"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=1.0.0"

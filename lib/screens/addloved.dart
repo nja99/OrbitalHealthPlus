@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:healthsphere/services/user/user_profile_service.dart';
 
 class AddLovedOnePage extends StatefulWidget {
+
+  const AddLovedOnePage({super.key});
+
   @override
   _AddLovedOnePageState createState() => _AddLovedOnePageState();
 }
@@ -28,9 +31,9 @@ class _AddLovedOnePageState extends State<AddLovedOnePage> {
 
   try {
     // Check if the email is the same as the current user's email
-    if (_emailController.text == _currentUser!.email) {
+    if (_emailController.text == _currentUser.email) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('You cannot add yourself as a caregiver.')),
+        const SnackBar(content: Text('You cannot add yourself as a caregiver.')),
       );
       return;
     }
@@ -50,8 +53,8 @@ class _AddLovedOnePageState extends State<AddLovedOnePage> {
     }
 
     // Add the dependent and update the caregiver
-    await _userProfileService.addDependent(_currentUser!, _emailController.text);
-    await _userProfileService.addCaregiver(_emailController.text, _currentUser!.email!);
+    await _userProfileService.addDependent(_currentUser, _emailController.text);
+    await _userProfileService.addCaregiver(_emailController.text, _currentUser.email!);
 
     // Pass back the email and password
     Navigator.pop(context, {
@@ -68,9 +71,9 @@ class _AddLovedOnePageState extends State<AddLovedOnePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Add Loved One')),
+      appBar: AppBar(title: const Text('Add Loved One')),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             TextField(
