@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+
 import 'package:healthsphere/pages/auth/login_page.dart';
 import 'package:healthsphere/pages/home_page.dart';
 import 'package:healthsphere/pages/user_onboarding/onboarding_page.dart';
@@ -13,17 +14,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'config/firebase_options.dart';
-
 void main() async {
   
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await NotificationService.initialize();
-  
+
   // Initialize Service Providers
   setUp();
   await getIt.allReady();
+
+
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent, // Make status bar transparent
@@ -31,7 +33,6 @@ void main() async {
         Brightness.light, // Set the color of status bar icons
   ));
   
-
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown
@@ -50,22 +51,17 @@ void main() async {
     );
   });
 }
-
 class MyApp extends StatelessWidget {
-
   final bool isFirstLaunch;
   
   const MyApp({
     super.key,
     required this.isFirstLaunch
   });
-
-
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
     final userProfileService = getIt<UserProfileService>();
-
     return MaterialApp(
       debugShowCheckedModeBanner:false,
       home: isFirstLaunch 
@@ -87,5 +83,4 @@ class MyApp extends StatelessWidget {
       theme: Provider.of<ThemeProvider>(context).themeData
     );
   }
-
 }
