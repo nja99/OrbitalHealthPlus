@@ -1,12 +1,10 @@
-import 'dart:async';
-
 import 'package:flutter/services.dart';
-import 'package:healthsphere/functions/schedule_daily_reset.dart';
 import 'package:healthsphere/pages/auth/login_page.dart';
 import 'package:healthsphere/pages/home_page.dart';
 import 'package:healthsphere/pages/user_onboarding/onboarding_page.dart';
 import 'package:healthsphere/pages/user_onboarding/profile_collection_page.dart';
 import 'package:healthsphere/services/auth/auth_provider.dart';
+import 'package:healthsphere/services/notification/notification_service.dart';
 import 'package:healthsphere/services/service_locator.dart';
 import 'package:healthsphere/services/user/user_profile_service.dart';
 import 'package:healthsphere/themes/theme_provider.dart';
@@ -21,16 +19,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await NotificationService.initialize();
   
   // Initialize Service Providers
   setUp();
   await getIt.allReady();
-
-  final userProfileService = getIt<UserProfileService>();
-  await userProfileService.initializeApp();
-
-  // Set Up Daily Resets
-  scheduleDailyReset();
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent, // Make status bar transparent
@@ -45,35 +38,18 @@ void main() async {
   ]).then((_) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
-    FlutterError.onError = (FlutterErrorDetails details) {
-    print('Flutter Error:');
-    print('Error: ${details.exception}');
-    print('Stack trace: ${details.stack}');
-  };
-
-  runZonedGuarded(
-    () async {
-      runApp(
-        MultiProvider(
-          providers: [
-            ChangeNotifierProvider(create: (context) => ThemeProvider()),
-            ChangeNotifierProvider(create: (context) => AuthProvider())
-          ],
-          child: MyApp(isFirstLaunch: isFirstLaunch),
-        )
-      );
-    },
-    (error, stackTrace) {
-      print('Caught Error:');
-      print('Error: $error');
-      print('Stack trace: $stackTrace');
-    },
-  );
-  }
-  );
+    
+    runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => ThemeProvider()),
+          ChangeNotifierProvider(create: (context) => AuthProvider())
+        ],
+        child: MyApp(isFirstLaunch: isFirstLaunch),
+      )
+    );
+  });
 }
-
-
 
 class MyApp extends StatelessWidget {
 
