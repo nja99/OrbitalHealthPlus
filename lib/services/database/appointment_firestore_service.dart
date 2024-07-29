@@ -43,6 +43,17 @@ class AppointmentFirestoreService {
         .orderBy('date_time')
         .snapshots();
   }
+  Stream<DocumentSnapshot?> getUpcomingPendingAppointmentStream() {
+    DateTime now = DateTime.now();
+    return appointmentsCollection
+      .where('date_time', isGreaterThan: now)
+      .where('status', isEqualTo: 'Upcoming')
+      .orderBy('date_time')
+      .limit(1)
+      .snapshots()
+      .map((snapshot) =>
+          snapshot.docs.isNotEmpty ? snapshot.docs.first : null);
+  }
 
   // Get Appointment Document Changes
   Stream<DocumentSnapshot> getAppointmentStream(String appointmentId) {

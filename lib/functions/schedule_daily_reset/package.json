@@ -1,0 +1,15 @@
+{
+    "name": "schedule_daily_reset",
+    "version": "1.0.0",
+    "main": "schedule_daily_reset.js",
+    "scripts": {
+        "start": "node schedule_daily_reset.js"
+    },
+    "dependencies": {
+        "firebase-admin": "^12.1.1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": ""
+}

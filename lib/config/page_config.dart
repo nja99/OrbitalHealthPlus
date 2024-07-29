@@ -16,15 +16,15 @@ final List<PageData> pages = [
     showSearchBar: true
   ),
   PageData(
-    pageBuilder: (_, __) => MedicationScreen(),
+    pageBuilder: (_, __) => const MedicationScreen(),
     title: "Medications"
   ),
   PageData(
-    pageBuilder: (_, __) => AppointmentScreen(),
+    pageBuilder: (_, __) => const AppointmentScreen(),
     title: "Appointments"
   ),
   PageData(
-    pageBuilder: (_, __) => FamilyScreen(),
+    pageBuilder: (_, __) => const FamilyScreen(),
     title: "FamilyHub"
   ),
   PageData(
