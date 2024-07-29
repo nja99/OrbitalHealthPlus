@@ -29,16 +29,26 @@ Future<void> _addLovedOne() async {
   if (_currentUser == null) return;
 
   try {
-    // ... existing checks ...
-
-    await _userProfileService.addDependent(_currentUser!, _emailController.text);
-    await _userProfileService.addCaregiver(_emailController.text, _currentUser!.email!);
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Loved one added successfully')),
+    // Verify email and password
+    UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: _emailController.text,
+      password: _passwordController.text,
     );
 
-    Navigator.pop(context);
+    if (userCredential.user != null) {
+      // Email and password are correct
+      await _userProfileService.addDependent(_currentUser!, _emailController.text);
+      await _userProfileService.addCaregiver(_emailController.text, _currentUser!.email!);
+      
+      // Store the credentials securely
+      await _userProfileService.storeCredentials(_emailController.text, _passwordController.text);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Loved one added successfully')),
+      );
+
+      Navigator.pop(context, true);
+    }
   } catch (e) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Error: ${e.toString()}')),

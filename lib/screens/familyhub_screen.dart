@@ -15,8 +15,12 @@ class FamilyScreen extends StatefulWidget {
 class _FamilyScreenState extends State<FamilyScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final UserProfileService _userProfileService = getIt<UserProfileService>();
+
   final User? _currentUser = FirebaseAuth.instance.currentUser;
-  
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   Map<String, dynamic>? _userData;
   late Stream<List<Map<String, dynamic>>> _dependentsStream;
   late Stream<List<Map<String, dynamic>>> _caregiversStream;
@@ -53,23 +57,41 @@ class _FamilyScreenState extends State<FamilyScreen> {
   if (result != null && result is Map<String, String>) {
     String email = result['email']!;
     
-    try {
-      await _userProfileService.addDependent(_currentUser!, email);
-      await _userProfileService.addCaregiver(email, _currentUser!.email!);
-
+    if (email == _currentUser!.email) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Loved one added successfully')),
+        SnackBar(content: Text('You cannot add yourself as a loved one.')),
+      );
+      return;
+    }
+
+    try {
+      // Verify email and password
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
       );
 
-      _fetchUserData();
-      _initializeStreams();
+      if (userCredential.user != null) {
+        // Email and password are correct
+        await _userProfileService.addDependent(_currentUser!, _emailController.text);
+        await _userProfileService.addCaregiver(_emailController.text, _currentUser!.email!);
+        
+        // Store the credentials securely (we'll implement this next)
+        await _userProfileService.storeCredentials(_emailController.text, _passwordController.text);
+
+        Navigator.pop(context, true);
+      }
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: Invalid email or password')),
+      );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: ${e.toString()}')),
       );
     }
+    }
   }
-}
 
   Future<void> _deleteDependent(String email) async {
     try {
@@ -85,31 +107,83 @@ class _FamilyScreenState extends State<FamilyScreen> {
   }
 
   Future<void> _switchToAccount(String email) async {
-    try {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) => Center(child: CircularProgressIndicator()),
-      );
+  try {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) => Center(child: CircularProgressIndicator()),
+    );
 
-      User? newUser = await _userProfileService.switchAccount(email);
-      Navigator.of(context).pop();
-
-      if (newUser != null) {
-        _fetchUserData();
-        _initializeStreams();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Successfully switched to ${newUser.email}')),
-        );
-      } else {
-        throw Exception('Failed to switch account');
+    String? storedPassword = await _userProfileService.getStoredPassword(email);
+    
+    if (storedPassword == null) {
+      // If no stored password, prompt the user to enter it
+      Navigator.of(context).pop(); // Dismiss the loading dialog
+      String? enteredPassword = await _promptForPassword(email);
+      if (enteredPassword == null) {
+        throw Exception('Password entry cancelled');
       }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: ${e.toString()}')),
-      );
+      storedPassword = enteredPassword;
+      // Store the entered password for future use
+      await _userProfileService.storeCredentials(email, enteredPassword);
     }
+
+    UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email,
+      password: storedPassword,
+    );
+
+    Navigator.of(context).pop(); // Dismiss the loading dialog
+
+    if (userCredential.user != null) {
+      _fetchUserData();
+      _initializeStreams();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Successfully switched to ${userCredential.user!.email}')),
+      );
+    } else {
+      throw Exception('Failed to switch account');
+    }
+  } catch (e) {
+    Navigator.of(context).pop(); // Dismiss the loading dialog
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error: ${e.toString()}')),
+    );
   }
+}
+
+Future<String?> _promptForPassword(String email) async {
+  String? password;
+  await showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text('Enter password for $email'),
+        content: TextField(
+          obscureText: true,
+          onChanged: (value) {
+            password = value;
+          },
+        ),
+        actions: [
+          TextButton(
+            child: Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: Text('OK'),
+            onPressed: () {
+              Navigator.of(context).pop(password);
+            },
+          ),
+        ],
+      );
+    },
+  );
+  return password;
+}
 
   @override
   Widget build(BuildContext context) {
