@@ -16,63 +16,62 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'config/firebase_options.dart';
 
-void main() async {
-  
-  WidgetsFlutterBinding.ensureInitialized();
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+// Import other necessary packages
 
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  
-  // Initialize Service Providers
-  setUp();
-  await getIt.allReady();
+void main() {
+  runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    
+    // Initialize Service Providers
+    setUp();
+    await getIt.allReady();
 
-  final userProfileService = getIt<UserProfileService>();
-  await userProfileService.initializeApp();
+    // Initialize the app and perform migrations
+    final userProfileService = getIt<UserProfileService>();
+    await userProfileService.initializeApp();
 
-  // Set Up Daily Resets
-  scheduleDailyReset();
+    // Set Up Daily Resets
+    scheduleDailyReset();
 
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent, // Make status bar transparent
-    statusBarIconBrightness:
-        Brightness.light, // Set the color of status bar icons
-  ));
-  
+    // Set system UI overlay style
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.light,
+    ));
 
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown
-  ]).then((_) async {
+    // Set preferred orientations
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown
+    ]);
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
+
     FlutterError.onError = (FlutterErrorDetails details) {
-    print('Flutter Error:');
-    print('Error: ${details.exception}');
-    print('Stack trace: ${details.stack}');
-  };
+      print('Error: ${details.exception}');
+      print('Stack trace: ${details.stack}');
+    };
 
-  runZonedGuarded(
-    () async {
-      runApp(
-        MultiProvider(
-          providers: [
-            ChangeNotifierProvider(create: (context) => ThemeProvider()),
-            ChangeNotifierProvider(create: (context) => AuthProvider())
-          ],
-          child: MyApp(isFirstLaunch: isFirstLaunch),
-        )
-      );
-    },
-    (error, stackTrace) {
-      print('Caught Error:');
-      print('Error: $error');
-      print('Stack trace: $stackTrace');
-    },
-  );
-  }
-  );
+    runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => ThemeProvider()),
+          ChangeNotifierProvider(create: (context) => AuthProvider())
+        ],
+        child: MyApp(isFirstLaunch: isFirstLaunch),
+      )
+    );
+  }, (error, stack) {
+    print('Uncaught error: $error');
+    print('Stack trace: $stack');
+  });
 }
-
 
 
 class MyApp extends StatelessWidget {
