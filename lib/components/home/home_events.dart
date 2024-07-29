@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import "package:healthsphere/components/cards/category_card.dart";
 import 'package:healthsphere/assets/model/category.dart';
+import 'package:healthsphere/pages/drugdatabase_page.dart';
 import 'package:healthsphere/pages/settings_page.dart';
 import 'package:healthsphere/screens/appointment_screen.dart';
+import 'package:healthsphere/screens/blooddonation.dart';
 import 'package:healthsphere/screens/familyhub_screen.dart';
 import 'package:healthsphere/screens/medication_screen.dart';
 
@@ -64,29 +66,39 @@ class _HomeEventsState extends State<HomeEvents> {
           itemBuilder: (context, index) {
             return CategoryCard(
             category: categoryList[index],
-            onTap: () {
-              int newIndex;
-              switch (categoryList[index].name) {
-                case 'Family':
-                  newIndex = 3;
-                  break;
-                case 'Medication':
-                  newIndex = 1;
-                  break;
-                case 'Appointment':
-                  newIndex = 2;
-                  break;
-                case 'Particulars':
-                  Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SettingsPage()),
-                );
-                newIndex = widget.currentIndex;
-                default:
-                  newIndex = 0;
+                onTap: () {
+                switch (categoryList[index].name) {
+                    case 'Family':
+                      widget.onCategorySelected(3);
+                    break;
+                  case 'Medication':
+                      widget.onCategorySelected(1);
+                    break;
+                  case 'Appointment':
+                      widget.onCategorySelected(2);
+                    break;
+                  case 'Database':
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => DrugDatabasePage()),
+                    );
+                  return; // Add this to exit the function after navigation
+                  case 'Blood Donation': 
+                  // Make sure this matches exactly with your category name
+                    Navigator.push(
+                      context,
+                    MaterialPageRoute(builder: (context) => BloodDonationScreen()),
+                    );
+                    return; // Add this to exit the function after navigation
+                  case 'Settings':
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SettingsPage()),
+                    );
+                  default:
+                    widget.onCategorySelected(0);
+                }
               }
-              widget.onCategorySelected(newIndex);
-            },
             );
           },
         ),

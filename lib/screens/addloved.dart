@@ -1,11 +1,6 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:healthsphere/components/buttons/user_button.dart';
-import 'package:healthsphere/components/forms/user_textfield.dart';
-import 'package:healthsphere/services/service_locator.dart';
 import 'package:healthsphere/services/user/user_profile_service.dart';
 
 class AddLovedOnePage extends StatefulWidget {
@@ -15,18 +10,20 @@ class AddLovedOnePage extends StatefulWidget {
 
 class _AddLovedOnePageState extends State<AddLovedOnePage> {
   final TextEditingController _emailController = TextEditingController();
-  final UserProfileService _userProfileService = getIt<UserProfileService>();
+  final TextEditingController _passwordController = TextEditingController();
+  final UserProfileService _userProfileService = UserProfileService();
   final User? _currentUser = FirebaseAuth.instance.currentUser;
 
-  Future<bool> _doesEmailExist(String email) async {
-  final querySnapshot = await FirebaseFirestore.instance
-    .collection('users')
-    .where('email', isEqualTo: email)
-    .get();
-  return querySnapshot.docs.isNotEmpty;
-}
 
-Future<void> _addLovedOne() async {
+  Future<bool> _doesEmailExist(String email) async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isEqualTo: email)
+        .get();
+    return querySnapshot.docs.isNotEmpty;
+  }
+
+  Future<void> _addLovedOne() async {
   if (_currentUser == null) return;
 
   try {
@@ -34,6 +31,15 @@ Future<void> _addLovedOne() async {
     if (_emailController.text == _currentUser!.email) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('You cannot add yourself as a caregiver.')),
+      );
+      return;
+    }
+
+    // Check if the email already exists in the user's loved ones
+    bool alreadyAdded = await _userProfileService.isAlreadyAddedAsLovedOne(_currentUser!, _emailController.text);
+    if (alreadyAdded) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('This person is already added as a loved one.')),
       );
       return;
     }
@@ -47,7 +53,11 @@ Future<void> _addLovedOne() async {
     await _userProfileService.addDependent(_currentUser!, _emailController.text);
     await _userProfileService.addCaregiver(_emailController.text, _currentUser!.email!);
 
-    Navigator.pop(context, true);
+    // Pass back the email and password
+    Navigator.pop(context, {
+      'email': _emailController.text,
+      'password': _passwordController.text,
+    });
   } catch (e) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Error: ${e.toString()}')),
@@ -63,14 +73,19 @@ Future<void> _addLovedOne() async {
         padding: EdgeInsets.all(16.0),
         child: Column(
           children: [
-            UserTextField(
+            TextField(
               controller: _emailController,
-              labelText: 'Email of Loved One',
+              decoration: InputDecoration(labelText: 'Email of Loved One'),
+            ),
+            TextField(
+              controller: _passwordController,
+              decoration: InputDecoration(labelText: 'Password'),
+              obscureText: true,
             ),
             const SizedBox(height: 20),
-            UserButton(
-              buttonText: 'Add Loved One',
+            ElevatedButton(
               onPressed: _addLovedOne,
+              child: Text('Add Loved One'),
             ),
           ],
         ),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/services.dart';
 import 'package:healthsphere/functions/schedule_daily_reset.dart';
 import 'package:healthsphere/pages/auth/login_page.dart';
@@ -14,33 +16,48 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'config/firebase_options.dart';
 
-void main() async {
-  
-  WidgetsFlutterBinding.ensureInitialized();
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+// Import other necessary packages
 
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  
-  // Initialize Service Providers
-  setUp();
-  await getIt.allReady();
+void main() {
+  runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    
+    // Initialize Service Providers
+    setUp();
+    await getIt.allReady();
 
-  // Set Up Daily Resets
-  scheduleDailyReset();
+    // Initialize the app and perform migrations
+    final userProfileService = getIt<UserProfileService>();
+    await userProfileService.initializeApp();
 
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent, // Make status bar transparent
-    statusBarIconBrightness:
-        Brightness.light, // Set the color of status bar icons
-  ));
-  
+    // Set Up Daily Resets
+    scheduleDailyReset();
 
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown
-  ]).then((_) async {
+    // Set system UI overlay style
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.light,
+    ));
+
+    // Set preferred orientations
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown
+    ]);
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
-    
+
+    FlutterError.onError = (FlutterErrorDetails details) {
+      print('Error: ${details.exception}');
+      print('Stack trace: ${details.stack}');
+    };
+
     runApp(
       MultiProvider(
         providers: [
@@ -50,8 +67,12 @@ void main() async {
         child: MyApp(isFirstLaunch: isFirstLaunch),
       )
     );
+  }, (error, stack) {
+    print('Uncaught error: $error');
+    print('Stack trace: $stack');
   });
 }
+
 
 class MyApp extends StatelessWidget {
 

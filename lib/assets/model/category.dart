@@ -18,7 +18,7 @@ class Category {
       thumbnail:  'lib/assets/images/family.png'
     ),
     Category(
-      name: 'Donate',
+      name: 'Blood Donation',
       info: 'Donate blood today',
       thumbnail:  'lib/assets/images/blood.png'
     ),
@@ -33,14 +33,14 @@ class Category {
       thumbnail: 'lib/assets/images/schedule.png'
     ),
     Category(
-      name: 'Particulars',
+      name: 'Database',
       info: 'More information',
       thumbnail:  'lib/assets/images/particulars.png'
     ),
     Category(
-      name: 'Lab Report',
+      name: 'Settings',
       info: 'More information',
-      thumbnail:  'lib/assets/images/labreport.png'
+      thumbnail:  'lib/assets/images/settings.png'
     ),
 
   ];
