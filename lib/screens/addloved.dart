@@ -15,32 +15,19 @@ class _AddLovedOnePageState extends State<AddLovedOnePage> {
   final UserProfileService _userProfileService = UserProfileService();
   final User? _currentUser = FirebaseAuth.instance.currentUser;
 
-
-  Future<bool> _doesEmailExist(String email) async {
-    final querySnapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .where('email', isEqualTo: email)
-        .get();
-    return querySnapshot.docs.isNotEmpty;
-  }
-
-
 Future<void> _addLovedOne() async {
   if (_currentUser == null) return;
 
   try {
-    // Verify email and password
-    UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: _emailController.text,
-      password: _passwordController.text,
+    bool isValid = await _userProfileService.validateCredentials(
+      _emailController.text,
+      _passwordController.text,
     );
 
-    if (userCredential.user != null) {
-      // Email and password are correct
+    if (isValid) {
       await _userProfileService.addDependent(_currentUser!, _emailController.text);
       await _userProfileService.addCaregiver(_emailController.text, _currentUser!.email!);
       
-      // Store the credentials securely
       await _userProfileService.storeCredentials(_emailController.text, _passwordController.text);
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -48,6 +35,8 @@ Future<void> _addLovedOne() async {
       );
 
       Navigator.pop(context, true);
+    } else {
+      throw Exception('Invalid email or password');
     }
   } catch (e) {
     ScaffoldMessenger.of(context).showSnackBar(

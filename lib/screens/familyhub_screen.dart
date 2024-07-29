@@ -47,51 +47,23 @@ class _FamilyScreenState extends State<FamilyScreen> {
   }
 
   Future<void> _addLovedOne() async {
-  if (_currentUser == null) return;
-
   final result = await Navigator.push(
     context,
     MaterialPageRoute(builder: (context) => AddLovedOnePage()),
   );
 
-  if (result != null && result is Map<String, String>) {
-    String email = result['email']!;
+  if (result == true) {
+    // Refresh the data without switching profiles
+    await _fetchUserData();
+    _initializeStreams(); // This will refresh the dependent and caregiver streams
+    setState(() {});
     
-    if (email == _currentUser!.email) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('You cannot add yourself as a loved one.')),
-      );
-      return;
-    }
-
-    try {
-      // Verify email and password
-      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text,
-        password: _passwordController.text,
-      );
-
-      if (userCredential.user != null) {
-        // Email and password are correct
-        await _userProfileService.addDependent(_currentUser!, _emailController.text);
-        await _userProfileService.addCaregiver(_emailController.text, _currentUser!.email!);
-        
-        // Store the credentials securely (we'll implement this next)
-        await _userProfileService.storeCredentials(_emailController.text, _passwordController.text);
-
-        Navigator.pop(context, true);
-      }
-    } on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: Invalid email or password')),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: ${e.toString()}')),
-      );
-    }
-    }
+    // Show a success message
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Loved one added successfully')),
+    );
   }
+}
 
   Future<void> _deleteDependent(String email) async {
     try {
@@ -136,8 +108,10 @@ class _FamilyScreenState extends State<FamilyScreen> {
     Navigator.of(context).pop(); // Dismiss the loading dialog
 
     if (userCredential.user != null) {
-      _fetchUserData();
-      _initializeStreams();
+      // Switch to the new profile
+      await _fetchUserData();
+      _initializeStreams(); // This will refresh the dependent and caregiver streams
+      setState(() {});
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Successfully switched to ${userCredential.user!.email}')),
       );
@@ -254,40 +228,40 @@ Future<String?> _promptForPassword(String email) async {
   }
 
   Widget _buildProfileCard(Map<String, dynamic>? data, {bool isDependent = false, bool isCaregiver = false}) {
-    if (data == null) return SizedBox.shrink();
-    
-    String fullName = "${data['firstName'] ?? ''} ${data['lastName'] ?? ''}".trim();
-    String email = data['email'] as String;
-    
-    return Card(
-      child: ListTile(
-        leading: CircleAvatar(
-          child: Text(fullName.isNotEmpty ? fullName[0].toUpperCase() : '?'),
-        ),
-        title: Text(fullName),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Height: ${data['height']?.toString() ?? 'N/A'} cm'),
-            Text('Weight: ${data['weight']?.toString() ?? 'N/A'} kg'),
-          ],
-        ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (isDependent)
-              IconButton(
-                icon: Icon(Icons.delete),
-                onPressed: () => _deleteDependent(email),
-              ),
-            if (isDependent || isCaregiver)
-              Icon(Icons.chevron_right),
-          ],
-        ),
-        onTap: (isDependent || isCaregiver) ? () => _switchToAccount(email) : null,
+  if (data == null) return SizedBox.shrink();
+  
+  String fullName = "${data['firstName'] ?? ''} ${data['lastName'] ?? ''}".trim();
+  String email = data['email'] as String;
+  
+  return Card(
+    child: ListTile(
+      leading: CircleAvatar(
+        child: Text(fullName.isNotEmpty ? fullName[0].toUpperCase() : '?'),
       ),
-    );
-  }
+      title: Text(fullName),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Height: ${data['height']?.toString() ?? 'N/A'} cm'),
+          Text('Weight: ${data['weight']?.toString() ?? 'N/A'} kg'),
+        ],
+      ),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (isDependent)
+            IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () => _deleteDependent(email),
+            ),
+          if (isDependent || isCaregiver)
+            Icon(Icons.chevron_right),
+        ],
+      ),
+      onTap: (isDependent || isCaregiver) ? () => _switchToAccount(email) : null,
+    ),
+  );
+}
 
   Widget _buildSectionTitle(String title) {
     return Padding(

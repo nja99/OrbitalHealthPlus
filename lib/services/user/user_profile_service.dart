@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:healthsphere/services/service_locator.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -12,25 +13,6 @@ class UserProfileService {
 
   DocumentReference _getUserDocument(User user) {
     return _firestore.collection('users').doc(user.uid);
-  }
-  Future<void> storeCredentials(String email, String password) async {
-    try {
-      await _storage.write(key: email, value: password);
-      print('Credentials stored for $email');
-    } catch (e) {
-      print('Error storing credentials: $e');
-      throw e;
-    }
-  }
-  Future<String?> getStoredPassword(String email) async {
-    try {
-      String? password = await _storage.read(key: email);
-      print('Retrieved password for $email: ${password != null ? 'Found' : 'Not found'}');
-      return password;
-    } catch (e) {
-      print('Error retrieving password: $e');
-      return null;
-    }
   }
 
   // User Profile Data Structure
@@ -55,30 +37,7 @@ class UserProfileService {
     };
   } 
 
-  Future<void> initializeApp() async {
-    await migrateUserDocuments();
-    // You can add other initialization tasks here if needed
-  }
-
-  Future<void> migrateUserDocuments() async {
-  try {
-    User? currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser == null) {
-      print('No authenticated user');
-      return;
-    }
-    DocumentSnapshot userDoc = await _firestore.collection('users').doc(currentUser.uid).get();
-    
-    if (!userDoc.exists || !(userDoc.data() as Map<String, dynamic>?)?['caregivers'] is List) {
-      await _firestore.collection('users').doc(currentUser.uid).set({
-        'caregivers': []
-      }, SetOptions(merge: true));
-    }
-    print('Migration completed successfully');
-  } catch (e) {
-    print('Error during migration: $e');
-  }
-}
+  
 
   Future<void> createUserProfile(User user) async {
   DocumentReference userDoc = _getUserDocument(user);
@@ -119,7 +78,50 @@ class UserProfileService {
     }
   }
 
+  Future<bool> validateCredentials(String email, String password) async {
+  try {
+    // Create a secondary Firebase Auth instance
+    FirebaseApp secondaryApp = await Firebase.initializeApp(
+      name: 'Secondary',
+      options: Firebase.app().options,
+    );
+    FirebaseAuth secondaryAuth = FirebaseAuth.instanceFor(app: secondaryApp);
+    // Attempt to sign in with the provided credentials
+    UserCredential userCredential = await secondaryAuth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    // If we reach here, the credentials are valid
+    await secondaryAuth.signOut();
+    await secondaryApp.delete();
+    return true;
+  } catch (e) {
+    print('Error validating credentials: $e');
+    return false;
+  }
+}
 
+
+
+Future<void> storeCredentials(String email, String password) async {
+    try {
+      await _storage.write(key: email, value: password);
+      print('Credentials stored for $email');
+    } catch (e) {
+      print('Error storing credentials: $e');
+      throw e;
+    }
+  }
+  Future<String?> getStoredPassword(String email) async {
+    try {
+      String? password = await _storage.read(key: email);
+      print('Retrieved password for $email: ${password != null ? 'Found' : 'Not found'}');
+      return password;
+    } catch (e) {
+      print('Error retrieving password: $e');
+      return null;
+    }
+  }
 
 
 
@@ -164,6 +166,36 @@ Stream<List<Map<String, dynamic>>> getDependentsStream(User user) {
         return caregivers;
       });
   }
+
+
+  Future<bool> isAlreadyAddedAsLovedOne(User currentUser, String email) async {
+  try {
+    // Check dependents
+    QuerySnapshot dependentSnapshot = await _firestore
+        .collection('users')
+        .doc(currentUser.uid)
+        .collection('dependents')
+        .where('email', isEqualTo: email)
+        .get();
+    
+    if (dependentSnapshot.docs.isNotEmpty) {
+      return true;
+    }
+    // Check caregivers
+    DocumentSnapshot userDoc = await _firestore.collection('users').doc(currentUser.uid).get();
+    if (userDoc.exists) {
+      Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+      List<dynamic> caregivers = userData['caregivers'] ?? [];
+      if (caregivers.contains(email)) {
+        return true;
+      }
+    }
+    return false;
+  } catch (e) {
+    print('Error checking if loved one is already added: $e');
+    return false;
+  }
+}
   
 
 
@@ -174,7 +206,6 @@ Stream<List<Map<String, dynamic>>> getDependentsStream(User user) {
 
   Future<void> addDependent(User currentUser, String dependentEmail) async {
   print('Adding dependent: $dependentEmail for user: ${currentUser.email}');
-  
   // Check if already a dependent
   bool isAlreadyDependent = await isAlreadyAddedAsLovedOne(currentUser, dependentEmail);
   if (currentUser.email == dependentEmail) {
@@ -322,43 +353,6 @@ Future<void> removeCaregiver(User currentUser, String caregiverEmail) async {
 
 
 
-
-
-
-
-
-
-
-
-
-Future<bool> isAlreadyAddedAsLovedOne(User currentUser, String email) async {
-  try {
-    // Check dependents
-    QuerySnapshot dependentSnapshot = await _firestore
-        .collection('users')
-        .doc(currentUser.uid)
-        .collection('dependents')
-        .where('email', isEqualTo: email)
-        .get();
-    
-    if (dependentSnapshot.docs.isNotEmpty) {
-      return true;
-    }
-    // Check caregivers
-    DocumentSnapshot userDoc = await _firestore.collection('users').doc(currentUser.uid).get();
-    if (userDoc.exists) {
-      Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
-      List<dynamic> caregivers = userData['caregivers'] ?? [];
-      if (caregivers.contains(email)) {
-        return true;
-      }
-    }
-    return false;
-  } catch (e) {
-    print('Error checking if loved one is already added: $e');
-    return false;
-  }
-}
   Future<User?> switchAccount(String email) async {
   try {
     // Fetch the user document to get the password
@@ -389,3 +383,26 @@ Future<bool> isAlreadyAddedAsLovedOne(User currentUser, String email) async {
 }
 
 }
+
+
+
+/*Future<void> storeCredentials(String email, String password) async {
+    try {
+      await _storage.write(key: email, value: password);
+      print('Credentials stored for $email');
+    } catch (e) {
+      print('Error storing credentials: $e');
+      throw e;
+    }
+  }
+  Future<String?> getStoredPassword(String email) async {
+    try {
+      String? password = await _storage.read(key: email);
+      print('Retrieved password for $email: ${password != null ? 'Found' : 'Not found'}');
+      return password;
+    } catch (e) {
+      print('Error retrieving password: $e');
+      return null;
+    }
+  }
+  */
