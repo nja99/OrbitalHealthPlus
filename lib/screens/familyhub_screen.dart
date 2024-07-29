@@ -5,14 +5,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:healthsphere/screens/addloved.dart';
 import 'package:healthsphere/services/service_locator.dart';
 import 'package:healthsphere/services/user/user_profile_service.dart';
-
 class FamilyScreen extends StatefulWidget {
   const FamilyScreen({super.key});
-
   @override
   State<FamilyScreen> createState() => _FamilyScreenState();
 }
-
 class _FamilyScreenState extends State<FamilyScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   
@@ -22,21 +19,31 @@ class _FamilyScreenState extends State<FamilyScreen> {
 
   List<Map<String, dynamic>> _dependents = [];
   List<Map<String, dynamic>> _caregivers = [];
+  Map<String, String>? _lastAddedLovedOne;
 
-  Future<void> _fetchUserData() async {
-    if (_currentUser != null) {
-      _userData = await _userProfileService.getUserProfile(_currentUser!);
-      if (mounted) {
-        setState(() {});
-      }
+
+
+
+
+
+
+
+
+
+Future<void> _fetchUserData() async {
+  User? currentUser = FirebaseAuth.instance.currentUser;
+  if (currentUser != null) {
+    _userData = await _userProfileService.getUserProfile(currentUser);
+    if (mounted) {
+      setState(() {});
     }
   }
+}
 
-
-//////////////////////////////////////////////////////////////////
-  Future<void> _fetchDependents() async {
+Future<void> _fetchDependents() async {
   if (_currentUser != null) {
     List<Map<String, dynamic>> fetchedDependents = await _userProfileService.getDependents(_currentUser!);
+    print("Fetched dependents: $fetchedDependents");
     if (mounted) {
       setState(() {
         _dependents = fetchedDependents;
@@ -44,56 +51,128 @@ class _FamilyScreenState extends State<FamilyScreen> {
     }
   }
 }
+
 Future<void> _fetchCaregivers() async {
-    if (_currentUser != null) {
-      List<Map<String, dynamic>> fetchedCaregivers = await _userProfileService.getCaregivers(_currentUser!);
-      if (mounted) {
-        setState(() {
-          _caregivers = fetchedCaregivers;
-        });
-      }
+  User? currentUser = FirebaseAuth.instance.currentUser;
+  if (currentUser != null) {
+    List<Map<String, dynamic>> fetchedCaregivers = await _userProfileService.getCaregivers(currentUser);
+    print("Fetched caregivers: $fetchedCaregivers");
+    if (mounted) {
+      setState(() {
+        _caregivers = fetchedCaregivers;
+      });
     }
   }
+}
+
+
   Future<void> _addLovedOne() async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => AddLovedOnePage()),
-    );
-    if (result == true) {
-      _fetchDependents();
-      print("hi");
-    }
+  final result = await Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => AddLovedOnePage()),
+  );
+  if (result != null && result is Map<String, String>) {
+    setState(() {
+      _lastAddedLovedOne = result;
+    });
+    await _fetchDependents();
+    print("Added loved one: ${_lastAddedLovedOne!['email']}");
   }
-  Future<void> _deleteCaregiver(String caregiverUid) async {
+} 
+
+  Future<void> _deleteCaregiver(String caregiverEmail) async {
   try {
-    await _userProfileService.removeCaregiver(_currentUser!, caregiverUid);
-    // Refresh the caregivers list
-    await _fetchCaregivers();
-    setState(() {});
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      await _userProfileService.removeCaregiver(currentUser, caregiverEmail);
+
+      // Immediately remove the caregiver from the local list
+      setState(() {
+        _dependents.removeWhere((dependent) => dependent['email'] == caregiverEmail);
+      });
+
+      // Refresh the data from Firestore
+      await _fetchDependents();
+      await _fetchCaregivers();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Caregiver removed successfully')),
+      );
+    }
   } catch (e) {
+    print('Error in _deleteCaregiver: ${e.toString()}');
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Error deleting caregiver: ${e.toString()}')),
     );
   }
 }
+
   Future<void> _refreshProfile() async {
     await _fetchUserData();
     setState(() {});
   }
-  Future<void> _switchAccount(String userId) async {
-    try {
-      await _userProfileService.switchAccount(userId);
-      // Refresh the screen or navigate to a new screen as needed
-      _fetchUserData();
-      _fetchDependents();
+
+  Future<void> _switchToAccount(String email) async {
+  try {
+    // Show a loading indicator
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Center(child: CircularProgressIndicator());
+      },
+    );
+
+    // Attempt to switch the account
+    User? newUser = await _userProfileService.switchAccount(email);
+
+    // Close the loading indicator
+    Navigator.of(context).pop();
+
+    if (newUser != null) {
+      // Refresh the screen with the new user's data
+      await _fetchUserData();
+      await _fetchDependents();
+      await _fetchCaregivers();
       setState(() {});
-    } catch (e) {
+
+      // Show a success message
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error switching account: ${e.toString()}')),
+        SnackBar(content: Text('Successfully switched to ${newUser.email}')),
       );
+    } else {
+      throw Exception('Failed to switch account');
     }
+  } catch (e) {
+    // Show an error message
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error: ${e.toString()}')),
+    );
   }
-  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   @override
   void initState() {
@@ -102,7 +181,6 @@ Future<void> _fetchCaregivers() async {
     _fetchDependents();
     _fetchCaregivers();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -155,15 +233,13 @@ Future<void> _fetchCaregivers() async {
       ),
     );
   }
-
-
-
 Widget _buildProfileCard(Map<String, dynamic>? data, {bool isDependent = false, bool isCaregiver = false}) {
   if (data == null) {
     return SizedBox.shrink();
   }
 
-  String fullName = "${data['firstName']} ${data['lastName']}";
+  String fullName = "${data['firstName'] ?? ''} ${data['lastName'] ?? ''}".trim();
+  String email = data['email'] as String;
 
   return Card(
     child: ListTile(
@@ -181,18 +257,36 @@ Widget _buildProfileCard(Map<String, dynamic>? data, {bool isDependent = false, 
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (isCaregiver)
+          if (isDependent && email != null)
             IconButton(
               icon: Icon(Icons.delete),
-              onPressed: () => _deleteCaregiver(data['uid']),
+              onPressed: () => _deleteCaregiver(email),
             ),
           if (isDependent || isCaregiver)
             Icon(Icons.chevron_right),
         ],
       ),
-      onTap: (isDependent || isCaregiver) ? () => _switchAccount(data['uid']) : null,
+      onTap: (isDependent || isCaregiver) ? () => _switchToAccount(email) : null,
     ),
   );
+}
+
+
+Future<void> _deleteDependent(String? email) async {
+  if (email == null) return;
+
+  try {
+    await _userProfileService.removeDependent(_currentUser!, email);
+    await _fetchDependents();
+    setState(() {});
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Dependent removed successfully')),
+    );
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error removing dependent: ${e.toString()}')),
+    );
+  }
 }
 
 
@@ -212,7 +306,6 @@ Widget _buildProfileCard(Map<String, dynamic>? data, {bool isDependent = false, 
       ),
     );
   }
-
   Widget _buildAddButton(String label) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
