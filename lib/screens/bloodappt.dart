@@ -1,4 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:healthsphere/components/date_time_widget.dart';
+import 'package:healthsphere/screens/blood_donation_map_screen.dart';
+import 'package:healthsphere/assets/model/blood_donation_drives.dart';
+import 'package:healthsphere/services/auth/auth_service_locator.dart';
+import 'package:healthsphere/services/user/user_profile_service.dart';
+import 'package:healthsphere/services/auth/auth_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class BloodDonationAppointmentScreen extends StatefulWidget {
   @override
@@ -6,72 +15,162 @@ class BloodDonationAppointmentScreen extends StatefulWidget {
 }
 
 class _BloodDonationAppointmentScreenState extends State<BloodDonationAppointmentScreen> {
+  final UserProfileService userProfileService = getIt<UserProfileService>();
   DateTime? selectedDate;
-  String? selectedCity;
-  String? selectedFacility;
   TimeOfDay? selectedTime;
+  BloodDonationDrive? selectedLocation;
+  bool useCurrentProfile = false;
+  Map<String, dynamic>? userProfileData;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedDate = DateTime.now();
+    selectedTime = TimeOfDay.now();
+  }
+
+  Future<Map<String, dynamic>?> _fetchUserProfile() async {
+  final authProvider = Provider.of<AuthProvider>(context, listen: false);
+  final user = authProvider.user;
+  if (user != null) {
+    return await userProfileService.getUserProfile(user);
+  }
+  return null;
+}
+
+Widget _buildProgressIndicator(BuildContext context) {
+  return Container(
+    color: Colors.white,
+    padding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+    child: Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _buildProgressStep('Donation Type', true),
+            _buildProgressStep('Appointment', true),
+            _buildProgressStep('Confirmation', false),
+          ],
+        ),
+        SizedBox(height: 4),
+        Container(
+          height: 2,
+          color: Colors.grey[300],
+          child: Row(
+            children: [
+              Expanded(
+                flex: 1,
+                child: Container(
+                  color: Colors.red,
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Container(),
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _buildProgressStep(String label, bool isActive) {
+  return Column(
+    children: [
+      Container(
+        width: 10,
+        height: 10,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: isActive ? Colors.red : Colors.grey[300],
+        ),
+      ),
+      SizedBox(height: 4),
+      Text(
+        label,
+        style: TextStyle(
+          color: Colors.grey[600],
+          fontSize: 12,
+        ),
+      ),
+    ],
+  );
+}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Donation Appointment', style: TextStyle(color: Colors.white)),
+        title: Text('Blood Donation Appointment', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.red,
-        elevation: 0,
-        iconTheme: IconThemeData(color: Colors.white),
       ),
-      body: Column(
+      body: ListView(
         children: [
-          _buildProgressIndicator(),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildDonationTypeHeader(),
-                    SizedBox(height: 24),
-                    _buildInputField('Appointment Date', selectedDate?.toString().split(' ')[0] ?? '', Icons.calendar_today, _selectDate),
-                    SizedBox(height: 16),
-                    _buildInputField('City', selectedCity ?? '', Icons.arrow_drop_down, _selectCity),
-                    SizedBox(height: 16),
-                    _buildInputField('Blood Donation Facility', selectedFacility ?? '', Icons.arrow_drop_down, _selectFacility),
-                    SizedBox(height: 16),
-                    _buildInputField('Appointment Time', selectedTime?.format(context) ?? '', Icons.access_time, _selectTime),
-                    SizedBox(height: 24),
-                    _buildContinueButton(),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildProgressIndicator() {
-    return Container(
-      color: Colors.white,
-      padding: EdgeInsets.symmetric(vertical: 16),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildProgressDot('Donation Type', true),
-              _buildProgressDot('Appointment', true),
-              _buildProgressDot('Confirmation', false),
-            ],
-          ),
-          SizedBox(height: 8),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
+          _buildProgressIndicator(context),
+          Padding(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(child: _buildProgressLine(true)),
-                Expanded(child: _buildProgressLine(false)),
+                Text(
+                  'Blood Donation',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 20),
+                DateTimeWidget(
+                  title: 'Location',
+                  value: selectedLocation?.name ?? 'Select Location',
+                  icon: Icons.location_on,
+                  onTap: _selectLocation,
+                ),
+                DateTimeWidget(
+                  title: 'Date',
+                  value: selectedDate != null
+                      ? DateFormat("dd-MMM-yyyy").format(selectedDate!)
+                      : 'Select Date',
+                  icon: Icons.calendar_today,
+                  onTap: _selectDate,
+                ),
+                DateTimeWidget(
+                  title: 'Time',
+                  value: selectedTime != null
+                      ? selectedTime!.format(context)
+                      : 'Select Time',
+                  icon: Icons.access_time,
+                  onTap: _selectTime,
+                ),
+                SizedBox(height: 20),
+                Text(
+                  'Use current account profile details',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                SwitchListTile(
+                  title: Text('Use current profile'),
+                  value: useCurrentProfile,
+                  onChanged: (bool value) async {
+                    setState(() {
+                      useCurrentProfile = value;
+                    });
+                    if (value) {
+                      userProfileData = await _fetchUserProfile();
+                      setState(() {});
+                    }
+                  },
+                ),
+                if (useCurrentProfile && userProfileData != null)
+                  _buildUserProfileDetails(),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  child: Text('Continue', style: TextStyle(color: Colors.white)),
+                  onPressed: _isFormValid() && useCurrentProfile ? _continuePressed : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    disabledBackgroundColor: Colors.grey,
+                    minimumSize: Size(double.infinity, 50),
+                  ),
+                ),
               ],
             ),
           ),
@@ -80,109 +179,51 @@ class _BloodDonationAppointmentScreenState extends State<BloodDonationAppointmen
     );
   }
 
-  Widget _buildProgressDot(String label, bool isActive) {
-    return Column(
-      children: [
-        Container(
-          width: 10,
-          height: 10,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: isActive ? Colors.red : Colors.grey,
-          ),
-        ),
-        SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(
-            color: Colors.grey,
-            fontSize: 12,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildProgressLine(bool isActive) {
-    return Container(
-      height: 2,
-      color: isActive ? Colors.red : Colors.grey,
-    );
-  }
-
-  Widget _buildDonationTypeHeader() {
-    return Row(
-      children: [
-        Icon(Icons.opacity, color: Colors.red, size: 24),
-        SizedBox(width: 8),
-        Text(
-          'Blood Donation',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildInputField(String label, String value, IconData icon, VoidCallback onTap) {
+  Widget _buildUserProfileDetails() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: TextStyle(
-            color: Colors.grey[600],
-            fontSize: 14,
-          ),
+        TextFormField(
+          initialValue: '${userProfileData!['firstName']} ${userProfileData!['lastName']}',
+          decoration: InputDecoration(labelText: 'Name'),
+          readOnly: true,
         ),
-        SizedBox(height: 8),
-        InkWell(
-          onTap: onTap,
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey[300]!),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  value.isEmpty ? 'Select $label' : value,
-                  style: TextStyle(
-                    color: value.isEmpty ? Colors.grey[400] : Colors.black,
-                    fontSize: 16,
-                  ),
-                ),
-                Icon(icon, color: Colors.grey[400]),
-              ],
-            ),
-          ),
+        TextFormField(
+          initialValue: userProfileData!['dateOfBirth'] != null
+              ? DateFormat('dd-MMM-yyyy').format((userProfileData!['dateOfBirth'] as Timestamp).toDate())
+              : 'N/A',
+          decoration: InputDecoration(labelText: 'Date of Birth'),
+          readOnly: true,
+        ),
+        TextFormField(
+          initialValue: '${userProfileData!['height']} cm',
+          decoration: InputDecoration(labelText: 'Height'),
+          readOnly: true,
+        ),
+        TextFormField(
+          initialValue: '${userProfileData!['weight']} kg',
+          decoration: InputDecoration(labelText: 'Weight'),
+          readOnly: true,
+        ),
+        TextFormField(
+          initialValue: userProfileData!['sex'] ?? 'N/A',
+          decoration: InputDecoration(labelText: 'Sex'),
+          readOnly: true,
+        ),
+        TextFormField(
+          initialValue: userProfileData!['bloodType'] ?? 'N/A',
+          decoration: InputDecoration(labelText: 'Blood Type'),
+          readOnly: true,
         ),
       ],
     );
   }
 
-  Widget _buildContinueButton() {
-    return ElevatedButton(
-      child: Text('Continue', style: TextStyle(color: Colors.white)),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.red,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        minimumSize: Size(double.infinity, 48),
-      ),
-      onPressed: _allFieldsFilled() ? _continue : null,
-    );
-  }
 
   void _selectDate() async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: selectedDate ?? DateTime.now(),
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(Duration(days: 365)),
     );
@@ -193,18 +234,10 @@ class _BloodDonationAppointmentScreenState extends State<BloodDonationAppointmen
     }
   }
 
-  void _selectCity() {
-    // Implement city selection logic
-  }
-
-  void _selectFacility() {
-    // Implement facility selection logic
-  }
-
   void _selectTime() async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialTime: TimeOfDay.now(),
+      initialTime: selectedTime ?? TimeOfDay.now(),
     );
     if (picked != null && picked != selectedTime) {
       setState(() {
@@ -213,14 +246,31 @@ class _BloodDonationAppointmentScreenState extends State<BloodDonationAppointmen
     }
   }
 
-  bool _allFieldsFilled() {
-    return selectedDate != null &&
-        selectedCity != null &&
-        selectedFacility != null &&
-        selectedTime != null;
+  void _selectLocation() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => BloodDonationMapScreen()),
+    );
+    if (result != null && result is BloodDonationDrive) {
+      setState(() {
+        selectedLocation = result;
+      });
+    }
   }
 
-  void _continue() {
-    // Implement continue logic
+  bool _isFormValid() {
+    return selectedDate != null && selectedTime != null && selectedLocation != null;
+  }
+
+  void _continuePressed() {
+    // Implement the logic for continuing to the next step
+    print('Appointment details:');
+    print('Date: ${selectedDate.toString()}');
+    print('Time: ${selectedTime!.format(context)}');
+    print('Location: ${selectedLocation!.name}');
+    print('Use current profile: $useCurrentProfile');
+    if (useCurrentProfile) {
+      print('User Profile: $userProfileData');
+    }
   }
 }

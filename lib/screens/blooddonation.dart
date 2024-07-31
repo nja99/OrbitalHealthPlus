@@ -57,7 +57,7 @@ class BloodDonationScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProgressIndicator(BuildContext context) {  // Accept context as parameter
+  Widget _buildProgressIndicator(BuildContext context) { 
     return Container(
       color: Colors.white,
       padding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
@@ -154,7 +154,6 @@ class BloodDonationScreen extends StatelessWidget {
           right: 8,
           child: InkWell(
             onTap: () {
-              // Add navigation to info page here
               print('Info button tapped for $title');
             },
             child: Icon(Icons.help_outline, color: Colors.grey[400], size: 24),
