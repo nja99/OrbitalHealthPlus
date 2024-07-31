@@ -1,112 +1,55 @@
-// lib/screens/blood_donation_screen.dart
-
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:healthsphere/assets/model/clinic.dart';
-import 'package:healthsphere/components/expanded_container.dart';
-import 'package:healthsphere/screens/map_screen.dart';
-import 'package:healthsphere/services/auth/auth_service_locator.dart';
-import 'package:healthsphere/services/user/user_profile_service.dart';
+import 'package:healthsphere/screens/bloodappt.dart';
 
-class BloodDonationScreen extends StatefulWidget {
-  const BloodDonationScreen({Key? key}) : super(key: key);
-
-  @override
-  _BloodDonationScreenState createState() => _BloodDonationScreenState();
-}
-
-class _BloodDonationScreenState extends State<BloodDonationScreen> {
-
-  final UserProfileService userProfileService = getIt<UserProfileService>();
-  final TextEditingController _locationController = TextEditingController();
-  Clinic? selectedClinic;
-  DateTime? selectedDate;
-  TimeOfDay? selectedTime;
-
-  @override
-  void dispose() {
-    _locationController.dispose();
-    super.dispose();
-  }
-
+class BloodDonationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.inverseSurface,
       appBar: AppBar(
-        title: const Text('Blood Donation'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        title: Text(
+          'Donation Appointment',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.red,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: Column(
         children: [
-          const SizedBox(height: 20),
-          ExpandedContainer(
-            padding: const EdgeInsetsDirectional.symmetric(horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 10),
-                Text(
-                  'Select Blood Donation Center',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                TextField(
-                  controller: _locationController,
-                  decoration: InputDecoration(
-                    hintText: 'Select Location',
-                    suffixIcon: IconButton(
-                      icon: Icon(Icons.map),
-                      onPressed: () => _navigateToMap(context),
-                    ),
-                  ),
-                  readOnly: true,
-                  onTap: () => _navigateToMap(context),
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  'Select Date and Time',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Row(
+          _buildProgressIndicator(context),
+          Expanded(
+            child: Container(
+              color: Colors.white,
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () => _selectDate(context),
-                        child: Text(selectedDate == null
-                            ? 'Select Date'
-                            : '${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}'),
-                      ),
+                    Text(
+                      'Please select your donation type below.',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
                     ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () => _selectTime(context),
-                        child: Text(selectedTime == null
-                            ? 'Select Time'
-                            : selectedTime!.format(context)),
-                      ),
+                    SizedBox(height: 20),
+                    _buildDonationTypeCard(
+                      icon: Icons.opacity,
+                      title: 'Blood Donation',
+                      color: Colors.red,
+                      onPressed: () => _navigateToAppointmentScreen(context),
+                    ),
+                    SizedBox(height: 20),
+                    _buildDonationTypeCard(
+                      icon: Icons.water_drop,
+                      title: 'Apheresis Donation',
+                      color: Colors.teal,
+                      onPressed: () => _navigateToAppointmentScreen(context),
                     ),
                   ],
                 ),
-                const SizedBox(height: 40),
-                Center(
-                  child: ElevatedButton(
-                    onPressed: _isFormValid() ? _confirmDonation : null,
-                    child: const Text('Confirm Donation'),
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ],
@@ -114,73 +57,117 @@ class _BloodDonationScreenState extends State<BloodDonationScreen> {
     );
   }
 
-  void _navigateToMap(BuildContext context) async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const MapScreen(),
+  Widget _buildProgressIndicator(BuildContext context) { 
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildProgressStep('Donation Type', true),
+              _buildProgressStep('Appointment', false),
+              _buildProgressStep('Confirmation', false),
+            ],
+          ),
+          SizedBox(height: 4),
+          Stack(
+            children: [
+              Container(
+                height: 2,
+                color: Colors.grey[300],
+              ),
+              Container(
+                height: 2,
+                width: MediaQuery.of(context).size.width / 4,
+                color: Colors.red,
+              ),
+            ],
+          ),
+        ],
       ),
     );
-
-    if (result != null && result is Clinic) {
-      setState(() {
-        selectedClinic = result;
-      });
-    }
   }
 
-  void _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(const Duration(days: 365)),
-    );
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-      });
-    }
-  }
-
-  void _selectTime(BuildContext context) async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
-    if (picked != null && picked != selectedTime) {
-      setState(() {
-        selectedTime = picked;
-      });
-    }
-  }
-
-  bool _isFormValid() {
-    return selectedClinic != null && selectedDate != null && selectedTime != null;
-  }
-
-  void _confirmDonation() {
-    // Here you would typically send the donation data to your backend
-    // For now, we'll just show a confirmation dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Donation Confirmed'),
-          content: Text(
-            'Your blood donation appointment has been scheduled for ${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year} at ${selectedTime!.format(context)} at ${selectedClinic!.name}.',
+  Widget _buildProgressStep(String label, bool isActive) {
+    return Column(
+      children: [
+        Container(
+          width: 10,
+          height: 10,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: isActive ? Colors.red : Colors.grey[300],
           ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pop(); // Return to home screen
-              },
-            ),
-          ],
-        );
-      },
+        ),
+        SizedBox(height: 4),
+        Text(
+          label,
+          style: TextStyle(
+            color: Colors.grey[600],
+            fontSize: 12,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDonationTypeCard({
+  required IconData icon,
+  required String title,
+  required Color color,
+  required VoidCallback onPressed,
+}) {
+  return Card(
+    elevation: 2,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+    child: Stack(
+      children: [
+        Padding(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            children: [
+              Icon(icon, size: 60, color: color),
+              SizedBox(height: 8),
+              Text(
+                title,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 16),
+              ElevatedButton(
+                child: Text('Get Appointment', style: TextStyle(color: Colors.white)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  minimumSize: Size(double.infinity, 40),
+                ),
+                onPressed: onPressed,
+              ),
+            ],
+          ),
+        ),
+        Positioned(
+          top: 8,
+          right: 8,
+          child: InkWell(
+            onTap: () {
+              print('Info button tapped for $title');
+            },
+            child: Icon(Icons.help_outline, color: Colors.grey[400], size: 24),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+  void _navigateToAppointmentScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => BloodDonationAppointmentScreen()),
     );
   }
 }
