@@ -19,11 +19,13 @@ class AppointmentService {
           .collection('appointments')
           .get();
 
+      print('Fetched ${snapshot.docs.length} appointments');
+
       return snapshot.docs.map((doc) {
         try {
           return Appointment.fromMap(doc.id, doc.data());
         } catch (e) {
-          print('Error parsing appointment: $e');
+          print('Error parsing appointment ${doc.id}: $e');
           return null;
         }
       }).whereType<Appointment>().toList();
@@ -33,21 +35,27 @@ class AppointmentService {
     }
   }
 
+  Future<bool> createAppointment(Appointment appointment) async {
+    final user = _auth.currentUser;
+    if (user == null) return false;
 
-  Future<void> createAppointment(Appointment appointment) async {
-  final user = _auth.currentUser;
-  if (user == null) return;
-
-  await _firestore.collection('users').doc(user.uid).collection('appointments').add({
-    'donationType': appointment.donationType,
-    'dateTime': appointment.dateTime != null ? Timestamp.fromDate(appointment.dateTime!) : null,
-    'city': appointment.city,
-    'facility': appointment.facility,
-    'location': appointment.location != null 
-      ? GeoPoint(appointment.location!.latitude, appointment.location!.longitude)
-      : null,
-  });
-}
+    try {
+      await _firestore.collection('users').doc(user.uid).collection('appointments').add({
+        'donationType': appointment.donationType,
+        'dateTime': appointment.dateTime != null ? Timestamp.fromDate(appointment.dateTime!) : null,
+        'city': appointment.city,
+        'facility': appointment.facility,
+        'location': appointment.location != null 
+          ? GeoPoint(appointment.location!.latitude, appointment.location!.longitude)
+          : null,
+      });
+      print('Appointment created successfully');
+      return true;
+    } catch (e) {
+      print('Error creating appointment: $e');
+      return false;
+    }
+  }
 
   Future<void> cancelAppointment(String appointmentId) async {
     final user = _auth.currentUser;
