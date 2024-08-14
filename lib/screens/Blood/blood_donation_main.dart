@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:healthsphere/screens/bloodappt.dart';
+import 'package:healthsphere/screens/Blood/blood_appt.dart';
 
 class BloodDonationScreen extends StatelessWidget {
   @override

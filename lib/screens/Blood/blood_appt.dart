@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:healthsphere/components/date_time_widget.dart';
-import 'package:healthsphere/screens/blood_donation_map_screen.dart';
+import 'package:healthsphere/screens/Blood/blood_donationConfirmation_screen.dart';
+import 'package:healthsphere/screens/Blood/blood_donation_map_screen.dart';
 import 'package:healthsphere/assets/model/blood_donation_drives.dart';
 import 'package:healthsphere/services/auth/auth_service_locator.dart';
 import 'package:healthsphere/services/user/user_profile_service.dart';
@@ -263,14 +264,15 @@ Widget _buildProgressStep(String label, bool isActive) {
   }
 
   void _continuePressed() {
-    // Implement the logic for continuing to the next step
-    print('Appointment details:');
-    print('Date: ${selectedDate.toString()}');
-    print('Time: ${selectedTime!.format(context)}');
-    print('Location: ${selectedLocation!.name}');
-    print('Use current profile: $useCurrentProfile');
-    if (useCurrentProfile) {
-      print('User Profile: $userProfileData');
-    }
-  }
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => BloodDonationConfirmationScreen(
+        appointmentDate: selectedDate!,
+        appointmentTime: selectedTime!,
+        location: selectedLocation!.name,
+      ),
+    ),
+  );
+}
 }
