@@ -104,6 +104,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
   bool _isDismissible (String status) {
     return status == "Upcoming";
   }
+  
 
   Widget _buildAppointmentList(String status) {
     return StreamBuilder<QuerySnapshot>(

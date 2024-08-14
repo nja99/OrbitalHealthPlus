@@ -4,8 +4,8 @@ import 'package:healthsphere/assets/model/category.dart';
 import 'package:healthsphere/pages/drugdatabase_page.dart';
 import 'package:healthsphere/pages/settings_page.dart';
 import 'package:healthsphere/screens/appointment_screen.dart';
-import 'package:healthsphere/screens/blooddonation.dart';
-import 'package:healthsphere/screens/familyhub_screen.dart';
+import 'package:healthsphere/screens/Blood/blood_donation_main.dart';
+import 'package:healthsphere/screens/FamilyHub/familyhub_screen.dart';
 import 'package:healthsphere/screens/medication_screen.dart';
 
 class HomeEvents extends StatefulWidget {

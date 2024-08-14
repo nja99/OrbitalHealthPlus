@@ -1,6 +1,6 @@
 import 'package:healthsphere/screens/appointment_screen.dart';
-import 'package:healthsphere/screens/blooddonation.dart';
-import 'package:healthsphere/screens/familyhub_screen.dart';
+import 'package:healthsphere/screens/Blood/blood_donation_main.dart';
+import 'package:healthsphere/screens/FamilyHub/familyhub_screen.dart';
 import 'package:healthsphere/screens/home_screen.dart';
 import 'package:healthsphere/screens/medication_screen.dart';
 import 'package:healthsphere/utils/page_data.dart';
